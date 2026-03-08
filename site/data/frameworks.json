@@ -8,6 +8,7 @@
   "flask": {"description": "Flask web framework on Gunicorn with sync workers, one worker per CPU core.", "repo": "https://github.com/pallets/flask", "type": "realistic", "engine": "gunicorn"},
   "go-fasthttp": {"description": "High-performance Go HTTP server using fasthttp with zero-allocation design and buffer reuse.", "repo": "https://github.com/valyala/fasthttp", "type": "realistic", "engine": "fasthttp"},
   "h2o": {"description": "High-performance C HTTP server using libh2o with multi-threaded event loops and native HTTP/2 support.", "repo": "https://github.com/h2o/h2o", "type": "realistic", "engine": "h2o"},
+  "h2o-h3": {"description": "h2o config-based server with mruby handlers and native HTTP/3 (QUIC) support.", "repo": "https://github.com/h2o/h2o", "type": "realistic", "engine": "h2o"},
   "hyper": {"description": "Low-level HTTP library for Rust, built on tokio with multi-threaded async runtime.", "repo": "https://github.com/hyperium/hyper", "type": "realistic", "engine": "hyper"},
   "lithium": {"description": "Lithium C++ HTTP framework with compile-time reflection, boost::context coroutines, and -O3 -march=native -flto.", "repo": "https://github.com/matt-42/lithium", "type": "realistic", "engine": "li/http"},
   "nginx": {"description": "Nginx with a custom C handler module, compiled with -O3 -march=native -flto.", "repo": "https://github.com/nginx/nginx", "type": "realistic", "engine": "nginx"},

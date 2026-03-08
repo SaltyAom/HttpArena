@@ -77,20 +77,7 @@ html.dark .http-ver[data-ver="composite"].active { color: #fb923c; background: r
 </div>
 
 <div id="lb-h3-wrapper" style="display:none;">
-<div style="margin-top:1rem; border:1.5px solid rgba(234,179,8,0.3); border-radius:0.75rem; background:linear-gradient(135deg, rgba(234,179,8,0.04) 0%, rgba(251,191,36,0.08) 100%); padding:2.5rem 2rem; text-align:center;">
-<div style="display:inline-flex; align-items:center; justify-content:center; width:3rem; height:3rem; border-radius:50%; background:rgba(234,179,8,0.12); margin-bottom:1rem;">
-<span style="font-size:1.4rem; line-height:1;">🚧</span>
-</div>
-<div style="font-size:1.5rem; font-weight:700; color:#92400e; letter-spacing:-0.01em;">HTTP/3 Benchmarks</div>
-<div style="display:inline-block; margin-top:0.5rem; padding:0.25rem 0.75rem; font-size:0.8rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; border-radius:999px; background:rgba(234,179,8,0.15); color:#b45309;">Work in progress</div>
-<div style="color:#64748b; margin-top:1.25rem; max-width:560px; margin-left:auto; margin-right:auto; line-height:1.7; font-size:1.05rem;">
-HTTP/3 runs over <strong>QUIC</strong> (UDP-based transport with built-in TLS 1.3). We've tested both <strong>oha</strong> and <strong>h2load</strong> with QUIC support, but neither can generate enough load to saturate high-performance servers — making the results unreliable for fair comparison.
-</div>
-<div style="color:#94a3b8; margin-top:1.5rem; font-size:0.95rem;">
-We'll add HTTP/3 benchmarks once mature load generators become available.<br>
-Know of a good HTTP/3 load testing tool? <a href="https://github.com/MDA2AV/HttpArena/issues" target="_blank" rel="noreferrer" style="color:#3b82f6; text-decoration:none; font-weight:500;">Open an issue</a> and let us know!
-</div>
-</div>
+{{< leaderboard-h3 >}}
 </div>
 
 <div id="lb-composite-wrapper">

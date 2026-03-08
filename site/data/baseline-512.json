@@ -120,6 +120,21 @@
 }
 ,
 {
+  "framework": "h2o-h3",
+  "language": "C",
+  "rps": 1679871,
+  "avg_latency": "304us",
+  "p99_latency": "3.23ms",
+  "cpu": "2236.1%",
+  "memory": "83.2MiB",
+  "connections": 512,
+  "threads": 12,
+  "duration": "5s",
+  "pipeline": 1,
+  "reconnects": 0
+}
+,
+{
   "framework": "h2o",
   "language": "C",
   "rps": 2925371,

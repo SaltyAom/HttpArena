@@ -3,19 +3,18 @@
   "cpu": "Intel(R) Core(TM) i9-14900K",
   "cores": "32",
   "ram": "62Gi",
-  "ram_speed": "6000 MHz",
   "os": "Ubuntu 24.04.4 LTS",
   "kernel": "6.17.0-14-generic",
   "docker": "29.2.1",
-  "docker_runtime": "runc",
+  "commit": "08b5301",
   "governor": "performance",
-  "smt": "on",
+  "docker_runtime": "runc",
+  "threads_per_core": "2",
   "tcp": {
     "lo_mtu": "65536",
     "congestion": "cubic",
     "somaxconn": "4096",
     "rmem_max": "212992",
     "wmem_max": "212992"
-  },
-  "commit": "d9ad69e"
+  }
 }

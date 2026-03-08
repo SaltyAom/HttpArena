@@ -6,5 +6,5 @@
   "description": "Caddy web server with a custom handler module for benchmark endpoints, native HTTP/2 support.",
   "repo": "https://github.com/caddyserver/caddy",
   "enabled": true,
-  "tests": ["baseline", "limited-conn", "json", "baseline-h2", "static-h2"]
+  "tests": ["baseline", "limited-conn", "json", "baseline-h2", "static-h2", "baseline-h3", "static-h3"]
 }

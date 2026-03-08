@@ -1,0 +1,16 @@
+[
+{
+  "framework": "h2o-h3",
+  "language": "C",
+  "rps": 145835,
+  "avg_latency": "0.1240ms",
+  "p99_latency": "0.2285ms",
+  "cpu": "319.7%",
+  "memory": "54.8MiB",
+  "connections": 16,
+  "threads": 12,
+  "duration": "5s",
+  "pipeline": 8,
+  "reconnects": 0
+}
+]

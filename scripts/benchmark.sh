@@ -7,6 +7,7 @@ cd "$ROOT_DIR"
 
 GCANNON="${GCANNON:-/home/diogo/Desktop/Socket/gcannon/gcannon}"
 H2LOAD="${H2LOAD:-h2load}"
+OHA="${OHA:-oha}"
 HARD_NOFILE=$(ulimit -Hn)
 ulimit -n "$HARD_NOFILE"
 THREADS=12
@@ -19,7 +20,7 @@ RESULTS_DIR="$ROOT_DIR/results"
 CERTS_DIR="$ROOT_DIR/certs"
 
 # Profile definitions: pipeline|req_per_conn|cpu_limit|connections|endpoint
-# endpoint: empty = /baseline11 (raw), "json" = /json (GET), "pipeline" = /pipeline, "h2" = /baseline2 (h2load), "static-h2" = multi-URI h2load
+# endpoint: empty = /baseline11 (raw), "json" = /json (GET), "pipeline" = /pipeline, "h2" = /baseline2 (h2load), "static-h2" = multi-URI h2load, "h3" = /baseline2 (oha HTTP/3)
 declare -A PROFILES=(
     [baseline]="1|0||512,4096,16384|"
     [pipelined]="16|0||512,4096,16384|pipeline"
@@ -27,8 +28,10 @@ declare -A PROFILES=(
     [json]="1|0||4096,16384,32768|json"
     [baseline-h2]="1|0||64,256,1024|h2"
     [static-h2]="1|0||64,256,1024|static-h2"
+    [baseline-h3]="128|0||64,512|h3"
+    [static-h3]="128|0||64,512|static-h3"
 )
-PROFILE_ORDER=(baseline pipelined limited-conn json baseline-h2 static-h2)
+PROFILE_ORDER=(baseline pipelined limited-conn json baseline-h2 static-h2 baseline-h3 static-h3)
 
 # Parse flags
 SAVE_RESULTS=false
@@ -267,7 +270,9 @@ for profile in "${profiles_to_run[@]}"; do
 
     # Wait for server
     echo "[wait] Waiting for server..."
-    if [ "$endpoint" = "h2" ] || [ "$endpoint" = "static-h2" ]; then
+    if [ "$endpoint" = "h3" ] || [ "$endpoint" = "static-h3" ]; then
+        local_check_url="https://localhost:$H2PORT/baseline2?a=1&b=1"
+    elif [ "$endpoint" = "h2" ] || [ "$endpoint" = "static-h2" ]; then
         local_check_url="https://localhost:$H2PORT/static/reset.css"
         [ "$endpoint" = "h2" ] && local_check_url="https://localhost:$H2PORT/baseline2?a=1&b=1"
     elif [ "$endpoint" = "json" ]; then
@@ -289,7 +294,25 @@ for profile in "${profiles_to_run[@]}"; do
 
     # Build load generator args based on profile endpoint
     USE_H2LOAD=false
-    if [ "$endpoint" = "static-h2" ]; then
+    USE_OHA=false
+    if [ "$endpoint" = "static-h3" ]; then
+        USE_OHA=true
+        oha_out=$(mktemp)
+        gc_args=("$OHA"
+            "$REQUESTS_DIR/static-h2-uris.txt"
+            --urls-from-file
+            --http-version 3 --insecure
+            -o "$oha_out" --output-format json
+            -c "$CONNS" -p "$pipeline" -z "$DURATION")
+    elif [ "$endpoint" = "h3" ]; then
+        USE_OHA=true
+        oha_out=$(mktemp)
+        gc_args=("$OHA"
+            "https://localhost:$H2PORT/baseline2?a=1&b=1"
+            --http-version 3 --insecure
+            -o "$oha_out" --output-format json
+            -c "$CONNS" -p "$pipeline" -z "$DURATION")
+    elif [ "$endpoint" = "static-h2" ]; then
         USE_H2LOAD=true
         gc_args=("$H2LOAD"
             -i "$REQUESTS_DIR/static-h2-uris.txt"
@@ -330,7 +353,11 @@ for profile in "${profiles_to_run[@]}"; do
         done &
         stats_pid=$!
 
-        if [ "$USE_H2LOAD" = "true" ]; then
+        if [ "$USE_OHA" = "true" ]; then
+            "${gc_args[@]}" || true
+            output=$(cat "$oha_out" 2>/dev/null)
+            rm -f "$oha_out"
+        elif [ "$USE_H2LOAD" = "true" ]; then
             output=$(timeout 45 "${gc_args[@]}" 2>&1) || true
         else
             output=$(timeout 45 "$GCANNON" "${gc_args[@]}" 2>&1) || true
@@ -345,7 +372,11 @@ for profile in "${profiles_to_run[@]}"; do
         echo "$output"
         echo "  CPU: $avg_cpu | Mem: $peak_mem"
 
-        if [ "$USE_H2LOAD" = "true" ]; then
+        if [ "$USE_OHA" = "true" ]; then
+            # oha JSON: .summary.requestsPerSec
+            rps_int=$(echo "$output" | python3 -c "import sys,json; d=json.load(sys.stdin); print(int(d['summary']['requestsPerSec']))" 2>/dev/null || echo "0")
+            rps_int=${rps_int:-0}
+        elif [ "$USE_H2LOAD" = "true" ]; then
             # h2load: "finished in 5.00s, 123456.78 req/s, 45.67MB/s"
             rps_int=$(echo "$output" | grep -oP 'finished in [\d.]+s, \K[\d.]+' | cut -d. -f1 || echo "0")
             rps_int=${rps_int:-0}
@@ -370,7 +401,12 @@ for profile in "${profiles_to_run[@]}"; do
     echo "=== Best: ${best_rps} req/s (CPU: $best_cpu, Mem: $best_mem) ==="
 
     # Extract metrics
-    if [ "$USE_H2LOAD" = "true" ]; then
+    if [ "$USE_OHA" = "true" ]; then
+        # oha JSON: .summary.average (seconds), .latencyPercentiles.p99 (seconds)
+        avg_lat=$(echo "$best_output" | python3 -c "import sys,json; d=json.load(sys.stdin); v=d['summary']['average']; print(f'{v*1e6:.0f}us' if v<0.001 else f'{v*1000:.2f}ms')" 2>/dev/null || echo "—")
+        p99_lat=$(echo "$best_output" | python3 -c "import sys,json; d=json.load(sys.stdin); v=d['latencyPercentiles']['p99']; print(f'{v*1e6:.0f}us' if v<0.001 else f'{v*1000:.2f}ms')" 2>/dev/null || echo "—")
+        reconnects="0"
+    elif [ "$USE_H2LOAD" = "true" ]; then
         # h2load: "time for request:  min  max  mean  sd  +/-sd" all on one line
         avg_lat=$(echo "$best_output" | awk '/time for request:/{print $6}')
         p99_lat="$avg_lat"  # h2load doesn't report p99; use mean as placeholder

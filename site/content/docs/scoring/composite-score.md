@@ -42,6 +42,8 @@ Not all profiles count toward the composite score. Profiles marked as **scored**
 | JSON | HTTP/1.1 | Yes | Dataset processing and serialization |
 | Baseline | HTTP/2 | Yes | Query parsing over TLS with multiplexed streams |
 | Static | HTTP/2 | Yes | 20 static files served over TLS with multiplexed streams |
+| Baseline | HTTP/3 | Yes | Query parsing over QUIC (UDP) with TLS 1.3 |
+| Static | HTTP/3 | Yes | 20 static files served over QUIC (UDP) with TLS 1.3 |
 
 Pipelined is reference-only because not all frameworks support HTTP pipelining.
 

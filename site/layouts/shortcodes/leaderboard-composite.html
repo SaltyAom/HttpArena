@@ -5,6 +5,8 @@
   (dict "id" "json" "label" "JSON" "sublabel" "HTTP/1.1" "proto" "h1" "conns" (slice 4096 16384 32768) "scored" true)
   (dict "id" "baseline-h2" "label" "Baseline" "sublabel" "HTTP/2" "proto" "h2" "conns" (slice 64 256 1024) "scored" true)
   (dict "id" "static-h2" "label" "Static" "sublabel" "HTTP/2" "proto" "h2" "conns" (slice 64 256 1024) "scored" true)
+  (dict "id" "baseline-h3" "label" "Baseline" "sublabel" "HTTP/3" "proto" "h3" "conns" (slice 64 512) "scored" true)
+  (dict "id" "static-h3" "label" "Static" "sublabel" "HTTP/3" "proto" "h3" "conns" (slice 64 512) "scored" true)
 }}
 
 {{/* Build a clean JSON blob: array of {profile, framework, rps, language} entries */}}
@@ -57,14 +59,17 @@ html.dark .composite-disclaimer { color: #fff !important; background: rgba(234,1
   .composite-profile-filter[data-profile="all"].active { color:#8b5cf6; border-color:#8b5cf6; background:rgba(139,92,246,0.06); font-weight:600; }
   .composite-profile-filter.active.cp-h1 { color:#3b82f6; border-color:#3b82f6; background:rgba(59,130,246,0.06); font-weight:600; }
   .composite-profile-filter.active.cp-h2 { color:#d97706; border-color:#d97706; background:rgba(217,119,6,0.06); font-weight:600; }
+  .composite-profile-filter.active.cp-h3 { color:#16a34a; border-color:#16a34a; background:rgba(22,163,74,0.06); font-weight:600; }
   .composite-profile-filter.cp-h1:hover { background:rgba(59,130,246,0.06); }
   .composite-profile-filter.cp-h2:hover { background:rgba(217,119,6,0.06); }
+  .composite-profile-filter.cp-h3:hover { background:rgba(22,163,74,0.06); }
   html.dark .composite-profiles-wrap { background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.10); }
   html.dark .composite-profile-filter { color:#64748b; border-color:#334155; }
   html.dark .composite-profile-filter:hover { color:#94a3b8; border-color:#475569; }
   html.dark .composite-profile-filter[data-profile="all"].active { color:#a78bfa; border-color:#8b5cf6; background:rgba(139,92,246,0.12); }
   html.dark .composite-profile-filter.active.cp-h1 { color:#60a5fa; border-color:#3b82f6; background:rgba(59,130,246,0.12); }
   html.dark .composite-profile-filter.active.cp-h2 { color:#fbbf24; border-color:#d97706; background:rgba(217,119,6,0.12); }
+  html.dark .composite-profile-filter.active.cp-h3 { color:#4ade80; border-color:#16a34a; background:rgba(22,163,74,0.12); }
   </style>
 
   <div class="lb-filters composite-resource-wrap" style="margin:0.5rem 0 0 0; padding:0.5rem 1rem; background:rgba(0,0,0,0.02); border-radius:8px; border:1px solid rgba(0,0,0,0.06);">
@@ -279,26 +284,26 @@ function renderComposite() {
   // Header
   var header = document.createElement('div');
   header.className = 'lb-row lb-header';
-  header.style.gridTemplateColumns = '2.5rem 10rem 5.5rem 4.5rem 4rem 3.5rem 1fr repeat(' + activeCount + ', 5.5rem)';
+  header.style.gridTemplateColumns = '2.5rem 10rem 5.5rem 3.5rem 1fr repeat(' + activeCount + ', 5.5rem)';
   var headerHtml = '<div title="Rank by composite score">#</div>' +
     '<div>Framework</div>' +
     '<div>Lang</div>' +
-    '<div title="HTTP server engine">Engine</div>' +
-    '<div>Type</div>' +
     '<div style="font-weight:700; padding-left:0.5rem;" title="Composite score: average of normalized profile scores">Score</div>' +
     '<div></div>';
   activeIds.forEach(function(pid) {
-    var isH2 = profileProtos[pid] === 'h2';
+    var proto = profileProtos[pid];
     var scored = profileScored[pid];
     var bgStyle;
     if (!scored) {
       bgStyle = ' background:rgba(148,163,184,0.08); margin:-0.5rem -0.25rem; padding:0.5rem 0.25rem; border-radius:4px; opacity:0.6;';
-    } else if (isH2) {
+    } else if (proto === 'h3') {
+      bgStyle = ' background:rgba(34,197,94,0.12); margin:-0.5rem -0.25rem; padding:0.5rem 0.25rem; border-radius:4px;';
+    } else if (proto === 'h2') {
       bgStyle = ' background:rgba(234,179,8,0.12); margin:-0.5rem -0.25rem; padding:0.5rem 0.25rem; border-radius:4px;';
     } else {
       bgStyle = ' background:rgba(59,130,246,0.08); margin:-0.5rem -0.25rem; padding:0.5rem 0.25rem; border-radius:4px;';
     }
-    var sublabel = isH2 ? 'HTTP/2' : 'HTTP/1.1';
+    var sublabel = proto === 'h3' ? 'HTTP/3' : proto === 'h2' ? 'HTTP/2' : 'HTTP/1.1';
     var label = profileLabels[pid] + (scored ? '' : ' *');
     headerHtml += '<div style="text-align:right; font-size:0.7rem; line-height:1.2;' + bgStyle + '" title="' + profileLabels[pid] + ' (' + sublabel + ')' + (scored ? ' — counts toward composite score' : ' — reference only, does not count toward composite score') + '">' + label + '<br><span style="color:#94a3b8; font-size:0.6rem;">(' + sublabel + ')</span></div>';
   });
@@ -315,7 +320,7 @@ function renderComposite() {
     row.dataset.name = r.framework;
     row.dataset.lang = r.language;
     row.dataset.type = ftype;
-    row.style.gridTemplateColumns = '2.5rem 10rem 5.5rem 4.5rem 4rem 3.5rem 1fr repeat(' + activeCount + ', 5.5rem)';
+    row.style.gridTemplateColumns = '2.5rem 10rem 5.5rem 3.5rem 1fr repeat(' + activeCount + ', 5.5rem)';
     row.style.cursor = 'pointer';
 
     var rank = idx < 3 ? medals[idx] : String(idx + 1);
@@ -325,12 +330,14 @@ function renderComposite() {
     var profileCells = '';
     r.scores.forEach(function(s, i) {
       var pid = activeIds[i];
-      var isH2 = profileProtos[pid] === 'h2';
+      var proto = profileProtos[pid];
       var scored = profileScored[pid];
       var bgStyle;
       if (!scored) {
         bgStyle = ' background:rgba(148,163,184,0.08); margin:-0.5rem -0.25rem; padding:0.5rem 0.25rem; border-radius:4px; opacity:0.5;';
-      } else if (isH2) {
+      } else if (proto === 'h3') {
+        bgStyle = ' background:rgba(34,197,94,0.12); margin:-0.5rem -0.25rem; padding:0.5rem 0.25rem; border-radius:4px;';
+      } else if (proto === 'h2') {
         bgStyle = ' background:rgba(234,179,8,0.12); margin:-0.5rem -0.25rem; padding:0.5rem 0.25rem; border-radius:4px;';
       } else {
         bgStyle = ' background:rgba(59,130,246,0.08); margin:-0.5rem -0.25rem; padding:0.5rem 0.25rem; border-radius:4px;';
@@ -349,8 +356,6 @@ function renderComposite() {
       '<div class="lb-rank">' + rank + '</div>' +
       '<div class="lb-name">' + r.framework + '</div>' +
       '<div class="lb-lang" style="font-weight:600;">' + r.language + '</div>' +
-      '<div class="lb-lang">' + (fmeta.engine || '—') + '</div>' +
-      '<div><span class="lb-pill lb-pill-' + ftype + '">' + ftype + '</span></div>' +
       '<div class="lb-rps" style="font-weight:700; text-align:left; padding-left:0.5rem;">' + r.composite.toFixed(1) + '</div>' +
       '<div class="lb-bar-cell"><div class="lb-bar" style="width:' + pct.toFixed(1) + '%;"></div></div>' +
       profileCells;

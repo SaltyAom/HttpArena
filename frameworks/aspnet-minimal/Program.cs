@@ -17,16 +17,15 @@ builder.WebHost.ConfigureKestrel(options =>
         lo.Protocols = HttpProtocols.Http1;
     });
 
-    // HTTPS + HTTP/2 on port 8443
+    // HTTPS + HTTP/2 + HTTP/3 on port 8443
     if (hasCert)
     {
         options.ListenAnyIP(8443, lo =>
         {
-            lo.Protocols = HttpProtocols.Http2;
+            lo.Protocols = HttpProtocols.Http1AndHttp2AndHttp3;
             lo.UseHttps(X509Certificate2.CreateFromPemFile(certPath, keyPath));
         });
-
-}
+    }
 });
 
 var app = builder.Build();
