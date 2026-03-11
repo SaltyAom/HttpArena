@@ -1,0 +1,75 @@
+name: Benchmark PR
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: 'PR number'
+        required: true
+      framework:
+        description: 'Framework to benchmark'
+        required: true
+      profile:
+        description: 'Profile (e.g. baseline, baseline-h2, leave empty for all)'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: benchmark
+  cancel-in-progress: false
+
+jobs:
+  benchmark:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: refs/pull/${{ inputs.pr }}/head
+          fetch-depth: 1
+
+      - name: Run benchmarks
+        id: bench
+        run: |
+          log=$(mktemp)
+          ./scripts/benchmark.sh "${{ inputs.framework }}" ${{ inputs.profile }} 2>&1 | tee "$log"
+          echo "log_file=$log" >> "$GITHUB_OUTPUT"
+
+      - name: Post results to PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          log="${{ steps.bench.outputs.log_file }}"
+          profile="${{ inputs.profile }}"
+          profile_label="${profile:-all profiles}"
+
+          # Extract best results
+          results=$(grep -E "^=== Best:" "$log" | sed 's/^=== //' || echo "No results")
+          headers=$(grep -E "^=== .* / .* / " "$log" | sed 's/^=== //' | sed 's/ ===//' || true)
+
+          # Build table
+          body="## Benchmark Results"$'\n\n'
+          body+="**Framework:** \`${{ inputs.framework }}\` | **Profile:** \`${profile_label}\`"$'\n\n'
+          body+='```'$'\n'
+
+          # Interleave headers and results
+          paste -d'\n' <(echo "$headers") <(echo "$results") | while IFS= read -r header; do
+            IFS= read -r result || true
+            echo "$header"
+            echo "  $result"
+            echo ""
+          done >> /tmp/bench_table.txt
+
+          body+=$(cat /tmp/bench_table.txt)
+          body+=$'\n```\n\n'
+          body+="<details><summary>Full log</summary>"$'\n\n```\n'
+          # Trim log to last 200 lines to stay under comment limit
+          tail -200 "$log" >> /tmp/bench_full.txt
+          body+=$(cat /tmp/bench_full.txt)
+          body+=$'\n```\n</details>'
+
+          gh pr comment "${{ inputs.pr }}" --body "$body"
+          rm -f "$log" /tmp/bench_table.txt /tmp/bench_full.txt
