@@ -114,6 +114,25 @@
     "status_5xx": 0
   },
   {
+    "framework": "genhttp",
+    "language": "C#",
+    "rps": 1810271,
+    "avg_latency": "76.82ms",
+    "p99_latency": "199.80ms",
+    "cpu": "10350.8%",
+    "memory": "832.9MiB",
+    "connections": 16384,
+    "threads": 64,
+    "duration": "5s",
+    "pipeline": 16,
+    "bandwidth": "207.07MB/s",
+    "reconnects": 0,
+    "status_2xx": 9051356,
+    "status_3xx": 0,
+    "status_4xx": 0,
+    "status_5xx": 0
+  },
+  {
     "framework": "h2o-mruby",
     "language": "C",
     "rps": 3251808,

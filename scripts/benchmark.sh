@@ -265,6 +265,10 @@ for g in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do
     sudo sh -c "echo performance > $g" 2>/dev/null || true
 done
 
+echo "[tune] Setting UDP buffer sizes for QUIC..."
+sudo sysctl -w net.core.rmem_max=7500000 > /dev/null 2>&1 || true
+sudo sysctl -w net.core.wmem_max=7500000 > /dev/null 2>&1 || true
+
 echo "[clean] Restarting Docker daemon..."
 sudo systemctl restart docker
 sleep 3

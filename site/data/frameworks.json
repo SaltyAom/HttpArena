@@ -7,6 +7,7 @@
   "drogon": {"description": "Drogon C++ framework with sync advice for fast dispatch, mimalloc allocator, and -flto optimization.", "repo": "https://github.com/drogonframework/drogon", "type": "realistic", "engine": "drogon"},
   "express": {"description": "Express.js on Node.js with cluster mode, etag/x-powered-by disabled, raw writeHead responses.", "repo": "https://github.com/expressjs/express", "type": "realistic", "engine": "express"},
   "flask": {"description": "Flask web framework on Gunicorn with sync workers, one worker per CPU core.", "repo": "https://github.com/pallets/flask", "type": "realistic", "engine": "gunicorn"},
+  "genhttp": {"description": "Lightweight embeddable C# web server using the Kestrel engine for HTTP/1.1, HTTP/2, and HTTP/3 support.", "repo": "https://github.com/Kaliumhexacyanoferrat/GenHTTP", "type": "realistic", "engine": "Kestrel"},
   "go-fasthttp": {"description": "High-performance Go HTTP server using fasthttp with zero-allocation design and buffer reuse.", "repo": "https://github.com/valyala/fasthttp", "type": "realistic", "engine": "fasthttp"},
   "h2o": {"description": "High-performance C HTTP server using libh2o with multi-threaded event loops and native HTTP/2 support.", "repo": "https://github.com/h2o/h2o", "type": "realistic", "engine": "h2o"},
   "h2o-mruby": {"description": "h2o config-based server with mruby handlers and native HTTP/3 (QUIC) support.", "repo": "https://github.com/h2o/h2o", "type": "realistic", "engine": "h2o"},
