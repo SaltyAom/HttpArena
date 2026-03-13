@@ -133,25 +133,6 @@
     "status_5xx": 0
   },
   {
-    "framework": "genhttp",
-    "language": "C#",
-    "rps": 1070861,
-    "avg_latency": "1.81ms",
-    "p99_latency": "9.29ms",
-    "cpu": "6759.0%",
-    "memory": "412.7MiB",
-    "connections": 4096,
-    "threads": 64,
-    "duration": "5s",
-    "pipeline": 1,
-    "bandwidth": "195.71MB/s",
-    "reconnects": 820,
-    "status_2xx": 5354306,
-    "status_3xx": 0,
-    "status_4xx": 1670006,
-    "status_5xx": 0
-  },
-  {
     "framework": "go-fasthttp",
     "language": "Go",
     "rps": 1455201,
@@ -397,5 +378,25 @@
     "status_3xx": 0,
     "status_4xx": 1976323,
     "status_5xx": 1226
+  },
+  {
+    "framework": "GenHTTP",
+    "language": "C#",
+    "rps": 1139801,
+    "avg_latency": "1.86ms",
+    "p99_latency": "11.40ms",
+    "cpu": "6845.5%",
+    "memory": "1.2GiB",
+    "connections": 4096,
+    "threads": 64,
+    "duration": "5s",
+    "pipeline": 1,
+    "bandwidth": "226.66MB/s",
+    "input_bw": "115.22MB/s",
+    "reconnects": 721,
+    "status_2xx": 5710406,
+    "status_3xx": 0,
+    "status_4xx": 1751656,
+    "status_5xx": 0
   }
 ]
