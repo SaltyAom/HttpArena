@@ -48,7 +48,7 @@ score    = (weighted / max(weighted)) × 100
 | Baseline | 0.1 | Trivial — parse query params, add integers, return 2 bytes |
 | JSON | 1 | Moderate — iterate 50 items, compute fields, serialize ~10 KB |
 | DB | 15 | Heavy — SQLite range query, parse tags, build JSON response |
-| Upload | 15 | Heavy — receive 1 MB body, compute CRC32, memory management |
+| Upload | 15 | Heavy — receive 1 MB body, return byte count, memory management |
 | Compression | 8 | Heavy — gzip-compress ~1 MB response on the fly |
 
 The framework with the highest weighted total scores **100**, others scale proportionally.

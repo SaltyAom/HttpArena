@@ -722,23 +722,27 @@ function applyFilters() {
       }
     });
 
-    if (!isCompression) {
+    var isMixed = connPanel.dataset.profile === 'mixed';
+    if (!isCompression && !isMixed) {
       rows.forEach(function(row) {
         if (row.classList.contains('lb-hidden')) return;
         var rankEl = row.querySelector('.lb-rank');
         rankEl.textContent = visibleIdx < 3 ? medals[visibleIdx] : String(visibleIdx + 1);
         var bar = row.querySelector('.lb-bar');
-        barClasses.forEach(function(c) { bar.classList.remove(c); });
-        bar.classList.add(barClasses[Math.min(visibleIdx, barClasses.length - 1)]);
-        var rps = Number(row.dataset.rps);
-        var pct = maxRps > 0 ? (rps / maxRps * 100) : 0;
-        bar.style.width = pct.toFixed(1) + '%';
+        if (bar) {
+          barClasses.forEach(function(c) { bar.classList.remove(c); });
+          bar.classList.add(barClasses[Math.min(visibleIdx, barClasses.length - 1)]);
+          var rps = Number(row.dataset.rps);
+          var pct = maxRps > 0 ? (rps / maxRps * 100) : 0;
+          bar.style.width = pct.toFixed(1) + '%';
+        }
         visibleIdx++;
       });
     }
   });
 
   applyCompressionScores();
+  applyMixedScores();
 }
 
 /* Language filters */
@@ -1341,7 +1345,7 @@ function applyMixedScores() {
     var best = {};
 
     connPanels.forEach(function(cp) {
-      cp.querySelectorAll('.lb-row:not(.lb-header)').forEach(function(row) {
+      cp.querySelectorAll('.lb-row:not(.lb-header):not(.lb-hidden)').forEach(function(row) {
         var name = row.dataset.name;
         var score = parseFloat(row.dataset.mixedScore || '0');
         if (!best[name] || score > best[name].score) {
@@ -1388,5 +1392,5 @@ function applyMixedScores() {
     });
   });
 }
-applyMixedScores();
+applyFilters();
 </script>

@@ -30,15 +30,6 @@ Same workload as the HTTP/1.1 baseline — query parameter parsing and sum compu
 
 HTTP/2 uses far fewer connections because each connection multiplexes many streams. The lower connection counts reflect real-world HTTP/2 usage patterns.
 
-## Framework requirements
-
-To participate in this test, a framework must:
-
-1. Listen on **port 8443** with TLS and HTTP/2 enabled
-2. Load TLS certificates from `/certs/server.crt` and `/certs/server.key`
-3. Handle `GET /baseline2?a=N&b=N` with the same sum logic as `/baseline11`
-4. Add `"baseline-h2"` to the `tests` array in `meta.json`
-
 ## Parameters
 
 | Parameter | Value |

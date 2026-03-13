@@ -38,15 +38,6 @@ Total payload: ~325 KB across 20 files.
 | Content types | `text/plain` | CSS, JS, HTML, fonts, SVG, WebP, JSON |
 | h2load mode | Single URI | Multi-URI (`-i` flag, round-robin) |
 
-## Framework requirements
-
-To participate in this test, a framework must:
-
-1. Listen on **port 8443** with TLS and HTTP/2 enabled
-2. Load TLS certificates from `/certs/server.crt` and `/certs/server.key`
-3. Pre-load files from `/data/static/` and serve them at `GET /static/<filename>` with correct `Content-Type`
-4. Add `"static-h2"` to the `tests` array in `meta.json`
-
 ## Parameters
 
 | Parameter | Value |

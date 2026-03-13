@@ -2,16 +2,15 @@
 title: Upload (20 MB)
 ---
 
-The Upload profile measures how efficiently a framework handles large request body ingestion. Each request sends a 20 MB binary payload and the server returns its CRC32 checksum.
+The Upload profile measures how efficiently a framework handles large request body ingestion. Each request sends a 20 MB binary payload and the server returns the byte count.
 
 **Connections:** 64, 256, 512
 
 ## How it works
 
 1. The load generator sends `POST /upload` with a 20 MB binary body using a pre-built raw request file
-2. The server reads the entire request body into memory
-3. Computes a CRC32 (ISO 3309) checksum using slicing-by-8 optimization
-4. Returns the checksum as an 8-character lowercase hex string
+2. The server reads the entire request body
+3. Returns the total number of bytes received as plain text
 
 ## What it measures
 
@@ -31,7 +30,7 @@ Content-Length: 20971520
 HTTP/1.1 200 OK
 Content-Type: text/plain
 
-4a6ce2a3
+20971520
 ```
 
 ## Parameters
@@ -44,10 +43,9 @@ Content-Type: text/plain
 | Duration | 5s |
 | Runs | 3 (best taken) |
 | Payload | 20 MB binary (`data/upload.bin`) |
-| Checksum | CRC32 (slicing-by-8) |
 
 ## Notes
 
-- I/O is the primary bottleneck, not CRC32 computation
+- I/O is the primary bottleneck — body ingestion dominates request handling time
 - Lower connection counts are used because each request transfers 20 MB
 - The load generator's bandwidth metric only measures response data (~8 bytes), not the uploaded payload

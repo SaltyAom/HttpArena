@@ -64,42 +64,42 @@ html.dark .test-card-endpoint { color: #64748b; }
 <div class="tests-proto">
 <span class="tests-proto-label tests-proto-h1">HTTP/1.1</span>
 <div class="tests-grid">
-  <a class="test-card" href="docs/tests/h1/baseline">
+  <a class="test-card" href="docs/add-framework/test-profiles/h1/baseline">
     <div class="test-card-title">Baseline</div>
     <div class="test-card-desc">Mixed GET/POST with keep-alive connections, query parsing, and chunked encoding.</div>
     <div class="test-card-endpoint">GET/POST /baseline11</div>
   </a>
-  <a class="test-card" href="docs/tests/h1/short-lived">
+  <a class="test-card" href="docs/add-framework/test-profiles/h1/short-lived">
     <div class="test-card-title">Short-lived Connection</div>
     <div class="test-card-desc">Connections closed after 10 requests — measures TCP handshake overhead.</div>
     <div class="test-card-endpoint">GET/POST /baseline11 (10 req/conn)</div>
   </a>
-  <a class="test-card" href="docs/tests/h1/json-processing">
+  <a class="test-card" href="docs/add-framework/test-profiles/h1/json-processing">
     <div class="test-card-title">JSON Processing</div>
     <div class="test-card-desc">Load dataset, compute derived fields, serialize ~10 KB JSON response.</div>
     <div class="test-card-endpoint">GET /json</div>
   </a>
-  <a class="test-card" href="docs/tests/h1/upload">
+  <a class="test-card" href="docs/add-framework/test-profiles/h1/upload">
     <div class="test-card-title">Upload (20 MB)</div>
-    <div class="test-card-desc">Ingest a 20 MB binary payload and return its CRC32 checksum.</div>
+    <div class="test-card-desc">Ingest a 20 MB binary payload and return its byte count.</div>
     <div class="test-card-endpoint">POST /upload</div>
   </a>
-  <a class="test-card" href="docs/tests/h1/compression">
+  <a class="test-card" href="docs/add-framework/test-profiles/h1/compression">
     <div class="test-card-title">Compression</div>
     <div class="test-card-desc">Serve ~1 MB JSON with gzip compression. Bandwidth-adjusted scoring.</div>
     <div class="test-card-endpoint">GET /compression (gzip)</div>
   </a>
-  <a class="test-card" href="docs/tests/h1/noisy">
+  <a class="test-card" href="docs/add-framework/test-profiles/h1/noisy">
     <div class="test-card-title">Noisy (Resilience)</div>
     <div class="test-card-desc">Valid requests mixed with malformed noise — bad paths, bad content-length, binary. Only 2xx count.</div>
     <div class="test-card-endpoint">GET/POST /baseline11 + noise</div>
   </a>
-  <a class="test-card" href="docs/tests/h1/mixed">
+  <a class="test-card" href="docs/add-framework/test-profiles/h1/mixed">
     <div class="test-card-title">Mixed Workload</div>
     <div class="test-card-desc">Realistic mix of baseline, JSON, DB, upload, and compression requests with weighted scoring.</div>
     <div class="test-card-endpoint">GET/POST mixed endpoints (100 req/conn)</div>
   </a>
-  <a class="test-card" href="docs/tests/h1/pipelined">
+  <a class="test-card" href="docs/add-framework/test-profiles/h1/pipelined">
     <div class="test-card-title">Pipelined (16x)</div>
     <div class="test-card-desc">16 requests sent back-to-back per connection. Tests pipeline batching.</div>
     <div class="test-card-endpoint">GET /pipeline</div>
@@ -110,12 +110,12 @@ html.dark .test-card-endpoint { color: #64748b; }
 <div class="tests-proto">
 <span class="tests-proto-label tests-proto-h2">HTTP/2</span>
 <div class="tests-grid">
-  <a class="test-card" href="docs/tests/h2/baseline-h2">
+  <a class="test-card" href="docs/add-framework/test-profiles/h2/baseline-h2">
     <div class="test-card-title">Baseline</div>
     <div class="test-card-desc">Multiplexed HTTP/2 streams over TLS with 100 concurrent streams per connection.</div>
     <div class="test-card-endpoint">GET /baseline2 (h2)</div>
   </a>
-  <a class="test-card" href="docs/tests/h2/static-h2">
+  <a class="test-card" href="docs/add-framework/test-profiles/h2/static-h2">
     <div class="test-card-title">Static Files</div>
     <div class="test-card-desc">Round-robin across 20 pre-loaded static files — CSS, JS, HTML, fonts, images.</div>
     <div class="test-card-endpoint">GET /static/* (h2)</div>
@@ -126,12 +126,12 @@ html.dark .test-card-endpoint { color: #64748b; }
 <div class="tests-proto">
 <span class="tests-proto-label tests-proto-h3">HTTP/3</span>
 <div class="tests-grid">
-  <a class="test-card" href="docs/tests/h3/baseline-h3">
+  <a class="test-card" href="docs/add-framework/test-profiles/h3/baseline-h3">
     <div class="test-card-title">Baseline</div>
     <div class="test-card-desc">HTTP/3 over QUIC — measures framework performance with UDP-based transport.</div>
     <div class="test-card-endpoint">GET /baseline2 (h3)</div>
   </a>
-  <a class="test-card" href="docs/tests/h3/static-h3">
+  <a class="test-card" href="docs/add-framework/test-profiles/h3/static-h3">
     <div class="test-card-title">Static Files</div>
     <div class="test-card-desc">Multi-URI static file serving over QUIC with parallel streams.</div>
     <div class="test-card-endpoint">GET /static/* (h3)</div>
