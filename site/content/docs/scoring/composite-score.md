@@ -44,7 +44,7 @@ Not all profiles count toward the composite score. Profiles marked as **scored**
 | Upload | Yes | 20 MB body ingestion, return byte count |
 | Compression | Yes | ~1 MB gzip-compressed JSON response |
 | Mixed | Yes | Weighted mix of baseline, JSON, DB, upload, compression |
-| Pipelined | No (*) | 16 requests batched per connection |
+| Pipelined | Yes | 16 requests batched per connection |
 | Noisy | No (*) | Valid requests interleaved with malformed noise |
 
 ### HTTP/2
@@ -61,7 +61,7 @@ Not all profiles count toward the composite score. Profiles marked as **scored**
 | Baseline | Yes | Query parsing over QUIC (UDP) with TLS 1.3 |
 | Static | Yes | 20 static files served over QUIC (UDP) with TLS 1.3 |
 
-Pipelined and Noisy are reference-only because not all frameworks support HTTP pipelining, and noisy traffic handling varies too widely to be fairly scored.
+Noisy is reference-only because noisy traffic handling varies too widely to be fairly scored.
 
 ## Resource efficiency factors
 

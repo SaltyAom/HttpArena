@@ -1,6 +1,6 @@
 {{ $profiles := slice
   (dict "id" "baseline" "label" "Baseline" "sublabel" "HTTP/1.1" "proto" "h1" "conns" (slice 512 4096 16384) "scored" true "engineScored" true)
-  (dict "id" "pipelined" "label" "Pipelined" "sublabel" "HTTP/1.1" "proto" "h1" "conns" (slice 512 4096 16384) "scored" false "engineScored" true)
+  (dict "id" "pipelined" "label" "Pipelined" "sublabel" "HTTP/1.1" "proto" "h1" "conns" (slice 512 4096 16384) "scored" true "engineScored" true)
   (dict "id" "limited-conn" "label" "Short-lived" "sublabel" "HTTP/1.1" "proto" "h1" "conns" (slice 512 4096) "scored" true "engineScored" true)
   (dict "id" "json" "label" "JSON" "sublabel" "HTTP/1.1" "proto" "h1" "conns" (slice 4096 16384 32768) "scored" true "engineScored" false)
   (dict "id" "upload" "label" "Upload" "sublabel" "HTTP/1.1" "proto" "h1" "conns" (slice 64 256 512) "scored" true "engineScored" false)
