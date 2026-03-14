@@ -1,4 +1,6 @@
-use tonic::{transport::Server, Request, Response, Status};
+use std::path::Path;
+use tonic::transport::{Identity, Server, ServerTlsConfig};
+use tonic::{Request, Response, Status};
 
 pub mod benchmark {
     tonic::include_proto!("benchmark");
@@ -26,15 +28,46 @@ impl BenchmarkService for BenchmarkServiceImpl {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let addr = "0.0.0.0:8080".parse()?;
-    let service = BenchmarkServiceImpl::default();
+    let service = BenchmarkServiceServer::new(BenchmarkServiceImpl::default());
 
-    println!("Application started.");
+    let cert_path = "/certs/server.crt";
+    let key_path = "/certs/server.key";
+    let has_cert = Path::new(cert_path).exists() && Path::new(key_path).exists();
 
-    Server::builder()
-        .add_service(BenchmarkServiceServer::new(service))
-        .serve(addr)
-        .await?;
+    if has_cert {
+        let cert = tokio::fs::read(cert_path).await?;
+        let key = tokio::fs::read(key_path).await?;
+        let identity = Identity::from_pem(cert, key);
+
+        let h2c_handle = tokio::spawn({
+            let svc = service.clone();
+            async move {
+                Server::builder()
+                    .add_service(svc)
+                    .serve("0.0.0.0:8080".parse().unwrap())
+                    .await
+            }
+        });
+
+        println!("Application started.");
+
+        let tls_handle = tokio::spawn(async move {
+            Server::builder()
+                .tls_config(ServerTlsConfig::new().identity(identity))
+                .unwrap()
+                .add_service(service)
+                .serve("0.0.0.0:8443".parse().unwrap())
+                .await
+        });
+
+        tokio::try_join!(h2c_handle, tls_handle)?;
+    } else {
+        println!("Application started.");
+        Server::builder()
+            .add_service(service)
+            .serve("0.0.0.0:8080".parse().unwrap())
+            .await?;
+    }
 
     Ok(())
 }

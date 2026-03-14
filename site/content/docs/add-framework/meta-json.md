@@ -46,6 +46,7 @@ Create a `meta.json` file in your framework directory:
 | `static-h2` | HTTP/2 | `/static/*` (TLS, port 8443) |
 | `baseline-h3` | HTTP/3 | `/baseline2` (QUIC, port 8443) |
 | `static-h3` | HTTP/3 | `/static/*` (QUIC, port 8443) |
-| `baseline-grpc` | gRPC | `BenchmarkService/GetSum` (h2c, port 8080) |
+| `unary-grpc` | gRPC | `BenchmarkService/GetSum` (h2c, port 8080) |
+| `unary-grpc-tls` | gRPC | `BenchmarkService/GetSum` (TLS, port 8443) |
 
 Only include profiles your framework supports. Frameworks missing a profile simply don't appear in that profile's leaderboard.

@@ -24,7 +24,7 @@ CERTS_DIR="$ROOT_DIR/certs"
 # Profile definitions: pipeline|req_per_conn|cpu_limit|connections|endpoint
 # endpoint: empty = /baseline11 (raw), "json" = /json (GET), "compression" = /compression (GET+gzip), "pipeline" = /pipeline, "upload" = POST /upload (raw),
 #           "h2" = /baseline2 (h2load), "static-h2" = multi-URI h2load, "h3" = /baseline2 (oha HTTP/3), "static-h3" = multi-URI oha,
-#           "grpc" = gRPC unary (ghz)
+#           "grpc" = gRPC unary (h2load h2c), "grpc-tls" = gRPC unary (h2load TLS)
 declare -A PROFILES=(
     [baseline]="1|0||512,4096,16384|"
     [pipelined]="16|0||512,4096,16384|pipeline"
@@ -38,9 +38,10 @@ declare -A PROFILES=(
     [static-h2]="1|0||256,1024|static-h2"
     [baseline-h3]="32|0||256,512|h3"
     [static-h3]="32|0||256,512|static-h3"
-    [baseline-grpc]="1|0||256,1024|grpc"
+    [unary-grpc]="1|0||256,1024|grpc"
+    [unary-grpc-tls]="1|0||256,1024|grpc-tls"
 )
-PROFILE_ORDER=(baseline pipelined limited-conn json upload compression noisy mixed baseline-h2 static-h2 baseline-h3 static-h3 baseline-grpc)
+PROFILE_ORDER=(baseline pipelined limited-conn json upload compression noisy mixed baseline-h2 static-h2 baseline-h3 static-h3 unary-grpc unary-grpc-tls)
 
 # Parse flags
 SAVE_RESULTS=false
@@ -340,13 +341,18 @@ for profile in "${profiles_to_run[@]}"; do
 
     # Wait for server
     echo "[wait] Waiting for server..."
-    if [ "$endpoint" = "grpc" ]; then
+    if [ "$endpoint" = "grpc" ] || [ "$endpoint" = "grpc-tls" ]; then
         PROTO_FILE=$(find "$ROOT_DIR/frameworks/$FRAMEWORK" -name 'benchmark.proto' -type f | head -1)
+        if [ "$endpoint" = "grpc-tls" ]; then
+            local_grpc_check="localhost:$H2PORT"
+        else
+            local_grpc_check="localhost:$PORT"
+        fi
         for i in $(seq 1 30); do
             if $GHZ --insecure --proto "$PROTO_FILE" \
                 --call benchmark.BenchmarkService/GetSum \
                 -d '{"a":1,"b":2}' -c 1 -n 1 \
-                "localhost:$PORT" >/dev/null 2>&1; then
+                "$local_grpc_check" >/dev/null 2>&1; then
                 break
             fi
             if [ "$i" -eq 30 ]; then
@@ -394,6 +400,14 @@ for profile in "${profiles_to_run[@]}"; do
         USE_H2LOAD=true
         gc_args=("$H2LOAD"
             "http://localhost:$PORT/benchmark.BenchmarkService/GetSum"
+            -d "$REQUESTS_DIR/grpc-sum.bin"
+            -H 'content-type: application/grpc'
+            -H 'te: trailers'
+            -c "$CONNS" -m 100 -t "$H2THREADS" -D "$DURATION")
+    elif [ "$endpoint" = "grpc-tls" ]; then
+        USE_H2LOAD=true
+        gc_args=("$H2LOAD"
+            "https://localhost:$H2PORT/benchmark.BenchmarkService/GetSum"
             -d "$REQUESTS_DIR/grpc-sum.bin"
             -H 'content-type: application/grpc'
             -H 'te: trailers'
@@ -642,6 +656,10 @@ EOF
         LOGS_DIR="$ROOT_DIR/site/static/logs/$profile/$CONNS"
         mkdir -p "$LOGS_DIR"
         docker logs "$CONTAINER_NAME" > "$LOGS_DIR/${FRAMEWORK}.log" 2>&1 || true
+        # Truncate large logs (>10MB) to last 5000 lines
+        if [ -f "$LOGS_DIR/${FRAMEWORK}.log" ] && [ "$(stat -c%s "$LOGS_DIR/${FRAMEWORK}.log" 2>/dev/null)" -gt 10485760 ] 2>/dev/null; then
+            tail -5000 "$LOGS_DIR/${FRAMEWORK}.log" > "$LOGS_DIR/${FRAMEWORK}.log.tmp" && mv "$LOGS_DIR/${FRAMEWORK}.log.tmp" "$LOGS_DIR/${FRAMEWORK}.log"
+        fi
         echo "[saved] site/static/logs/$profile/${CONNS}/${FRAMEWORK}.log"
     else
         echo "[dry-run] Results not saved (use --save to persist)"

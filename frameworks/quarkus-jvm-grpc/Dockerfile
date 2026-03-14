@@ -6,7 +6,7 @@ RUN mvn package -DskipTests -q
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 COPY --from=build /app/target/quarkus-app /app
-EXPOSE 8080
+EXPOSE 8080 8443
 ENTRYPOINT ["java", \
   "-server", \
   "-XX:+UseParallelGC", \

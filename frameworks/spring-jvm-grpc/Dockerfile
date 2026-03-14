@@ -18,5 +18,5 @@ RUN gradle bootJar --no-daemon -q
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 COPY --from=build /app/build/libs/spring-jvm-grpc-1.0.0.jar app.jar
-EXPOSE 8080
+EXPOSE 8080 8443
 ENTRYPOINT ["java", "-jar", "app.jar"]

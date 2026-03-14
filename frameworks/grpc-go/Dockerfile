@@ -6,5 +6,5 @@ RUN CGO_ENABLED=0 go build -o server main.go
 
 FROM debian:bookworm-slim
 COPY --from=build /app/server /server
-EXPOSE 8080
+EXPOSE 8080 8443
 CMD ["/server"]

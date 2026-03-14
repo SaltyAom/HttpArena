@@ -15,5 +15,5 @@ WORKDIR /app
 
 COPY --from=build /app/target/release/tonic-grpc .
 
-EXPOSE 8080
+EXPOSE 8080 8443
 ENTRYPOINT ["./tonic-grpc"]

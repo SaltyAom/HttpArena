@@ -1,5 +1,10 @@
+using System.Security.Cryptography.X509Certificates;
 using AspnetGrpc.Services;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+
+var certPath = Environment.GetEnvironmentVariable("TLS_CERT") ?? "/certs/server.crt";
+var keyPath = Environment.GetEnvironmentVariable("TLS_KEY") ?? "/certs/server.key";
+var hasCert = File.Exists(certPath) && File.Exists(keyPath);
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Logging.ClearProviders();
@@ -15,6 +20,15 @@ builder.WebHost.ConfigureKestrel(options =>
     {
         lo.Protocols = HttpProtocols.Http2;
     });
+
+    if (hasCert)
+    {
+        options.ListenAnyIP(8443, lo =>
+        {
+            lo.Protocols = HttpProtocols.Http2;
+            lo.UseHttps(X509Certificate2.CreateFromPemFile(certPath, keyPath));
+        });
+    }
 });
 
 var app = builder.Build();

@@ -9,6 +9,8 @@
   (dict "id" "mixed" "label" "Mixed" "sublabel" "HTTP/1.1" "proto" "h1" "conns" (slice 4096 16384) "scored" true "engineScored" false)
   (dict "id" "baseline-h2" "label" "Baseline" "sublabel" "HTTP/2" "proto" "h2" "conns" (slice 256 1024) "scored" true "engineScored" true)
   (dict "id" "static-h2" "label" "Static" "sublabel" "HTTP/2" "proto" "h2" "conns" (slice 256 1024) "scored" true "engineScored" true)
+  (dict "id" "unary-grpc" "label" "Unary" "sublabel" "gRPC" "proto" "grpc" "conns" (slice 256 1024) "scored" true "engineScored" true)
+  (dict "id" "unary-grpc-tls" "label" "Unary TLS" "sublabel" "gRPC" "proto" "grpc" "conns" (slice 256 1024) "scored" true "engineScored" true)
   (dict "id" "baseline-h3" "label" "Baseline" "sublabel" "HTTP/3" "proto" "h3" "conns" (slice 256 512) "scored" true "engineScored" true)
   (dict "id" "static-h3" "label" "Static" "sublabel" "HTTP/3" "proto" "h3" "conns" (slice 256 512) "scored" true "engineScored" true)
 }}
@@ -68,53 +70,45 @@ html.dark .composite-disclaimer { color: #fff !important; background: rgba(234,1
 
   <div class="composite-profiles-wrap" style="margin:0.5rem 0 0 0; padding:0.75rem 1rem; background:rgba(0,0,0,0.04); border-radius:8px; border:1px solid rgba(0,0,0,0.08); display:flex; flex-direction:column; gap:0.5rem;">
     <div class="lb-filters" style="margin:0; padding:0;">
+      <span class="lb-filters-label">Protocol</span>
+      <div class="composite-proto-select active" data-proto="h1">HTTP/1.1</div>
+      <div class="composite-proto-select" data-proto="h2">HTTP/2</div>
+      <div class="composite-proto-select" data-proto="h3">HTTP/3</div>
+      <div class="composite-proto-select" data-proto="grpc">gRPC</div>
+    </div>
+    <div class="lb-filters" style="margin:0; padding:0;">
       <span class="lb-filters-label">Tests</span>
       <span class="lb-filters-hint">(Toggle)</span>
       <div class="composite-profile-filter active" data-profile="all">All</div>
-    </div>
-    <div class="lb-filters" style="margin:0; padding:0;">
-      <span class="composite-proto-label composite-proto-toggle active" data-proto="h1">HTTP/1.1</span>
-      {{ range $profiles }}{{ if eq .proto "h1" }}
-      <div class="composite-profile-filter cp-{{ .proto }} active" data-profile="{{ .id }}">{{ .label }}</div>
-      {{ end }}{{ end }}
-    </div>
-    <div class="lb-filters" style="margin:0; padding:0;">
-      <span class="composite-proto-label composite-proto-toggle active" data-proto="h2">HTTP/2</span>
-      {{ range $profiles }}{{ if eq .proto "h2" }}
-      <div class="composite-profile-filter cp-{{ .proto }} active" data-profile="{{ .id }}">{{ .label }}</div>
-      {{ end }}{{ end }}
-    </div>
-    <div class="lb-filters" style="margin:0; padding:0;">
-      <span class="composite-proto-label composite-proto-toggle active" data-proto="h3">HTTP/3</span>
-      {{ range $profiles }}{{ if eq .proto "h3" }}
-      <div class="composite-profile-filter cp-{{ .proto }} active" data-profile="{{ .id }}">{{ .label }}</div>
-      {{ end }}{{ end }}
+      {{ range $profiles }}
+      <div class="composite-profile-filter cp-{{ .proto }} active" data-profile="{{ .id }}" style="display:none;">{{ .label }}</div>
+      {{ end }}
     </div>
   </div>
   <style>
-  .composite-proto-label { font-size:0.7rem; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; align-self:center; }
-  .composite-proto-toggle { cursor:pointer; user-select:none; padding:0.25rem 0.6rem; border-radius:5px; border:1.5px solid #e2e8f0; color:#94a3b8; background:transparent; transition:all 0.15s ease; }
-  .composite-proto-toggle:hover { transform:translateY(-1px); box-shadow:0 2px 4px rgba(0,0,0,0.08); color:#475569; border-color:#cbd5e1; }
-  .composite-proto-toggle.active[data-proto="h1"] { color:#3b82f6; border-color:#3b82f6; background:rgba(59,130,246,0.06); }
-  .composite-proto-toggle.active[data-proto="h2"] { color:#d97706; border-color:#d97706; background:rgba(217,119,6,0.06); }
-  .composite-proto-toggle.active[data-proto="h3"] { color:#16a34a; border-color:#16a34a; background:rgba(22,163,74,0.06); }
-  .composite-proto-toggle.active[data-proto="h1"]:hover { background:rgba(59,130,246,0.12); }
-  .composite-proto-toggle.active[data-proto="h2"]:hover { background:rgba(217,119,6,0.12); }
-  .composite-proto-toggle.active[data-proto="h3"]:hover { background:rgba(22,163,74,0.12); }
-  html.dark .composite-proto-toggle { color:#64748b; border-color:#334155; }
-  html.dark .composite-proto-toggle:hover { color:#94a3b8; border-color:#475569; }
-  html.dark .composite-proto-toggle.active[data-proto="h1"] { color:#60a5fa; border-color:#3b82f6; background:rgba(59,130,246,0.12); }
-  html.dark .composite-proto-toggle.active[data-proto="h2"] { color:#fbbf24; border-color:#d97706; background:rgba(217,119,6,0.12); }
-  html.dark .composite-proto-toggle.active[data-proto="h3"] { color:#4ade80; border-color:#16a34a; background:rgba(22,163,74,0.12); }
+  .composite-proto-select { padding:0.3rem 0.75rem; font-size:0.8rem; font-weight:500; color:#94a3b8; cursor:pointer; border-radius:6px; border:1.5px solid #e2e8f0; background:transparent; transition:all 0.15s ease; user-select:none; }
+  .composite-proto-select:hover { color:#475569; border-color:#cbd5e1; transform:translateY(-1px); box-shadow:0 2px 4px rgba(0,0,0,0.08); }
+  .composite-proto-select.active[data-proto="h1"] { color:#3b82f6; border-color:#3b82f6; background:rgba(59,130,246,0.06); font-weight:600; }
+  .composite-proto-select.active[data-proto="h2"] { color:#d97706; border-color:#d97706; background:rgba(217,119,6,0.06); font-weight:600; }
+  .composite-proto-select.active[data-proto="h3"] { color:#16a34a; border-color:#16a34a; background:rgba(22,163,74,0.06); font-weight:600; }
+  .composite-proto-select.active[data-proto="grpc"] { color:#7c3aed; border-color:#7c3aed; background:rgba(124,58,237,0.06); font-weight:600; }
+  html.dark .composite-proto-select { color:#64748b; border-color:#334155; }
+  html.dark .composite-proto-select:hover { color:#94a3b8; border-color:#475569; }
+  html.dark .composite-proto-select.active[data-proto="h1"] { color:#60a5fa; border-color:#3b82f6; background:rgba(59,130,246,0.12); }
+  html.dark .composite-proto-select.active[data-proto="h2"] { color:#fbbf24; border-color:#d97706; background:rgba(217,119,6,0.12); }
+  html.dark .composite-proto-select.active[data-proto="h3"] { color:#4ade80; border-color:#16a34a; background:rgba(22,163,74,0.12); }
+  html.dark .composite-proto-select.active[data-proto="grpc"] { color:#a78bfa; border-color:#7c3aed; background:rgba(124,58,237,0.12); }
   .composite-profile-filter { padding:0.3rem 0.75rem; font-size:0.8rem; font-weight:500; color:#94a3b8; cursor:pointer; border-radius:6px; border:1.5px solid #e2e8f0; background:transparent; transition:all 0.15s ease; user-select:none; }
   .composite-profile-filter:hover { color:#475569; border-color:#cbd5e1; transform:translateY(-1px); box-shadow:0 2px 4px rgba(0,0,0,0.08); }
   .composite-profile-filter[data-profile="all"].active { color:#8b5cf6; border-color:#8b5cf6; background:rgba(139,92,246,0.06); font-weight:600; }
   .composite-profile-filter.active.cp-h1 { color:#3b82f6; border-color:#3b82f6; background:rgba(59,130,246,0.06); font-weight:600; }
   .composite-profile-filter.active.cp-h2 { color:#d97706; border-color:#d97706; background:rgba(217,119,6,0.06); font-weight:600; }
   .composite-profile-filter.active.cp-h3 { color:#16a34a; border-color:#16a34a; background:rgba(22,163,74,0.06); font-weight:600; }
+  .composite-profile-filter.active.cp-grpc { color:#7c3aed; border-color:#7c3aed; background:rgba(124,58,237,0.06); font-weight:600; }
   .composite-profile-filter.cp-h1:hover { background:rgba(59,130,246,0.06); }
   .composite-profile-filter.cp-h2:hover { background:rgba(217,119,6,0.06); }
   .composite-profile-filter.cp-h3:hover { background:rgba(22,163,74,0.06); }
+  .composite-profile-filter.cp-grpc:hover { background:rgba(124,58,237,0.06); }
   html.dark .composite-profiles-wrap { background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.10); }
   html.dark .composite-profile-filter { color:#64748b; border-color:#334155; }
   html.dark .composite-profile-filter:hover { color:#94a3b8; border-color:#475569; }
@@ -122,6 +116,7 @@ html.dark .composite-disclaimer { color: #fff !important; background: rgba(234,1
   html.dark .composite-profile-filter.active.cp-h1 { color:#60a5fa; border-color:#3b82f6; background:rgba(59,130,246,0.12); }
   html.dark .composite-profile-filter.active.cp-h2 { color:#fbbf24; border-color:#d97706; background:rgba(217,119,6,0.12); }
   html.dark .composite-profile-filter.active.cp-h3 { color:#4ade80; border-color:#16a34a; background:rgba(22,163,74,0.12); }
+  html.dark .composite-profile-filter.active.cp-grpc { color:#a78bfa; border-color:#7c3aed; background:rgba(124,58,237,0.12); }
   </style>
 
   <div class="lb-filters composite-resource-wrap" style="margin:0.5rem 0 0 0; padding:0.5rem 1rem; background:rgba(0,0,0,0.02); border-radius:8px; border:1px solid rgba(0,0,0,0.06);">
@@ -158,7 +153,8 @@ var profileLabels = {};
 var profileProtos = {};
 var profileScored = {};
 var profileEngineScored = {};
-profiles.forEach(function(p) { profileLabels[p.id] = p.label; profileProtos[p.id] = p.proto; profileScored[p.id] = p.scored !== false; profileEngineScored[p.id] = p.engineScored === true; });
+var profileSublabels = {};
+profiles.forEach(function(p) { profileLabels[p.id] = p.label; profileProtos[p.id] = p.proto; profileScored[p.id] = p.scored !== false; profileEngineScored[p.id] = p.engineScored === true; profileSublabels[p.id] = p.sublabel || ''; });
 
 function parseCpu(s) {
   if (!s) return 0;
@@ -274,7 +270,7 @@ window.addEventListener('roundChanged', function(ev) {
 function getActiveProfiles() {
   var active = [];
   document.querySelectorAll('.composite-profile-filter[data-profile]:not([data-profile="all"]).active').forEach(function(el) {
-    active.push(el.dataset.profile);
+    if (el.style.display !== 'none') active.push(el.dataset.profile);
   });
   return active;
 }
@@ -422,7 +418,7 @@ function renderComposite() {
     });
     var composite;
     if (participated === 0) {
-      composite = 0;
+      return;
     } else {
       var sum = 0;
       activeIds.forEach(function(pid, i) {
@@ -456,13 +452,15 @@ function renderComposite() {
       bgStyle = ' background:rgba(34,197,94,0.12); margin:-0.5rem -0.25rem; padding:0.5rem 0.25rem; border-radius:4px;';
     } else if (proto === 'h2') {
       bgStyle = ' background:rgba(234,179,8,0.12); margin:-0.5rem -0.25rem; padding:0.5rem 0.25rem; border-radius:4px;';
+    } else if (proto === 'grpc') {
+      bgStyle = ' background:rgba(124,58,237,0.10); margin:-0.5rem -0.25rem; padding:0.5rem 0.25rem; border-radius:4px;';
     } else {
       bgStyle = ' background:rgba(59,130,246,0.08); margin:-0.5rem -0.25rem; padding:0.5rem 0.25rem; border-radius:4px;';
     }
-    var sublabel = proto === 'h3' ? 'HTTP/3' : proto === 'h2' ? 'HTTP/2' : 'HTTP/1.1';
+    var sublabel = profileSublabels[pid] || proto;
     var label = profileLabels[pid] + (scored ? '' : ' *');
-    var shortProto = proto === 'h3' ? 'H3' : proto === 'h2' ? 'H2' : 'H1';
-    headerHtml += '<div style="text-align:right; font-size:0.62rem; line-height:1.2;' + bgStyle + '" title="' + profileLabels[pid] + ' (' + sublabel + ')' + (scored ? ' — counts toward composite score' : ' — reference only, does not count toward composite score') + '">' + label + '<br><span style="font-weight:700; font-size:0.6rem;">' + shortProto + '</span></div>';
+    var sublabel = profileSublabels[pid] || (proto === 'h3' ? 'HTTP/3' : proto === 'h2' ? 'HTTP/2' : 'HTTP/1.1');
+    headerHtml += '<div style="text-align:right; font-size:0.62rem; line-height:1.2;' + bgStyle + '" title="' + profileLabels[pid] + ' (' + sublabel + ')' + (scored ? ' — counts toward composite score' : ' — reference only, does not count toward composite score') + '">' + label + '</div>';
   });
   header.innerHTML = headerHtml;
   table.appendChild(header);
@@ -496,6 +494,8 @@ function renderComposite() {
         bgStyle = ' background:rgba(34,197,94,0.12); margin:-0.5rem -0.25rem; padding:0.5rem 0.25rem; border-radius:4px;';
       } else if (proto === 'h2') {
         bgStyle = ' background:rgba(234,179,8,0.12); margin:-0.5rem -0.25rem; padding:0.5rem 0.25rem; border-radius:4px;';
+      } else if (proto === 'grpc') {
+        bgStyle = ' background:rgba(124,58,237,0.10); margin:-0.5rem -0.25rem; padding:0.5rem 0.25rem; border-radius:4px;';
       } else {
         bgStyle = ' background:rgba(59,130,246,0.08); margin:-0.5rem -0.25rem; padding:0.5rem 0.25rem; border-radius:4px;';
       }
@@ -526,14 +526,14 @@ function renderComposite() {
         var pid = activeIds[i];
         var rps = avgByProfile[pid][r.framework];
         if (s === 0) {
-          var protoTag = profileProtos[pid] === 'h3' ? ' (H3)' : profileProtos[pid] === 'h2' ? ' (H2)' : ' (H1)';
+          var protoTag = ' (' + (profileSublabels[pid] || profileProtos[pid]) + ')';
           profileDetails +=
             '<div>' +
               '<div class="lb-popup-stat-label">' + profileLabels[pid] + protoTag + '</div>' +
               '<div class="lb-popup-stat-value" style="color:#94a3b8;">— <span style="font-size:0.7rem;">(not participating)</span></div>' +
             '</div>';
         } else {
-          var protoTag = profileProtos[pid] === 'h3' ? ' (H3)' : profileProtos[pid] === 'h2' ? ' (H2)' : ' (H1)';
+          var protoTag = ' (' + (profileSublabels[pid] || profileProtos[pid]) + ')';
           var popupSuffix = pid !== 'mixed' ? ' <span style="font-size:0.7rem; color:#94a3b8;">(' + Number(rps).toLocaleString() + ' req/s)</span>' : '';
           profileDetails +=
             '<div>' +
@@ -571,60 +571,53 @@ function renderComposite() {
   });
 }
 
-// Initial render
+// Show/hide test filters based on selected protocol
+function syncTestFilters() {
+  var activeProto = document.querySelector('.composite-proto-select.active').dataset.proto;
+  document.querySelectorAll('.composite-profile-filter[data-profile]:not([data-profile="all"])').forEach(function(f) {
+    var match = f.classList.contains('cp-' + activeProto);
+    f.style.display = match ? '' : 'none';
+    if (!match) f.classList.remove('active');
+    else f.classList.add('active');
+  });
+  document.querySelector('.composite-profile-filter[data-profile="all"]').classList.add('active');
+}
+
+// Initial sync and render
+syncTestFilters();
 renderComposite();
 
-// Sync proto toggle active state based on child profile filters
-function syncProtoToggles() {
-  document.querySelectorAll('.composite-proto-toggle').forEach(function(pt) {
-    var proto = pt.dataset.proto;
-    var groupFilters = document.querySelectorAll('.composite-profile-filter.cp-' + proto);
-    var anyActive = Array.prototype.some.call(groupFilters, function(f) { return f.classList.contains('active'); });
-    if (anyActive) pt.classList.add('active');
-    else pt.classList.remove('active');
+// Protocol selector — mutually exclusive
+document.querySelectorAll('.composite-proto-select').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.composite-proto-select').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    syncTestFilters();
+    renderComposite();
   });
-}
+});
 
 // Profile filter click handlers
 document.querySelectorAll('.composite-profile-filter').forEach(function(btn) {
   btn.addEventListener('click', function() {
     var pid = btn.dataset.profile;
-    var allFilters = document.querySelectorAll('.composite-profile-filter');
+    var activeProto = document.querySelector('.composite-proto-select.active').dataset.proto;
+    var groupFilters = document.querySelectorAll('.composite-profile-filter.cp-' + activeProto);
     var allBtn = document.querySelector('.composite-profile-filter[data-profile="all"]');
     if (pid === 'all') {
-      allFilters.forEach(function(f) { f.classList.add('active'); });
+      groupFilters.forEach(function(f) { f.classList.add('active'); });
+      allBtn.classList.add('active');
     } else {
       btn.classList.toggle('active');
       allBtn.classList.remove('active');
-      var total = document.querySelectorAll('.composite-profile-filter[data-profile]:not([data-profile="all"])').length;
-      var active = document.querySelectorAll('.composite-profile-filter[data-profile]:not([data-profile="all"]).active').length;
+      var total = groupFilters.length;
+      var active = 0;
+      groupFilters.forEach(function(f) { if (f.classList.contains('active')) active++; });
       if (active === 0 || active === total) {
-        allFilters.forEach(function(f) { f.classList.add('active'); });
+        groupFilters.forEach(function(f) { f.classList.add('active'); });
+        allBtn.classList.add('active');
       }
     }
-    syncProtoToggles();
-    renderComposite();
-  });
-});
-
-// Protocol group toggle handlers
-document.querySelectorAll('.composite-proto-toggle').forEach(function(btn) {
-  btn.addEventListener('click', function() {
-    var proto = btn.dataset.proto;
-    var groupFilters = document.querySelectorAll('.composite-profile-filter.cp-' + proto);
-    var allActive = Array.prototype.every.call(groupFilters, function(f) { return f.classList.contains('active'); });
-    groupFilters.forEach(function(f) {
-      if (allActive) f.classList.remove('active');
-      else f.classList.add('active');
-    });
-    var allBtn = document.querySelector('.composite-profile-filter[data-profile="all"]');
-    allBtn.classList.remove('active');
-    var total = document.querySelectorAll('.composite-profile-filter[data-profile]:not([data-profile="all"])').length;
-    var active = document.querySelectorAll('.composite-profile-filter[data-profile]:not([data-profile="all"]).active').length;
-    if (active === 0 || active === total) {
-      document.querySelectorAll('.composite-profile-filter').forEach(function(f) { f.classList.add('active'); });
-    }
-    syncProtoToggles();
     renderComposite();
   });
 });

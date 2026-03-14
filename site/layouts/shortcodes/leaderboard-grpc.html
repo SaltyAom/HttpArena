@@ -1,5 +1,6 @@
 {{ $profiles := slice
-  (dict "id" "baseline-grpc" "label" "Unary (gRPC)" "conns" (slice 256 1024) "desc" "Unary gRPC call (<code>BenchmarkService/GetSum</code>) over cleartext HTTP/2 (h2c). Measures gRPC transport performance using Protocol Buffers serialization. Benchmarked with <code>h2load</code>.")
+  (dict "id" "unary-grpc" "label" "Unary (h2c)" "conns" (slice 256 1024) "desc" "Unary gRPC call (<code>BenchmarkService/GetSum</code>) over cleartext HTTP/2 (h2c). Measures raw gRPC transport performance without TLS overhead. Benchmarked with <code>h2load</code>.")
+  (dict "id" "unary-grpc-tls" "label" "Unary (TLS)" "conns" (slice 256 1024) "desc" "Same unary gRPC call over encrypted HTTP/2 with TLS 1.3. Measures gRPC performance with real-world TLS encryption. Benchmarked with <code>h2load</code>.")
 }}
 
 {{/* Build JSON data blob for round switching */}}

@@ -7,6 +7,7 @@
   "repo": "https://github.com/grpc/grpc-go",
   "enabled": true,
   "tests": [
-    "baseline-grpc"
+    "unary-grpc",
+    "unary-grpc-tls"
   ]
 }
