@@ -34,4 +34,4 @@ zig build -Doptimize=ReleaseFast
 ./zig-out/bin/blitz
 ```
 
-The server listens on port 8080 and uses all available CPU cores.
+The server listens on port 8080 and spawns one worker thread per available CPU core.
