@@ -187,47 +187,12 @@ post "/upload" do |env|
 end
 
 # ---------------------------------------------------------------------------
-# Server config — multi-core via SO_REUSEPORT + fork
+# Server config
 # ---------------------------------------------------------------------------
 
 Kemal.config.port = 8080
 Kemal.config.env = "production"
-
-# Disable Kemal's default signal handlers and logging for workers
 Kemal.config.shutdown_message = false
 Kemal.config.logging = false
 
-worker_count = System.cpu_count.to_i
-worker_count = 1 if worker_count < 1
-
-def start_server
-  # Build Kemal's handler chain manually
-  Kemal.config.setup
-
-  # Register 404 handler (normally done by Kemal.run)
-  unless Kemal.config.error_handlers.has_key?(404)
-    error 404 do
-      render_404
-    end
-  end
-
-  handlers = Kemal.config.handlers
-
-  # Create server with SO_REUSEPORT
-  server = HTTP::Server.new(handlers)
-  server.bind_tcp("0.0.0.0", 8080, reuse_port: true)
-  server.listen
-end
-
-if worker_count > 1
-  pids = [] of Int64
-  worker_count.times do
-    child = Process.fork { start_server }
-    pids << child.pid
-  end
-  Signal::INT.trap { pids.each { |p| Process.signal(Signal::TERM, p) rescue nil }; exit }
-  Signal::TERM.trap { pids.each { |p| Process.signal(Signal::TERM, p) rescue nil }; exit }
-  sleep
-else
-  start_server
-end
+Kemal.run
