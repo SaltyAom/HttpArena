@@ -10,6 +10,7 @@ const Router = @import("router.zig").Router;
 const pool_mod = @import("pool.zig");
 const ConnPool = pool_mod.ConnPool;
 const ConnState = pool_mod.ConnState;
+const compress_mod = @import("compress.zig");
 const Request = types.Request;
 const Response = types.Response;
 
@@ -31,7 +32,63 @@ pub const Config = struct {
     port: u16 = 8080,
     threads: ?usize = null, // null = auto-detect
     keep_alive_timeout: u32 = 60, // seconds (0 = disable)
+    shutdown_timeout: u32 = 30, // seconds to drain connections before force-close (0 = immediate)
+    compression: bool = true, // enable gzip/deflate response compression
 };
+
+// ── Shared shutdown state (atomic, shared across worker threads) ─────
+var shutdown_flag: std.atomic.Value(bool) = std.atomic.Value(bool).init(false);
+
+// ── Shared eventfd for waking non-primary threads on shutdown ────────
+var shutdown_eventfd: i32 = -1;
+
+/// Check if the server is shutting down.
+pub fn isShuttingDown() bool {
+    return shutdown_flag.load(.acquire);
+}
+
+// ── Signal pipe (self-pipe trick) ───────────────────────────────────
+// Signal handler writes to pipe[1], event loop reads from pipe[0] via epoll.
+// Works as PID 1 in Docker — sigaction registers a real handler.
+var signal_pipe: [2]i32 = .{ -1, -1 };
+
+fn signalHandler(_: c_int) callconv(.C) void {
+    // Write a single byte to wake up the event loop — async-signal-safe
+    const buf = [_]u8{1};
+    _ = posix.write(signal_pipe[1], &buf) catch {};
+}
+
+// C library bindings for signal handling
+const libc = @cImport({
+    @cDefine("_GNU_SOURCE", "1");
+    @cInclude("signal.h");
+    @cInclude("unistd.h");
+    @cInclude("fcntl.h");
+});
+
+/// Install signal handlers for SIGTERM and SIGINT using the self-pipe trick.
+fn installSignalHandlers() void {
+    // Create a pipe and set non-blocking via raw syscall
+    const pipe_result = linux.syscall2(.pipe2, @intFromPtr(&signal_pipe), 0o4000 | 0o2000000);
+    const pipe_signed: i64 = @bitCast(pipe_result);
+    if (pipe_signed < 0) return;
+
+    // Install signal handlers via libc sigaction
+    var act: libc.struct_sigaction = std.mem.zeroes(libc.struct_sigaction);
+    act.__sigaction_handler = .{ .sa_handler = signalHandler };
+    act.sa_flags = libc.SA_RESTART;
+
+    _ = libc.sigaction(libc.SIGTERM, &act, null);
+    _ = libc.sigaction(libc.SIGINT, &act, null);
+
+    // Create eventfd for waking non-primary worker threads
+    // EFD_NONBLOCK | EFD_CLOEXEC
+    const efd = linux.syscall2(.eventfd2, 0, 0o4000 | 0o2000000);
+    const efd_signed: i64 = @bitCast(efd);
+    if (efd_signed >= 0) {
+        shutdown_eventfd = @intCast(efd_signed);
+    }
+}
 
 // ── Server ──────────────────────────────────────────────────────────
 pub const Server = struct {
@@ -42,32 +99,43 @@ pub const Server = struct {
         return .{ .router = router, .config = config };
     }
 
-    /// Start the server — blocks forever
+    /// Start the server — blocks until shutdown signal received
     pub fn listen(self: *Server) !void {
+        // Install signal handlers before spawning threads
+        installSignalHandlers();
+
         const n_threads = self.config.threads orelse @max(Thread.getCpuCount() catch 1, 1);
 
         var threads = std.ArrayList(Thread).init(std.heap.c_allocator);
         defer threads.deinit();
 
         for (1..n_threads) |_| {
-            const t = try Thread.spawn(.{}, workerThread, .{ self.router, self.config });
+            const t = try Thread.spawn(.{}, workerThread, .{ self.router, self.config, false });
             try threads.append(t);
         }
 
-        workerThread(self.router, self.config);
+        // Main thread is the primary worker — it monitors the signal pipe
+        workerThread(self.router, self.config, true);
+
+        // Wait for all worker threads to finish
+        for (threads.items) |t| {
+            t.join();
+        }
     }
 };
 
-// Default pool size per worker thread (covers most concurrent connections)
+// Default pool size per worker thread
 const POOL_SIZE: usize = 4096;
 
-// Sentinel fd for the timerfd (keep-alive sweep timer)
-const TIMER_FD_SENTINEL: i32 = -2;
+// Per-thread compression buffer size (enough for most responses)
+const COMPRESS_BUF_SIZE: usize = 131072; // 128KB
 
-fn workerThread(router: *Router, config: Config) void {
+fn workerThread(router: *Router, config: Config, is_primary: bool) void {
     const alloc = std.heap.c_allocator;
     const port = config.port;
     const ka_timeout: i64 = @intCast(config.keep_alive_timeout);
+    const drain_timeout: i64 = @intCast(config.shutdown_timeout);
+    const compression_enabled = config.compression;
 
     // Initialize connection pool for this worker
     var pool = ConnPool.init(alloc, POOL_SIZE) catch return;
@@ -90,12 +158,11 @@ fn workerThread(router: *Router, config: Config) void {
     var listen_ev = linux.epoll_event{ .events = linux.EPOLL.IN, .data = .{ .fd = sock } };
     posix.epoll_ctl(epfd, linux.EPOLL.CTL_ADD, sock, &listen_ev) catch return;
 
-    // Set up timerfd for keep-alive sweep (fires every 10 seconds)
+    // Set up timerfd for keep-alive sweep
     var timer_fd: i32 = -1;
     if (ka_timeout > 0) {
         timer_fd = timerfdCreate() orelse -1;
         if (timer_fd >= 0) {
-            // Sweep interval: every 10 seconds (or half the timeout if small)
             const half = @divTrunc(ka_timeout, 2);
             const interval: i64 = if (ka_timeout < 20) (if (half > 1) half else 1) else 10;
             timerfdSetInterval(timer_fd, interval);
@@ -108,12 +175,54 @@ fn workerThread(router: *Router, config: Config) void {
     }
     defer if (timer_fd >= 0) posix.close(timer_fd);
 
+    // Monitor signal pipe (primary thread) or shutdown eventfd (other threads)
+    const sig_fd = signal_pipe[0];
+    const evt_fd = shutdown_eventfd;
+    if (is_primary and sig_fd >= 0) {
+        var sig_ev = linux.epoll_event{ .events = linux.EPOLL.IN, .data = .{ .fd = sig_fd } };
+        posix.epoll_ctl(epfd, linux.EPOLL.CTL_ADD, sig_fd, &sig_ev) catch {};
+    } else if (!is_primary and evt_fd >= 0) {
+        // Non-primary threads listen on the shared eventfd
+        var evt_ev = linux.epoll_event{ .events = linux.EPOLL.IN, .data = .{ .fd = evt_fd } };
+        posix.epoll_ctl(epfd, linux.EPOLL.CTL_ADD, evt_fd, &evt_ev) catch {};
+    }
+
     var conns: [MAX_CONNS]?*ConnState = undefined;
     @memset(&conns, null);
     var events: [MAX_EVENTS]linux.epoll_event = undefined;
 
+    // Shutdown state
+    var accepting = true;
+    var drain_start: i64 = 0;
+
     while (true) {
-        const n = posix.epoll_wait(epfd, &events, -1);
+        // Check if shutdown was triggered by another thread
+        if (shutdown_flag.load(.acquire)) {
+            if (accepting) {
+                posix.epoll_ctl(epfd, linux.EPOLL.CTL_DEL, sock, null) catch {};
+                accepting = false;
+                if (drain_start == 0) {
+                    const ts = std.posix.clock_gettime(.MONOTONIC) catch std.posix.timespec{ .sec = 0, .nsec = 0 };
+                    drain_start = ts.sec;
+                }
+            }
+
+            if (drain_timeout == 0 or !hasActiveConns(&conns)) {
+                break;
+            }
+            if (drain_start > 0) {
+                const ts = std.posix.clock_gettime(.MONOTONIC) catch std.posix.timespec{ .sec = 0, .nsec = 0 };
+                if (ts.sec - drain_start >= drain_timeout) {
+                    forceCloseAll(&pool, &conns, epfd);
+                    break;
+                }
+            }
+        }
+
+        // Use 1-second timeout on non-primary threads so they notice shutdown.
+        // Primary thread uses -1 (infinite) normally, 500ms during drain.
+        const timeout_ms: i32 = if (shutdown_flag.load(.acquire)) 500 else if (is_primary) -1 else 1000;
+        const n = posix.epoll_wait(epfd, &events, timeout_ms);
         for (events[0..n]) |ev| {
             const fd = ev.data.fd;
 
@@ -122,9 +231,46 @@ fn workerThread(router: *Router, config: Config) void {
                 continue;
             }
 
+            // Signal pipe readable — shutdown signal received
+            if (fd == sig_fd and is_primary) {
+                // Drain the pipe
+                var sig_buf: [16]u8 = undefined;
+                _ = posix.read(sig_fd, &sig_buf) catch {};
+
+                // Set global shutdown flag
+                shutdown_flag.store(true, .release);
+
+                // Stop accepting
+                if (accepting) {
+                    posix.epoll_ctl(epfd, linux.EPOLL.CTL_DEL, sock, null) catch {};
+                    accepting = false;
+                    const ts2 = std.posix.clock_gettime(.MONOTONIC) catch std.posix.timespec{ .sec = 0, .nsec = 0 };
+                    drain_start = ts2.sec;
+                }
+
+                // Wake up non-primary threads via eventfd
+                if (evt_fd >= 0) {
+                    const val: u64 = 1;
+                    _ = posix.write(evt_fd, std.mem.asBytes(&val)) catch {};
+                }
+
+                // If no active connections, break immediately
+                if (!hasActiveConns(&conns)) {
+                    break;
+                }
+                continue;
+            }
+
+            // Eventfd readable — shutdown notification from primary thread
+            if (fd == evt_fd and !is_primary) {
+                var evtbuf: [8]u8 = undefined;
+                _ = posix.read(evt_fd, &evtbuf) catch {};
+                // Flag already set by primary, will be checked at top of loop
+                continue;
+            }
+
             // Timer event — sweep idle connections
             if (fd == timer_fd) {
-                // Read the timerfd to clear the event
                 var timer_buf: [8]u8 = undefined;
                 _ = posix.read(timer_fd, &timer_buf) catch {};
                 sweepIdleConns(&pool, &conns, epfd, ka_timeout);
@@ -151,13 +297,25 @@ fn workerThread(router: *Router, config: Config) void {
                 }
 
                 // Parse and handle pipelined requests
+                var compress_buf: [COMPRESS_BUF_SIZE]u8 = undefined;
                 var off: usize = 0;
                 while (off < st.read_len) {
                     const result = parser.parse(st.read_buf[off..st.read_len]) orelse break;
                     var req = result.request;
                     var res = Response{};
 
+                    // During shutdown, signal clients to close
+                    if (shutdown_flag.load(.acquire)) {
+                        res.headers.set("Connection", "close");
+                    }
+
                     router.handle(&req, &res);
+
+                    // Apply response compression if enabled
+                    if (compression_enabled) {
+                        _ = compress_mod.compressResponse(&compress_buf, &req, &res);
+                    }
+
                     res.writeTo(&st.write_list);
 
                     off += result.total_len;
@@ -167,7 +325,6 @@ fn workerThread(router: *Router, config: Config) void {
                     const rem = st.read_len - off;
                     if (rem > 0) std.mem.copyForwards(u8, st.read_buf[0..rem], st.read_buf[off..st.read_len]);
                     st.read_len = rem;
-                    // Touch on successful request processing
                     st.touch();
                 }
 
@@ -181,6 +338,10 @@ fn workerThread(router: *Router, config: Config) void {
                     if (st.write_off >= st.write_list.items.len) {
                         st.write_list.clearRetainingCapacity();
                         st.write_off = 0;
+                        // During shutdown, close after flush
+                        if (shutdown_flag.load(.acquire)) {
+                            should_close = true;
+                        }
                     } else {
                         var mev = linux.epoll_event{ .events = linux.EPOLL.IN | linux.EPOLL.OUT | linux.EPOLL.ET, .data = .{ .fd = fd } };
                         posix.epoll_ctl(epfd, linux.EPOLL.CTL_MOD, fd, &mev) catch {};
@@ -205,6 +366,11 @@ fn workerThread(router: *Router, config: Config) void {
                     if (s.write_off >= s.write_list.items.len) {
                         s.write_list.clearRetainingCapacity();
                         s.write_off = 0;
+                        // During shutdown, close after flushing
+                        if (shutdown_flag.load(.acquire)) {
+                            closeConn(&pool, &conns, epfd, fd, uidx);
+                            continue;
+                        }
                         var mev = linux.epoll_event{ .events = linux.EPOLL.IN | linux.EPOLL.ET, .data = .{ .fd = fd } };
                         posix.epoll_ctl(epfd, linux.EPOLL.CTL_MOD, fd, &mev) catch {};
                     }
@@ -274,13 +440,30 @@ fn sweepIdleConns(pool: *ConnPool, conns: *[MAX_CONNS]?*ConnState, epfd: i32, ti
     }
 }
 
+/// Check if there are any active connections.
+fn hasActiveConns(conns: *const [MAX_CONNS]?*ConnState) bool {
+    for (conns) |conn| {
+        if (conn != null) return true;
+    }
+    return false;
+}
+
+/// Force-close all remaining connections (shutdown timeout expired).
+fn forceCloseAll(pool: *ConnPool, conns: *[MAX_CONNS]?*ConnState, epfd: i32) void {
+    for (0..MAX_CONNS) |i| {
+        if (conns[i]) |_| {
+            const fd: i32 = @intCast(i);
+            closeConn(pool, conns, epfd, fd, i);
+        }
+    }
+}
+
 // ── timerfd helpers ─────────────────────────────────────────────────
 
 const TFD_CLOEXEC = 0o2000000;
 const TFD_NONBLOCK = 0o4000;
 
 fn timerfdCreate() ?i32 {
-    // timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC)
     const fd = linux.syscall2(.timerfd_create, 1, TFD_NONBLOCK | TFD_CLOEXEC);
     const signed: i64 = @bitCast(fd);
     if (signed < 0) return null;
@@ -302,7 +485,6 @@ fn timerfdSetInterval(fd: i32, seconds: i64) void {
         .interval = .{ .sec = seconds, .nsec = 0 },
         .value = .{ .sec = seconds, .nsec = 0 },
     };
-    // timerfd_settime(fd, 0, &spec, null)
     _ = linux.syscall4(.timerfd_settime, @as(usize, @intCast(fd)), 0, @intFromPtr(&spec), 0);
 }
 

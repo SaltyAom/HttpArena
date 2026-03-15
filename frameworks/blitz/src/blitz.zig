@@ -41,6 +41,7 @@ pub const query_mod = @import("blitz/query.zig");
 pub const pool_mod = @import("blitz/pool.zig");
 pub const body_mod = @import("blitz/body.zig");
 pub const cookie_mod = @import("blitz/cookie.zig");
+pub const compress_mod = @import("blitz/compress.zig");
 
 // Re-export main types for convenience
 pub const Request = types.Request;
@@ -105,6 +106,17 @@ pub const SameSite = cookie_mod.SameSite;
 pub const buildSetCookie = cookie_mod.buildSetCookie;
 pub const buildDeleteCookie = cookie_mod.buildDeleteCookie;
 
+// Compression
+pub const Encoding = compress_mod.Encoding;
+pub const acceptedEncoding = compress_mod.acceptedEncoding;
+pub const shouldCompress = compress_mod.shouldCompress;
+pub const compressResponse = compress_mod.compressResponse;
+pub const gzipCompressSlice = compress_mod.gzipCompressSlice;
+pub const deflateCompressSlice = compress_mod.deflateCompressSlice;
+
+// Graceful shutdown
+pub const isShuttingDown = server_mod.isShuttingDown;
+
 // Utilities
 pub const writeUsize = types.writeUsize;
 pub const writeI64 = types.writeI64;
@@ -121,4 +133,5 @@ test {
     _ = @import("blitz/pool.zig");
     _ = @import("blitz/body.zig");
     _ = @import("blitz/cookie.zig");
+    _ = @import("blitz/compress.zig");
 }

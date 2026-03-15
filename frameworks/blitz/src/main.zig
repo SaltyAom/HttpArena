@@ -280,6 +280,7 @@ pub fn main() !void {
     var server = blitz.Server.init(&router, .{
         .port = 8080,
         .keep_alive_timeout = 0, // disable for benchmarks
+        .compression = false, // disable for benchmarks — rawResponse handles most routes
     });
     try server.listen();
 }
