@@ -12,8 +12,6 @@ const BUF_SIZE: usize = 65536;
 pub const ConnState = struct {
     read_buf: [BUF_SIZE]u8 = undefined,
     read_len: usize = 0,
-    // Dynamic overflow buffer for large request bodies (e.g. uploads)
-    dyn_buf: std.ArrayList(u8),
     write_list: std.ArrayList(u8),
     write_off: usize = 0,
     // Pool linkage — index of next free slot (or null sentinel)
@@ -24,10 +22,7 @@ pub const ConnState = struct {
     last_active: i64 = 0,
 
     pub fn init(alloc: std.mem.Allocator) ConnState {
-        return .{
-            .dyn_buf = std.ArrayList(u8).init(alloc),
-            .write_list = std.ArrayList(u8).init(alloc),
-        };
+        return .{ .write_list = std.ArrayList(u8).init(alloc) };
     }
 
     /// Touch — update last activity timestamp.
@@ -36,28 +31,8 @@ pub const ConnState = struct {
         self.last_active = ts.sec;
     }
 
-    /// Get the current read data slice (static or dynamic buffer).
-    pub fn readData(self: *ConnState) []u8 {
-        if (self.dyn_buf.items.len > 0) return self.dyn_buf.items;
-        return self.read_buf[0..self.read_len];
-    }
-
-    /// Promote static buffer data into dynamic buffer for large bodies.
-    /// Call this when we know more than BUF_SIZE bytes are needed.
-    pub fn promoteToDyn(self: *ConnState, needed: usize) !void {
-        if (self.dyn_buf.items.len > 0) {
-            // Already dynamic — just ensure capacity
-            try self.dyn_buf.ensureTotalCapacity(needed);
-            return;
-        }
-        try self.dyn_buf.ensureTotalCapacity(needed);
-        try self.dyn_buf.appendSlice(self.read_buf[0..self.read_len]);
-        self.read_len = 0;
-    }
-
     pub fn reset(self: *ConnState) void {
         self.read_len = 0;
-        self.dyn_buf.clearRetainingCapacity();
         self.write_list.clearRetainingCapacity();
         self.write_off = 0;
         self.fd = -1;
@@ -65,7 +40,6 @@ pub const ConnState = struct {
     }
 
     pub fn deinit(self: *ConnState) void {
-        self.dyn_buf.deinit();
         self.write_list.deinit();
     }
 };

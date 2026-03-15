@@ -11,13 +11,13 @@ const pool_mod = @import("pool.zig");
 const ConnPool = pool_mod.ConnPool;
 const ConnState = pool_mod.ConnState;
 const compress_mod = @import("compress.zig");
+const log_mod = @import("log.zig");
 const Request = types.Request;
 const Response = types.Response;
 
 // ── Constants ───────────────────────────────────────────────────────
 const MAX_EVENTS: usize = 512;
 const BUF_SIZE: usize = 65536;
-const MAX_BODY_SIZE: usize = 64 * 1024 * 1024; // 64MB max request body
 const MAX_CONNS: usize = 65536;
 const SOCK_STREAM: u32 = linux.SOCK.STREAM;
 const SOCK_NONBLOCK: u32 = linux.SOCK.NONBLOCK;
@@ -35,6 +35,7 @@ pub const Config = struct {
     keep_alive_timeout: u32 = 60, // seconds (0 = disable)
     shutdown_timeout: u32 = 30, // seconds to drain connections before force-close (0 = immediate)
     compression: bool = true, // enable gzip/deflate response compression
+    logging: log_mod.LogConfig = .{}, // request logging (disabled by default)
 };
 
 // ── Shared shutdown state (atomic, shared across worker threads) ─────
@@ -137,6 +138,7 @@ fn workerThread(router: *Router, config: Config, is_primary: bool) void {
     const ka_timeout: i64 = @intCast(config.keep_alive_timeout);
     const drain_timeout: i64 = @intCast(config.shutdown_timeout);
     const compression_enabled = config.compression;
+    const log_config = config.logging;
 
     // Initialize connection pool for this worker
     var pool = ConnPool.init(alloc, POOL_SIZE) catch return;
@@ -285,84 +287,24 @@ fn workerThread(router: *Router, config: Config, is_primary: bool) void {
             if (ev.events & linux.EPOLL.IN != 0) {
                 var should_close = false;
 
-                // Read available data from socket
-                if (st.dyn_buf.items.len > 0) {
-                    readDynamic(st, fd, &should_close);
-                } else {
-                    while (st.read_len < BUF_SIZE) {
-                        const n_read = posix.read(fd, st.read_buf[st.read_len..]) catch |err| {
-                            if (err != error.WouldBlock) should_close = true;
-                            break;
-                        };
-                        if (n_read == 0) { should_close = true; break; }
-                        st.read_len += n_read;
+                while (st.read_len < BUF_SIZE) {
+                    const n_read = posix.read(fd, st.read_buf[st.read_len..]) catch {
+                        should_close = true;
+                        break;
+                    };
+                    if (n_read == 0) {
+                        should_close = true;
+                        break;
                     }
-                    // If buffer is full, check if headers indicate large body
-                    if (st.read_len == BUF_SIZE) {
-                        if (detectLargeBody(st.read_buf[0..st.read_len])) |needed| {
-                            st.promoteToDyn(needed) catch {
-                                should_close = true;
-                            };
-                            if (!should_close) readDynamic(st, fd, &should_close);
-                        }
-                    }
+                    st.read_len += n_read;
                 }
-
-                // Get the active data slice (may be re-fetched after promote)
-                var data = st.readData();
 
                 // Parse and handle pipelined requests
                 var compress_buf: [COMPRESS_BUF_SIZE]u8 = undefined;
+                const logging = log_config.enabled;
                 var off: usize = 0;
-                while (off < data.len) {
-                    const result = parser.parse(data[off..data.len]) orelse {
-                        const remaining = data[off..data.len];
-                        if (std.mem.indexOf(u8, remaining, "\r\n\r\n")) |hdr_end| {
-                            // Headers are complete — check if body is still arriving
-                            const hdr_data = remaining[0..hdr_end];
-                            const body_start_off = hdr_end + 4;
-                            if (extractContentLength(hdr_data)) |cl| {
-                                if (cl > 0 and body_start_off + cl > remaining.len) {
-                                    // Body not fully received yet — promote to dynamic if needed
-                                    const total_needed = off + body_start_off + cl;
-                                    if (total_needed > BUF_SIZE and st.dyn_buf.items.len == 0) {
-                                        st.promoteToDyn(total_needed) catch {
-                                            should_close = true;
-                                            break;
-                                        };
-                                        // Drain socket into dynamic buffer
-                                        readDynamic(st, fd, &should_close);
-                                        // Update data pointer and retry parse
-                                        data = st.readData();
-                                        continue;
-                                    }
-                                    break; // wait for more data (next epoll event)
-                                }
-                            }
-                            // Check if this is truly a bad request (unknown method)
-                            const req_end = std.mem.indexOf(u8, remaining, "\r\n") orelse break;
-                            const sp1 = std.mem.indexOfScalar(u8, remaining[0..req_end], ' ') orelse {
-                                var bad_res = Response{};
-                                bad_res.status = .bad_request;
-                                bad_res.body = "Bad Request";
-                                bad_res.writeTo(&st.write_list);
-                                off += hdr_end + 4;
-                                should_close = true;
-                                continue;
-                            };
-                            if (types.Method.fromString(remaining[0..sp1]) == null) {
-                                var bad_res = Response{};
-                                bad_res.status = .bad_request;
-                                bad_res.body = "Bad Request";
-                                bad_res.writeTo(&st.write_list);
-                                off += hdr_end + 4;
-                                should_close = true;
-                                continue;
-                            }
-                            break; // valid method but incomplete — wait for more data
-                        }
-                        break; // incomplete headers — wait for more
-                    };
+                while (off < st.read_len) {
+                    const result = parser.parse(st.read_buf[off..st.read_len]) orelse break;
                     var req = result.request;
                     var res = Response{};
 
@@ -371,11 +313,19 @@ fn workerThread(router: *Router, config: Config, is_primary: bool) void {
                         res.headers.set("Connection", "close");
                     }
 
+                    // Capture start time for request logging
+                    const req_start = if (logging) log_mod.now() else 0;
+
                     router.handle(&req, &res);
 
                     // Apply response compression if enabled
                     if (compression_enabled) {
                         _ = compress_mod.compressResponse(&compress_buf, &req, &res);
+                    }
+
+                    // Log completed request
+                    if (logging) {
+                        log_mod.logRequest(log_config, &req, &res, req_start);
                     }
 
                     res.writeTo(&st.write_list);
@@ -384,24 +334,9 @@ fn workerThread(router: *Router, config: Config, is_primary: bool) void {
                 }
 
                 if (off > 0) {
-                    if (st.dyn_buf.items.len > 0) {
-                        const rem = st.dyn_buf.items.len - off;
-                        if (rem > 0) {
-                            std.mem.copyForwards(u8, st.dyn_buf.items[0..rem], st.dyn_buf.items[off..]);
-                        }
-                        st.dyn_buf.shrinkRetainingCapacity(rem);
-                        // Move back to static buffer and free dynamic memory
-                        if (rem <= BUF_SIZE) {
-                            if (rem > 0) @memcpy(st.read_buf[0..rem], st.dyn_buf.items[0..rem]);
-                            st.read_len = rem;
-                            st.dyn_buf.clearAndFree();
-                            st.dyn_buf = std.ArrayList(u8).init(alloc);
-                        }
-                    } else {
-                        const rem = st.read_len - off;
-                        if (rem > 0) std.mem.copyForwards(u8, st.read_buf[0..rem], st.read_buf[off..st.read_len]);
-                        st.read_len = rem;
-                    }
+                    const rem = st.read_len - off;
+                    if (rem > 0) std.mem.copyForwards(u8, st.read_buf[0..rem], st.read_buf[off..st.read_len]);
+                    st.read_len = rem;
                     st.touch();
                 }
 
@@ -563,53 +498,6 @@ fn timerfdSetInterval(fd: i32, seconds: i64) void {
         .value = .{ .sec = seconds, .nsec = 0 },
     };
     _ = linux.syscall4(.timerfd_settime, @as(usize, @intCast(fd)), 0, @intFromPtr(&spec), 0);
-}
-
-/// Read from socket into dynamic buffer until EAGAIN/EOF.
-fn readDynamic(st: *ConnState, fd: i32, should_close: *bool) void {
-    var tmp_buf: [BUF_SIZE]u8 = undefined;
-    while (true) {
-        const n_read = posix.read(fd, &tmp_buf) catch |err| {
-            if (err == error.WouldBlock) return; // EAGAIN — no more data right now
-            should_close.* = true;
-            return;
-        };
-        if (n_read == 0) { should_close.* = true; return; }
-        st.dyn_buf.appendSlice(tmp_buf[0..n_read]) catch {
-            should_close.* = true;
-            return;
-        };
-    }
-}
-
-/// Detect if headers indicate a body larger than BUF_SIZE.
-/// Returns total needed bytes, or null if body fits in static buffer.
-/// Detect if headers indicate a body larger than BUF_SIZE.
-/// Returns total needed bytes, or null if body fits in static buffer or is too large.
-fn detectLargeBody(data: []const u8) ?usize {
-    const hdr_end = mem.indexOf(u8, data, "\r\n\r\n") orelse return null;
-    const body_start = hdr_end + 4;
-    const cl = extractContentLength(data[0..hdr_end]) orelse return null;
-    if (cl > MAX_BODY_SIZE) return null; // reject oversized bodies
-    const total = body_start + cl;
-    if (total > BUF_SIZE) return total;
-    return null;
-}
-
-/// Extract Content-Length from raw header data (before full parse).
-fn extractContentLength(hdr: []const u8) ?usize {
-    const needle = "Content-Length:";
-    var i: usize = 0;
-    while (i + needle.len <= hdr.len) : (i += 1) {
-        if (types.asciiEqlIgnoreCase(hdr[i .. i + needle.len], needle)) {
-            var pos = i + needle.len;
-            while (pos < hdr.len and hdr[pos] == ' ') pos += 1;
-            var end = pos;
-            while (end < hdr.len and hdr[end] >= '0' and hdr[end] <= '9') end += 1;
-            if (end > pos) return std.fmt.parseInt(usize, hdr[pos..end], 10) catch null;
-        }
-    }
-    return null;
 }
 
 fn setSockOptInt(fd: i32, level: i32, optname: u32, val: c_int) void {

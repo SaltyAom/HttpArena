@@ -4,11 +4,13 @@ const linux = std.os.linux;
 const mem = std.mem;
 const Thread = std.Thread;
 const IoUring = linux.IoUring;
+const BufferGroup = IoUring.BufferGroup;
 
 const types = @import("types.zig");
 const parser = @import("parser.zig");
 const Router = @import("router.zig").Router;
 const compress_mod = @import("compress.zig");
+const log_mod = @import("log.zig");
 const Request = types.Request;
 const Response = types.Response;
 
@@ -16,8 +18,8 @@ const Response = types.Response;
 const MAX_CONNS: usize = 65536;
 const RING_ENTRIES: u16 = 4096;
 const CQE_BATCH: usize = 256;
-const RECV_BUF_SIZE: usize = 4096;
-const RECV_BUF_COUNT: usize = 4096;
+const RECV_BUF_SIZE: u32 = 4096;
+const RECV_BUF_COUNT: u16 = 4096; // must be power of 2
 const SEND_BUF_SIZE: usize = 16384;
 const BUFFER_GROUP_ID: u16 = 0;
 const COMPRESS_BUF_SIZE: usize = 131072; // 128KB
@@ -39,8 +41,6 @@ const IORING_SETUP_DEFER_TASKRUN: u32 = 1 << 13; // 6.1+
 
 // CQE flags
 const IORING_CQE_F_MORE: u32 = 1 << 1;
-const IORING_CQE_F_BUFFER: u32 = 1 << 0;
-const IORING_CQE_BUFFER_SHIFT: u5 = 16;
 
 // ── User data encoding ─────────────────────────────────────────────
 // Pack operation type (upper 8 bits) + fd (lower 24 bits) into u64
@@ -100,6 +100,7 @@ pub const Config = struct {
     threads: ?usize = null,
     compression: bool = true,
     shutdown_timeout: u32 = 30,
+    logging: log_mod.LogConfig = .{},
 };
 
 // ── Shared shutdown state ───────────────────────────────────────────
@@ -167,6 +168,8 @@ pub const UringServer = struct {
 fn workerThread(router: *Router, config: Config, is_primary: bool) void {
     const alloc = std.heap.c_allocator;
     const compression_enabled = config.compression;
+    const log_config = config.logging;
+    const logging = log_config.enabled;
 
     // Create listening socket with SO_REUSEPORT
     const sock: i32 = @intCast(posix.socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0) catch return);
@@ -199,33 +202,21 @@ fn workerThread(router: *Router, config: Config, is_primary: bool) void {
     };
     defer ring.deinit();
 
-    // Allocate recv buffer slab and register with io_uring as provided buffers
-    const slab_size = RECV_BUF_COUNT * RECV_BUF_SIZE;
+    // Allocate recv buffer slab for BufferGroup
+    const slab_size: usize = @as(usize, RECV_BUF_COUNT) * @as(usize, RECV_BUF_SIZE);
     const slab = alloc.alloc(u8, slab_size) catch return;
     defer alloc.free(slab);
 
-    // Register provided buffers in chunks (io_uring provide_buffers)
-    {
-        const chunk_size: usize = 64; // register 64 buffers at a time
-        var base: usize = 0;
-        while (base < RECV_BUF_COUNT) {
-            const count = @min(chunk_size, RECV_BUF_COUNT - base);
-            _ = ring.provide_buffers(
-                0, // user_data
-                @ptrCast(slab.ptr + base * RECV_BUF_SIZE),
-                RECV_BUF_SIZE,
-                count,
-                BUFFER_GROUP_ID,
-                base,
-            ) catch return;
-            _ = ring.submit() catch return;
-            // Wait for completion
-            var cqe: [1]linux.io_uring_cqe = undefined;
-            _ = ring.copy_cqes(&cqe, 1) catch return;
-            if (cqe[0].res < 0) return; // provide_buffers failed
-            base += count;
-        }
-    }
+    // Initialize kernel-managed buffer ring (replaces provide_buffers)
+    // BufferGroup uses shared memory — buffer return is zero-SQE (just a memory write)
+    var buf_group = BufferGroup.init(
+        &ring,
+        BUFFER_GROUP_ID,
+        slab,
+        RECV_BUF_SIZE,
+        RECV_BUF_COUNT,
+    ) catch return;
+    defer buf_group.deinit();
 
     // Connection state array (sparse, indexed by fd)
     var conns: [MAX_CONNS]?*ConnState = undefined;
@@ -261,7 +252,7 @@ fn workerThread(router: *Router, config: Config, is_primary: bool) void {
 
         for (cqes[0..count]) |cqe| {
             const ud = cqe.user_data;
-            if (ud == 0) continue; // provide_buffers completion
+            if (ud == 0) continue; // internal completion
             const op = unpackOp(ud);
             const fd = unpackFd(ud);
             const res = cqe.res;
@@ -281,8 +272,12 @@ fn workerThread(router: *Router, config: Config, is_primary: bool) void {
                             st.* = ConnState.init(alloc);
                             conns[uidx] = st;
 
-                            // Arm recv for this connection
-                            armRecv(&ring, client_fd) catch {
+                            // Arm multishot recv using buffer group
+                            _ = buf_group.recv_multishot(
+                                packUserData(.recv, client_fd),
+                                client_fd,
+                                0,
+                            ) catch {
                                 st.deinit();
                                 alloc.destroy(st);
                                 conns[uidx] = null;
@@ -303,17 +298,13 @@ fn workerThread(router: *Router, config: Config, is_primary: bool) void {
                 },
 
                 .recv => {
-                    const has_buffer = (cqe.flags & IORING_CQE_F_BUFFER) != 0;
                     const has_more = (cqe.flags & IORING_CQE_F_MORE) != 0;
 
                     if (res <= 0) {
-                        // Connection closed or error
-                        if (has_buffer) {
-                            // Return the buffer
-                            const bid = @as(u16, @truncate(cqe.flags >> IORING_CQE_BUFFER_SHIFT));
-                            returnBuffer(&ring, slab.ptr, bid) catch {};
-                            needs_submit = true;
-                        }
+                        // Connection closed or error — return buffer if present
+                        if (cqe.buffer_id()) |_| {
+                            buf_group.put_cqe(cqe) catch {};
+                        } else |_| {}
                         const uidx: usize = @intCast(@as(u32, @bitCast(fd)));
                         if (uidx < MAX_CONNS) {
                             if (conns[uidx]) |st| {
@@ -326,10 +317,8 @@ fn workerThread(router: *Router, config: Config, is_primary: bool) void {
                         continue;
                     }
 
-                    if (!has_buffer) continue;
-
-                    const bid = @as(u16, @truncate(cqe.flags >> IORING_CQE_BUFFER_SHIFT));
-                    const recv_data = slab[bid * RECV_BUF_SIZE ..][0..@as(usize, @intCast(res))];
+                    // Get recv data from buffer group
+                    const recv_data = buf_group.get_cqe(cqe) catch continue;
 
                     const uidx: usize = @intCast(@as(u32, @bitCast(fd)));
                     if (uidx < MAX_CONNS) {
@@ -339,6 +328,9 @@ fn workerThread(router: *Router, config: Config, is_primary: bool) void {
                             const copy_len = @min(recv_data.len, space);
                             @memcpy(st.read_buf[st.read_len..][0..copy_len], recv_data[0..copy_len]);
                             st.read_len += copy_len;
+
+                            // Return buffer to kernel ASAP (zero-SQE — just a memory write!)
+                            buf_group.put_cqe(cqe) catch {};
 
                             // Parse and handle pipelined requests
                             var off: usize = 0;
@@ -351,10 +343,16 @@ fn workerThread(router: *Router, config: Config, is_primary: bool) void {
                                     resp.headers.set("Connection", "close");
                                 }
 
+                                const req_start = if (logging) log_mod.now() else 0;
+
                                 router.handle(&req, &resp);
 
                                 if (compression_enabled) {
                                     _ = compress_mod.compressResponse(&compress_buf, &req, &resp);
+                                }
+
+                                if (logging) {
+                                    log_mod.logRequest(log_config, &req, &resp, req_start);
                                 }
 
                                 resp.writeTo(&st.write_buf);
@@ -374,17 +372,23 @@ fn workerThread(router: *Router, config: Config, is_primary: bool) void {
                                 st.send_inflight = true;
                                 needs_submit = true;
                             }
+                        } else {
+                            // No ConnState — still need to return buffer
+                            buf_group.put_cqe(cqe) catch {};
                         }
+                    } else {
+                        // fd out of range — return buffer
+                        buf_group.put_cqe(cqe) catch {};
                     }
-
-                    // Return buffer to kernel
-                    returnBuffer(&ring, slab.ptr, bid) catch {};
-                    needs_submit = true;
 
                     // Re-arm recv if multishot was dropped
                     if (!has_more) {
                         if (uidx < MAX_CONNS and conns[uidx] != null) {
-                            armRecv(&ring, fd) catch {};
+                            _ = buf_group.recv_multishot(
+                                packUserData(.recv, fd),
+                                fd,
+                                0,
+                            ) catch {};
                             needs_submit = true;
                         }
                     }
@@ -466,37 +470,12 @@ fn armMultishotAccept(ring: *IoUring, sock: i32) !void {
     );
 }
 
-fn armRecv(ring: *IoUring, fd: i32) !void {
-    // Use recv with buffer_selection for provided buffers
-    // For multishot recv, we need to set the multishot flag manually
-    const sqe = try ring.get_sqe();
-    sqe.prep_rw(.RECV, fd, 0, RECV_BUF_SIZE, 0);
-    sqe.rw_flags = 0;
-    sqe.flags |= linux.IOSQE_BUFFER_SELECT;
-    sqe.buf_index = BUFFER_GROUP_ID;
-    // Set multishot flag (IORING_RECV_MULTISHOT = 0x02 in ioprio field)
-    sqe.ioprio |= 0x02; // IORING_RECV_MULTISHOT
-    sqe.user_data = packUserData(.recv, fd);
-}
-
 fn armSend(ring: *IoUring, fd: i32, data: []const u8) !void {
     _ = try ring.send(
         packUserData(.send, fd),
         fd,
         data,
         MSG_NOSIGNAL,
-    );
-}
-
-fn returnBuffer(ring: *IoUring, slab: [*]u8, bid: u16) !void {
-    // Re-provide the buffer to the kernel
-    _ = try ring.provide_buffers(
-        0, // user_data
-        @ptrCast(slab + @as(usize, bid) * RECV_BUF_SIZE),
-        RECV_BUF_SIZE,
-        1,
-        BUFFER_GROUP_ID,
-        bid,
     );
 }
 
