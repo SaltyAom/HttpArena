@@ -3,7 +3,7 @@ RUN apk add --no-cache sqlite-dev
 WORKDIR /app
 COPY src/ ./
 RUN nimble install -y prologue zippy db_connector
-RUN nim c -d:release -d:danger -d:useAsyncHTTPServer --opt:speed --threads:on --passL:-lsqlite3 -o:server server.nim
+RUN nim c -d:release -d:danger -d:usestd --opt:speed --threads:on --passL:-lsqlite3 -o:server server.nim
 
 FROM alpine:3.19
 RUN apk add --no-cache libgcc sqlite-libs

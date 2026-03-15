@@ -127,34 +127,9 @@ proc loadDb() =
 
 const validMethodStrs = ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"]
 
-proc decodeChunkedBody(raw: string): string =
-  ## Decode HTTP chunked transfer-encoding body
-  var pos = 0
-  var decoded = ""
-  while pos < raw.len:
-    # Find the end of chunk size line
-    let crlfPos = raw.find("\r\n", pos)
-    if crlfPos < 0: break
-    let sizeStr = raw[pos ..< crlfPos].strip()
-    if sizeStr.len == 0: break
-    let chunkSize = try: parseHexInt(sizeStr) except ValueError: 0
-    if chunkSize == 0: break
-    let dataStart = crlfPos + 2
-    if dataStart + chunkSize > raw.len: break
-    decoded.add(raw[dataStart ..< dataStart + chunkSize])
-    pos = dataStart + chunkSize + 2  # skip chunk data + trailing CRLF
-  return decoded
-
 proc getBody(ctx: Context): string =
-  ## Get request body, decoding chunked transfer-encoding if needed
-  let body = ctx.request.body
-  let te = if ctx.request.headers.hasKey("Transfer-Encoding"):
-    $ctx.request.headers["Transfer-Encoding"]
-  else:
-    ""
-  if "chunked" in te.toLowerAscii():
-    return decodeChunkedBody(body)
-  return body
+  ## Get request body — asynchttpserver already decodes chunked transfer-encoding
+  return ctx.request.body
 
 proc parseQuerySum(query: string): int =
   result = 0
