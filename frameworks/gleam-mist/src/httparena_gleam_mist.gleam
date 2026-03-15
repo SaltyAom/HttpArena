@@ -62,8 +62,8 @@ fn dataset_item_decoder() -> decode.Decoder(DatasetItem) {
   use quantity <- decode.field("quantity", decode.int)
   use active <- decode.field("active", decode.bool)
   use tags <- decode.field("tags", decode.list(decode.string))
-  use rating_score <- decode.at(["rating", "score"], decode.float)
-  use rating_count <- decode.at(["rating", "count"], decode.int)
+  use rating_score <- decode.subfield(["rating", "score"], decode.float)
+  use rating_count <- decode.subfield(["rating", "count"], decode.int)
   decode.success(DatasetItem(
     id:,
     name:,
