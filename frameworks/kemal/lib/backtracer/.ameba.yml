@@ -1,3 +1,0 @@
-Lint/NotNil:
-  Excluded:
-    - spec/backtracer/backtrace/frame/parser_spec.cr

@@ -6,9 +6,9 @@ WORKDIR /app
 # Install SQLite dev headers
 RUN apk add --no-cache sqlite-dev sqlite-static
 
-# Copy vendored dependencies (no network needed)
+# Install dependencies
 COPY shard.yml shard.lock ./
-COPY lib/ lib/
+RUN shards install --production
 
 # Copy source and build
 COPY src/ src/
