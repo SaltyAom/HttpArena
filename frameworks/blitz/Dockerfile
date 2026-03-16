@@ -11,5 +11,6 @@ RUN zig build -Doptimize=ReleaseFast
 
 FROM debian:bookworm-slim
 COPY --from=build /app/zig-out/bin/blitz /server
+ENV BLITZ_URING=1
 EXPOSE 8080
 CMD ["/server"]
