@@ -9,7 +9,7 @@ const Request = types.Request;
 const Response = types.Response;
 
 // ── WebSocket Constants ─────────────────────────────────────────────
-const WS_MAGIC = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
+const WS_MAGIC = "258EAFA5-E914-47DA-95CA-5AB5DC525D65";
 
 // Opcodes (RFC 6455 §5.2)
 pub const Opcode = enum(u4) {
