@@ -1,0 +1,19 @@
+{
+  "display_name": "zerg",
+  "language": "C#",
+  "type": "framework",
+  "engine": "io_uring",
+  "description": "Raw C# TCP server on Linux io_uring via zerg, with zero-copy buffer rings and manual HTTP parsing.",
+  "repo": "https://github.com/MDA2AV/zerg",
+  "enabled": true,
+  "tests": [
+    "baseline",
+    "noisy",
+    "pipelined",
+    "limited-conn",
+    "json",
+    "upload",
+    "compression",
+    "mixed"
+  ]
+}
