@@ -64,7 +64,9 @@ jobs:
           git add site/data/ site/static/logs/ 2>/dev/null || true
           if ! git diff --cached --quiet; then
             branch="benchmark-results/$(date +%Y%m%d-%H%M%S)"
-            git checkout -b "$branch"
+            git fetch origin main
+            git checkout -b "$branch" origin/main
+            git checkout HEAD@{1} -- site/data/ site/static/logs/
             git commit -m "benchmark: update results for ${{ steps.detect.outputs.list }}"
             git push -u origin "$branch"
             gh pr create \
