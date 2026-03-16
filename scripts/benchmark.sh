@@ -114,8 +114,9 @@ if os.path.exists(data_file):
     except:
         existing = []
 
-# Remove entries for frameworks being updated
-merged = [e for e in existing if e.get('framework') not in new_fws]
+# Remove entries for frameworks being updated (case-insensitive match)
+new_fws_lower = {fw.lower() for fw in new_fws}
+merged = [e for e in existing if e.get('framework', '').lower() not in new_fws_lower]
 
 # Add new results
 for f in sorted(glob.glob(os.path.join(conn_dir, '*.json'))):

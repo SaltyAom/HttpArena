@@ -12,6 +12,7 @@
   "deno": {"description": "Deno HTTP server using deno serve --parallel with zero-dependency native fetch handler.", "repo": "https://github.com/denoland/deno", "type": "framework", "engine": "V8"},
   "deno-websocket": {"description": "Deno WebSocket echo server", "repo": "https://github.com/denoland/deno", "type": "framework", "engine": "Deno"},
   "drogon": {"description": "Drogon C++ framework using HttpController with async callbacks, mimalloc allocator, and -flto optimization.", "repo": "https://github.com/drogonframework/drogon", "type": "framework", "engine": "drogon"},
+  "echo": {"description": "Echo is a high performance, extensible, minimalist Go web framework with optimized HTTP router, middleware support, and data binding.", "repo": "https://github.com/labstack/echo", "type": "framework", "engine": "echo"},
   "fastapi": {"description": "FastAPI async web framework on Uvicorn (uvloop), multi-worker via gunicorn.", "repo": "https://github.com/fastapi/fastapi", "type": "framework", "engine": "uvicorn"},
   "fastify": {"description": "Fast and low-overhead Node.js web framework built for developer experience and performance.", "repo": "https://github.com/fastify/fastify", "type": "framework", "engine": "V8"},
   "flask": {"description": "Flask web framework on Gunicorn with sync workers, one worker per CPU core.", "repo": "https://github.com/pallets/flask", "type": "framework", "engine": "gunicorn"},
