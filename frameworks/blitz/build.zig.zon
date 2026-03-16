@@ -1,10 +1,16 @@
 .{
-    .name = .blitz,
+    .name = .httparena_blitz,
     .version = "0.1.0",
-    .fingerprint = 0xe8a54ff4e60f9038,
+    .fingerprint = 0xb94d0e9e25eb1955,
     .paths = .{
         "build.zig",
         "build.zig.zon",
         "src",
+    },
+    .dependencies = .{
+        .blitz = .{
+            .url = "https://github.com/BennyFranciscus/blitz/archive/541cd3bae622b76e76c3c8b68d5f50825e38d75c.tar.gz",
+            .hash = "blitz-0.1.0-OJAP5jf0BABVpa50QwnJV50pDkAVhriR21R3sR7OfagO",
+        },
     },
 }

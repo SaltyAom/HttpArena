@@ -725,6 +725,14 @@ zig build test
 
 blitz is built to compete in [HttpArena](https://github.com/MDA2AV/HttpArena) benchmarks. See `meta.json` for the benchmark configuration.
 
+### Noisy profile 4xx responses
+
+The noisy benchmark profile uses 5 request templates, some of which intentionally target non-existent routes. This means 30–50% of responses will be 4xx (404) — this is **expected behavior**, not a bug. The server correctly returns 404 for unknown routes. The benchmark harness counts these as valid responses. Per-template breakdown:
+
+- Templates 1–2: existing routes → ~100% 2xx
+- Templates 3–4: non-existent routes → ~100% 4xx (correct 404s)
+- Template 5: POST with body to a route that may time out at high concurrency
+
 ## License
 
 MIT
