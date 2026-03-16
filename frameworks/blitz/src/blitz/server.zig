@@ -287,101 +287,97 @@ fn workerThread(router: *Router, config: Config, is_primary: bool) void {
             if (ev.events & linux.EPOLL.IN != 0) {
                 var should_close = false;
 
-                // Read into active buffer (static or dynamic)
-                while (true) {
-                    const rem_buf = st.readBufRemaining() orelse break;
-                    if (rem_buf.len == 0) break;
-                    const n_read = posix.read(fd, rem_buf) catch {
-                        should_close = true;
-                        break;
-                    };
-                    if (n_read == 0) {
-                        should_close = true;
-                        break;
-                    }
-                    st.advanceRead(n_read);
-                    // If still in static buffer and full, stop — check promotion below
-                    if (st.dyn_buf == null and st.read_len >= BUF_SIZE) break;
-                }
-
-                // Parse and handle pipelined requests
-                var compress_buf: [COMPRESS_BUF_SIZE]u8 = undefined;
-                const logging = log_config.enabled;
-                var off: usize = 0;
-                const cur_len = st.activeReadLen();
-                const cur_data = st.readSlice();
-                while (off < cur_len) {
-                    const result = parser.parse(cur_data[off..cur_len]) orelse {
-                        // Distinguish incomplete data from bad request:
-                        // If we can see complete headers (\r\n\r\n) but parse failed,
-                        // check if it needs dynamic buffer promotion for large bodies.
-                        const remaining = cur_data[off..cur_len];
-                        if (mem.indexOf(u8, remaining, "\r\n\r\n")) |hdr_end| {
-                            // Headers complete — check if large body needs promotion
-                            const cl = detectContentLength(remaining[0..hdr_end]);
-                            if (cl != null and cl.? > BUF_SIZE and st.dyn_buf == null) {
-                                // Promote to dynamic buffer for large body
-                                const total_needed = hdr_end + 4 + cl.?;
-                                if (st.promoteToDynamic(alloc, total_needed)) {
-                                    break; // Will read more in next epoll cycle
-                                }
-                            }
-                            // If dynamic buffer active but body still incomplete, wait
-                            if (st.dyn_buf != null) {
-                                break;
-                            }
-                            // Genuinely bad request — send 400
-                            const bad_resp = "HTTP/1.1 400 Bad Request\r\nServer: blitz\r\nContent-Length: 11\r\nConnection: close\r\n\r\nBad Request";
-                            st.write_list.appendSlice(bad_resp) catch {};
-                            off += hdr_end + 4;
+                // Read + parse loop.  Wrapped in `drain:` so we can re-enter
+                // after promoting to a dynamic buffer.  Edge-triggered epoll
+                // won't fire again for data already in the kernel buffer, so
+                // we must drain the socket immediately after promotion.
+                drain: while (true) {
+                    // ── Read into active buffer (static or dynamic) ──
+                    while (true) {
+                        const rem_buf = st.readBufRemaining() orelse break;
+                        if (rem_buf.len == 0) break;
+                        const n_read = posix.read(fd, rem_buf) catch {
+                            should_close = true;
+                            break;
+                        };
+                        if (n_read == 0) {
                             should_close = true;
                             break;
                         }
-                        break; // Incomplete data — wait for more
-                    };
-                    var req = result.request;
-                    var res = Response{};
-
-                    // During shutdown, signal clients to close
-                    if (shutdown_flag.load(.acquire)) {
-                        res.headers.set("Connection", "close");
+                        st.advanceRead(n_read);
+                        // If still in static buffer and full, stop — check promotion below
+                        if (st.dyn_buf == null and st.read_len >= BUF_SIZE) break;
                     }
 
-                    // Capture start time for request logging
-                    const req_start = if (logging) log_mod.now() else 0;
+                    // ── Parse and handle pipelined requests ──
+                    var compress_buf: [COMPRESS_BUF_SIZE]u8 = undefined;
+                    const logging = log_config.enabled;
+                    var off: usize = 0;
+                    const cur_len = st.activeReadLen();
+                    const cur_data = st.readSlice();
+                    while (off < cur_len) {
+                        const result = parser.parse(cur_data[off..cur_len]) orelse {
+                            const remaining = cur_data[off..cur_len];
+                            if (mem.indexOf(u8, remaining, "\r\n\r\n")) |hdr_end| {
+                                const cl = detectContentLength(remaining[0..hdr_end]);
+                                if (cl != null and cl.? > BUF_SIZE and st.dyn_buf == null) {
+                                    const total_needed = hdr_end + 4 + cl.?;
+                                    if (st.promoteToDynamic(alloc, total_needed)) {
+                                        // Re-drain socket into new dynamic buffer
+                                        continue :drain;
+                                    }
+                                }
+                                if (st.dyn_buf != null) {
+                                    break;
+                                }
+                                const bad_resp = "HTTP/1.1 400 Bad Request\r\nServer: blitz\r\nContent-Length: 11\r\nConnection: close\r\n\r\nBad Request";
+                                st.write_list.appendSlice(bad_resp) catch {};
+                                off += hdr_end + 4;
+                                should_close = true;
+                                break;
+                            }
+                            break; // Incomplete data — wait for more
+                        };
+                        var req = result.request;
+                        var res = Response{};
 
-                    router.handle(&req, &res);
-
-                    // Apply response compression if enabled
-                    if (compression_enabled) {
-                        _ = compress_mod.compressResponse(&compress_buf, &req, &res);
-                    }
-
-                    // Log completed request
-                    if (logging) {
-                        log_mod.logRequest(log_config, &req, &res, req_start);
-                    }
-
-                    res.writeTo(&st.write_list);
-
-                    off += result.total_len;
-                }
-
-                if (off > 0) {
-                    if (st.dyn_buf != null) {
-                        // Done with large body — revert to static buffer
-                        const rem = st.dyn_len - off;
-                        if (rem > 0 and rem <= BUF_SIZE) {
-                            @memcpy(st.read_buf[0..rem], st.dyn_buf.?[off..st.dyn_len]);
+                        if (shutdown_flag.load(.acquire)) {
+                            res.headers.set("Connection", "close");
                         }
-                        st.revertToStatic();
-                        st.read_len = if (rem <= BUF_SIZE) rem else 0;
-                    } else {
-                        const rem = st.read_len - off;
-                        if (rem > 0) std.mem.copyForwards(u8, st.read_buf[0..rem], st.read_buf[off..st.read_len]);
-                        st.read_len = rem;
+
+                        const req_start = if (logging) log_mod.now() else 0;
+
+                        router.handle(&req, &res);
+
+                        if (compression_enabled) {
+                            _ = compress_mod.compressResponse(&compress_buf, &req, &res);
+                        }
+
+                        if (logging) {
+                            log_mod.logRequest(log_config, &req, &res, req_start);
+                        }
+
+                        res.writeTo(&st.write_list);
+
+                        off += result.total_len;
                     }
-                    st.touch();
+
+                    if (off > 0) {
+                        if (st.dyn_buf != null) {
+                            const rem = st.dyn_len - off;
+                            if (rem > 0 and rem <= BUF_SIZE) {
+                                @memcpy(st.read_buf[0..rem], st.dyn_buf.?[off..st.dyn_len]);
+                            }
+                            st.revertToStatic();
+                            st.read_len = if (rem <= BUF_SIZE) rem else 0;
+                        } else {
+                            const rem = st.read_len - off;
+                            if (rem > 0) std.mem.copyForwards(u8, st.read_buf[0..rem], st.read_buf[off..st.read_len]);
+                            st.read_len = rem;
+                        }
+                        st.touch();
+                    }
+                    break :drain;
                 }
 
                 // Flush writes
