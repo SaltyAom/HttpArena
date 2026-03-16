@@ -13,6 +13,7 @@
     "limited-conn",
     "json",
     "upload",
-    "compression"
+    "compression",
+    "echo-ws"
   ]
 }
