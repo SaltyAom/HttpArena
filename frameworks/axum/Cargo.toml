@@ -1,0 +1,26 @@
+[package]
+name = "httparena-axum"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = { version = "0.8", features = ["macros"] }
+tokio = { version = "1", features = ["full"] }
+tower-http = { version = "0.6", features = ["compression-gzip"] }
+hyper = { version = "1" }
+hyper-util = { version = "0.1", features = ["tokio"] }
+axum-server = { version = "0.7", features = ["tls-rustls"] }
+rustls = { version = "0.23", default-features = false, features = ["ring", "logging", "std", "tls12"] }
+rustls-pemfile = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+num_cpus = "1"
+rusqlite = { version = "0.31", features = ["bundled"] }
+bytes = "1"
+tokio-rustls = "0.26"
+
+[profile.release]
+opt-level = 3
+codegen-units = 1
+lto = "thin"
+panic = "abort"
