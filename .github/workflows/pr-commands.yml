@@ -1,0 +1,83 @@
+name: PR Commands
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  pull-requests: write
+  actions: write
+
+jobs:
+  handle-command:
+    if: github.event.issue.pull_request && (contains(github.event.comment.body, '/validate') || contains(github.event.comment.body, '/benchmark'))
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: refs/pull/${{ github.event.issue.number }}/head
+          fetch-depth: 1
+
+      - name: Parse command
+        id: parse
+        run: |
+          COMMENT="${{ github.event.comment.body }}"
+          PR=${{ github.event.issue.number }}
+          echo "pr=$PR" >> "$GITHUB_OUTPUT"
+
+          # Detect changed frameworks from the PR
+          FRAMEWORKS=$(gh pr diff "$PR" --name-only | grep '^frameworks/' | cut -d'/' -f2 | sort -u | head -1)
+          echo "framework=$FRAMEWORKS" >> "$GITHUB_OUTPUT"
+
+          if echo "$COMMENT" | grep -q '/benchmark'; then
+            echo "command=benchmark" >> "$GITHUB_OUTPUT"
+            # Extract optional profile: /benchmark baseline
+            PROFILE=$(echo "$COMMENT" | grep -oP '/benchmark\s+\K\S+' || echo "")
+            echo "profile=$PROFILE" >> "$GITHUB_OUTPUT"
+          elif echo "$COMMENT" | grep -q '/validate'; then
+            echo "command=validate" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: React to comment
+        run: |
+          gh api "/repos/${{ github.repository }}/issues/comments/${{ github.event.comment.id }}/reactions" -f content="rocket"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run validate
+        if: steps.parse.outputs.command == 'validate' && steps.parse.outputs.framework != ''
+        run: |
+          FRAMEWORK="${{ steps.parse.outputs.framework }}"
+          echo "Validating $FRAMEWORK..."
+          if ./scripts/validate.sh "$FRAMEWORK" 2>&1 | tee /tmp/validate.log; then
+            STATUS="✅ Validation **passed** for \`$FRAMEWORK\`"
+          else
+            STATUS="❌ Validation **failed** for \`$FRAMEWORK\`"
+          fi
+
+          BODY="$STATUS"$'\n\n'"<details><summary>Full log</summary>"$'\n\n```\n'"$(tail -100 /tmp/validate.log)"$'\n```\n</details>'
+          gh pr comment "${{ steps.parse.outputs.pr }}" --body "$BODY"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run benchmark
+        if: steps.parse.outputs.command == 'benchmark' && steps.parse.outputs.framework != ''
+        run: |
+          gh workflow run benchmark-pr.yml \
+            -f pr=${{ steps.parse.outputs.pr }} \
+            -f framework=${{ steps.parse.outputs.framework }} \
+            -f profile="${{ steps.parse.outputs.profile }}"
+
+          gh pr comment "${{ steps.parse.outputs.pr }}" --body "🚀 Benchmark run triggered for \`${{ steps.parse.outputs.framework }}\`${{ steps.parse.outputs.profile && format(' (profile: {0})', steps.parse.outputs.profile) || ' (all profiles)' }}. Results will be posted here when done."
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: No framework detected
+        if: steps.parse.outputs.framework == ''
+        run: |
+          gh pr comment "${{ steps.parse.outputs.pr }}" --body "⚠️ Couldn't detect which framework to test. Make sure the PR modifies files under \`frameworks/<name>/\`."
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
