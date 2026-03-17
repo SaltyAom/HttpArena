@@ -65,13 +65,13 @@ class App < Sinatra::Base
     'ok'
   end
 
-  route :get, :post, '/baseline11' do
+  def handle_baseline11
     total = 0
-    params.each do |_k, v|
-      next if _k == 'splat' || _k == 'captures'
+    request.GET.each do |_k, v|
       total += v.to_i if v =~ /\A-?\d+\z/
     end
     if request.post?
+      request.body.rewind
       body_str = request.body.read.strip
       total += body_str.to_i if body_str =~ /\A-?\d+\z/
     end
@@ -80,10 +80,12 @@ class App < Sinatra::Base
     total.to_s
   end
 
+  get('/baseline11') { handle_baseline11 }
+  post('/baseline11') { handle_baseline11 }
+
   get '/baseline2' do
     total = 0
-    params.each do |_k, v|
-      next if _k == 'splat' || _k == 'captures'
+    request.GET.each do |_k, v|
       total += v.to_i if v =~ /\A-?\d+\z/
     end
     content_type 'text/plain'
@@ -131,6 +133,7 @@ class App < Sinatra::Base
   end
 
   post '/upload' do
+    request.body.rewind
     data = request.body.read
     content_type 'text/plain'
     headers 'Server' => 'sinatra'
