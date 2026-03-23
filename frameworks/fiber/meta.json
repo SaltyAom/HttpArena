@@ -1,0 +1,18 @@
+{
+  "display_name": "fiber",
+  "language": "Go",
+  "type": "framework",
+  "engine": "fiber",
+  "description": "Fiber is an Express-inspired Go web framework built on fasthttp, featuring zero-allocation routing and extreme performance.",
+  "repo": "https://github.com/gofiber/fiber",
+  "enabled": true,
+  "tests": [
+    "baseline",
+    "pipelined",
+    "limited-conn",
+    "json",
+    "compression",
+    "upload",
+    "mixed"
+  ]
+}
