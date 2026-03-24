@@ -76,7 +76,6 @@ data class DbResponse(
 object AppData {
     val json = Json { ignoreUnknownKeys = true }
     var dataset: List<DatasetItem> = emptyList()
-    var jsonCache: ByteArray = ByteArray(0)
     var largeJsonCache: ByteArray = ByteArray(0)
     val staticFiles: MutableMap<String, Pair<ByteArray, String>> = mutableMapOf()
     var db: Connection? = null
@@ -97,7 +96,6 @@ object AppData {
         val dataFile = File(path)
         if (dataFile.exists()) {
             dataset = json.decodeFromString<List<DatasetItem>>(dataFile.readText())
-            jsonCache = buildJsonCache(dataset)
         }
 
         // Large dataset for compression
@@ -179,11 +177,21 @@ fun main() {
             }
 
             get("/json") {
-                if (AppData.jsonCache.isEmpty()) {
+                if (AppData.dataset.isEmpty()) {
                     call.respondText("Dataset not loaded", ContentType.Text.Plain, HttpStatusCode.InternalServerError)
                     return@get
                 }
-                call.respondBytes(AppData.jsonCache, ContentType.Application.Json)
+                val processed = AppData.dataset.map { d ->
+                    ProcessedItem(
+                        id = d.id, name = d.name, category = d.category,
+                        price = d.price, quantity = d.quantity, active = d.active,
+                        tags = d.tags, rating = d.rating,
+                        total = Math.round(d.price * d.quantity * 100.0) / 100.0
+                    )
+                }
+                val resp = JsonResponse(items = processed, count = processed.size)
+                val body = AppData.json.encodeToString(JsonResponse.serializer(), resp).toByteArray()
+                call.respondBytes(body, ContentType.Application.Json)
             }
 
             get("/compression") {

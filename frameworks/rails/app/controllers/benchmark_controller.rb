@@ -8,13 +8,11 @@ class BenchmarkController < ActionController::API
   DATASET_PATH = ENV.fetch('DATASET_PATH', '/data/dataset.json')
   LARGE_DATASET_PATH = '/data/dataset-large.json'
 
-  @@json_payload = nil
+  @@dataset_items = nil
   @@db_available = File.exist?('/data/benchmark.db')
 
   if File.exist?(DATASET_PATH)
-    raw = JSON.parse(File.read(DATASET_PATH))
-    items = raw.map { |d| d.merge('total' => (d['price'] * d['quantity'] * 100).round / 100.0) }
-    @@json_payload = JSON.generate({ 'items' => items, 'count' => items.length })
+    @@dataset_items = JSON.parse(File.read(DATASET_PATH))
   end
 
   @@large_json_payload = nil
@@ -54,10 +52,12 @@ class BenchmarkController < ActionController::API
   end
 
   def json_endpoint
-    if @@json_payload
+    if @@dataset_items
+      items = @@dataset_items.map { |d| d.merge('total' => (d['price'] * d['quantity'] * 100).round / 100.0) }
+      body = JSON.generate({ 'items' => items, 'count' => items.length })
       response.headers['Server'] = 'rails'
       response.headers['Content-Type'] = 'application/json'
-      render plain: @@json_payload
+      render plain: body
     else
       head 500
     end

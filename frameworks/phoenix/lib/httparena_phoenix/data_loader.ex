@@ -9,7 +9,6 @@ defmodule HttparenaPhoenix.DataLoader do
     dataset = load_json(dataset_path)
     large_dataset = load_json("/data/dataset-large.json")
 
-    json_cache = build_json_response(dataset)
     json_large_cache = build_json_response(large_dataset)
 
     static_files = load_static_files()
@@ -17,7 +16,6 @@ defmodule HttparenaPhoenix.DataLoader do
     db_available = File.exists?("/data/benchmark.db")
 
     :persistent_term.put(:dataset, dataset)
-    :persistent_term.put(:json_cache, json_cache)
     :persistent_term.put(:json_large_cache, json_large_cache)
     :persistent_term.put(:static_files, static_files)
     :persistent_term.put(:db_available, db_available)

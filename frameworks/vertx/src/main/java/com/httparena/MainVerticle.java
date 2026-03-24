@@ -24,7 +24,6 @@ public class MainVerticle extends AbstractVerticle {
 
     // Shared pre-computed data (loaded once, shared across verticle instances)
     private static volatile List<Map<String, Object>> dataset;
-    private static volatile byte[] jsonResponse;
     private static volatile byte[] largeJsonResponse;
     private static final Map<String, byte[]> staticFiles = new ConcurrentHashMap<>();
     private static final Map<String, String> MIME_TYPES = Map.ofEntries(
@@ -75,16 +74,6 @@ public class MainVerticle extends AbstractVerticle {
                 File f = new File(path);
                 if (f.exists()) {
                     dataset = MAPPER.readValue(f, new TypeReference<>() {});
-                    // Pre-compute /json response
-                    List<Map<String, Object>> items = new ArrayList<>(dataset.size());
-                    for (Map<String, Object> item : dataset) {
-                        Map<String, Object> processed = new LinkedHashMap<>(item);
-                        double price = ((Number) item.get("price")).doubleValue();
-                        int quantity = ((Number) item.get("quantity")).intValue();
-                        processed.put("total", Math.round(price * quantity * 100.0) / 100.0);
-                        items.add(processed);
-                    }
-                    jsonResponse = MAPPER.writeValueAsBytes(Map.of("items", items, "count", items.size()));
                 }
 
                 // Large dataset for compression
@@ -231,13 +220,26 @@ public class MainVerticle extends AbstractVerticle {
     }
 
     private void handleJson(RoutingContext ctx) {
-        if (jsonResponse == null) {
+        if (dataset == null) {
             ctx.response().setStatusCode(500).end("Dataset not loaded");
             return;
         }
-        ctx.response()
-            .putHeader("content-type", "application/json")
-            .end(Buffer.buffer(jsonResponse));
+        try {
+            List<Map<String, Object>> items = new ArrayList<>(dataset.size());
+            for (Map<String, Object> item : dataset) {
+                Map<String, Object> processed = new LinkedHashMap<>(item);
+                double price = ((Number) item.get("price")).doubleValue();
+                int quantity = ((Number) item.get("quantity")).intValue();
+                processed.put("total", Math.round(price * quantity * 100.0) / 100.0);
+                items.add(processed);
+            }
+            byte[] body = MAPPER.writeValueAsBytes(Map.of("items", items, "count", items.size()));
+            ctx.response()
+                .putHeader("content-type", "application/json")
+                .end(Buffer.buffer(body));
+        } catch (Exception e) {
+            ctx.response().setStatusCode(500).end("Serialization failed");
+        }
     }
 
     private void handleCompression(RoutingContext ctx) {

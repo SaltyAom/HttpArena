@@ -25,7 +25,6 @@ import sqlight
 pub type Context {
   Context(
     dataset: List(DatasetItem),
-    json_cache: BitArray,
     json_large_cache: BitArray,
     static_files: List(#(String, StaticFile)),
     db_available: Bool,
@@ -340,7 +339,7 @@ fn handle_json(
     Get ->
       case ctx.dataset {
         [] -> server_error()
-        _ -> json_response(ctx.json_cache)
+        _ -> json_response(build_json_response(ctx.dataset))
       }
     _ -> not_found()
   }
@@ -548,7 +547,6 @@ pub fn main() {
     Error(_) -> "/data/dataset.json"
   }
   let dataset = load_dataset(dataset_path)
-  let json_cache = build_json_response(dataset)
 
   let large_dataset = load_dataset("/data/dataset-large.json")
   let json_large_cache = build_json_response(large_dataset)
@@ -563,7 +561,6 @@ pub fn main() {
   let ctx =
     Context(
       dataset:,
-      json_cache:,
       json_large_cache:,
       static_files:,
       db_available:,

@@ -20,8 +20,8 @@ static h2o_globalconf_t globalconf;
 static SSL_CTX *ssl_ctx;
 static __thread sqlite3 *tl_db = NULL;
 static __thread sqlite3_stmt *tl_db_stmt = NULL;
-static char *json_response;
-static size_t json_response_len;
+static yajl_val dataset_tree = NULL;
+static size_t dataset_count = 0;
 static char *json_large_response;
 static size_t json_large_response_len;
 /* Pre-loaded static files */
@@ -123,23 +123,121 @@ static int on_baseline2(h2o_handler_t *h, h2o_req_t *req)
     return 0;
 }
 
-/* GET /json — return pre-serialized JSON dataset */
+/* GET /json — serialize JSON dataset per-request from parsed tree */
 static int on_json(h2o_handler_t *h, h2o_req_t *req)
 {
     (void)h;
-    if (!json_response) {
+    if (!dataset_tree) {
         h2o_send_error_500(req, "Error", "No dataset", 0);
         return 0;
     }
-    h2o_generator_t gen;
-    memset(&gen, 0, sizeof(gen));
-    h2o_iovec_t body = h2o_iovec_init(json_response, json_response_len);
+
+    yajl_gen gen = yajl_gen_alloc(NULL);
+    yajl_gen_map_open(gen);
+    yajl_gen_string(gen, (const unsigned char *)"items", 5);
+    yajl_gen_array_open(gen);
+
+    for (size_t i = 0; i < dataset_count; i++) {
+        yajl_val item = YAJL_GET_ARRAY(dataset_tree)->values[i];
+        if (!YAJL_IS_OBJECT(item)) continue;
+
+        const char *p_id[] = {"id", NULL};
+        const char *p_name[] = {"name", NULL};
+        const char *p_cat[] = {"category", NULL};
+        const char *p_price[] = {"price", NULL};
+        const char *p_qty[] = {"quantity", NULL};
+        const char *p_active[] = {"active", NULL};
+        const char *p_tags[] = {"tags", NULL};
+        const char *p_rating[] = {"rating", NULL};
+
+        yajl_val vid = yajl_tree_get(item, p_id, yajl_t_number);
+        yajl_val vname = yajl_tree_get(item, p_name, yajl_t_string);
+        yajl_val vcat = yajl_tree_get(item, p_cat, yajl_t_string);
+        yajl_val vprice = yajl_tree_get(item, p_price, yajl_t_number);
+        yajl_val vqty = yajl_tree_get(item, p_qty, yajl_t_number);
+        yajl_val vactive = yajl_tree_get(item, p_active, yajl_t_any);
+        yajl_val vtags = yajl_tree_get(item, p_tags, yajl_t_array);
+        yajl_val vrating = yajl_tree_get(item, p_rating, yajl_t_object);
+
+        double price = vprice ? YAJL_GET_DOUBLE(vprice) : 0;
+        long long qty = vqty ? YAJL_GET_INTEGER(vqty) : 0;
+        double total = round(price * (double)qty * 100.0) / 100.0;
+
+        yajl_gen_map_open(gen);
+
+        yajl_gen_string(gen, (const unsigned char *)"id", 2);
+        yajl_gen_integer(gen, vid ? YAJL_GET_INTEGER(vid) : 0);
+
+        yajl_gen_string(gen, (const unsigned char *)"name", 4);
+        const char *name = vname ? YAJL_GET_STRING(vname) : "";
+        yajl_gen_string(gen, (const unsigned char *)name, strlen(name));
+
+        yajl_gen_string(gen, (const unsigned char *)"category", 8);
+        const char *cat = vcat ? YAJL_GET_STRING(vcat) : "";
+        yajl_gen_string(gen, (const unsigned char *)cat, strlen(cat));
+
+        yajl_gen_string(gen, (const unsigned char *)"price", 5);
+        yajl_gen_double(gen, price);
+
+        yajl_gen_string(gen, (const unsigned char *)"quantity", 8);
+        yajl_gen_integer(gen, qty);
+
+        yajl_gen_string(gen, (const unsigned char *)"active", 6);
+        yajl_gen_bool(gen, vactive ? YAJL_IS_TRUE(vactive) : 0);
+
+        yajl_gen_string(gen, (const unsigned char *)"tags", 4);
+        yajl_gen_array_open(gen);
+        if (vtags) {
+            for (size_t j = 0; j < YAJL_GET_ARRAY(vtags)->len; j++) {
+                yajl_val t = YAJL_GET_ARRAY(vtags)->values[j];
+                if (YAJL_IS_STRING(t)) {
+                    const char *s = YAJL_GET_STRING(t);
+                    yajl_gen_string(gen, (const unsigned char *)s, strlen(s));
+                }
+            }
+        }
+        yajl_gen_array_close(gen);
+
+        yajl_gen_string(gen, (const unsigned char *)"rating", 6);
+        yajl_gen_map_open(gen);
+        if (vrating) {
+            const char *ps[] = {"score", NULL};
+            const char *pc[] = {"count", NULL};
+            yajl_val vs = yajl_tree_get(vrating, ps, yajl_t_number);
+            yajl_val vc = yajl_tree_get(vrating, pc, yajl_t_number);
+            yajl_gen_string(gen, (const unsigned char *)"score", 5);
+            yajl_gen_double(gen, vs ? YAJL_GET_DOUBLE(vs) : 0);
+            yajl_gen_string(gen, (const unsigned char *)"count", 5);
+            yajl_gen_integer(gen, vc ? YAJL_GET_INTEGER(vc) : 0);
+        }
+        yajl_gen_map_close(gen);
+
+        yajl_gen_string(gen, (const unsigned char *)"total", 5);
+        yajl_gen_double(gen, total);
+
+        yajl_gen_map_close(gen);
+    }
+
+    yajl_gen_array_close(gen);
+    yajl_gen_string(gen, (const unsigned char *)"count", 5);
+    yajl_gen_integer(gen, (long long)dataset_count);
+    yajl_gen_map_close(gen);
+
+    const unsigned char *buf;
+    size_t len;
+    yajl_gen_get_buf(gen, &buf, &len);
+
+    h2o_iovec_t body = h2o_strdup(&req->pool, (const char *)buf, len);
+    yajl_gen_free(gen);
+
+    h2o_generator_t hgen;
+    memset(&hgen, 0, sizeof(hgen));
     req->res.status = 200;
     req->res.reason = "OK";
-    req->res.content_length = json_response_len;
+    req->res.content_length = body.len;
     h2o_add_header(&req->pool, &req->res.headers, H2O_TOKEN_CONTENT_TYPE,
                    NULL, H2O_STRLIT("application/json"));
-    h2o_start_response(req, &gen);
+    h2o_start_response(req, &hgen);
     h2o_send(req, &body, 1, H2O_SEND_STATE_FINAL);
     return 0;
 }
@@ -452,7 +550,7 @@ static void setup_host(h2o_hostconf_t *host)
     h2o_compress_register(pc_compress, &compress_args);
 }
 
-/* Load dataset.json and pre-serialize the /json response with yajl */
+/* Load dataset.json — parse into tree, keep in memory for per-request serialization */
 static void load_dataset(void)
 {
     const char *path = getenv("DATASET_PATH");
@@ -476,107 +574,9 @@ static void load_dataset(void)
         return;
     }
 
-    yajl_gen gen = yajl_gen_alloc(NULL);
-    yajl_gen_map_open(gen);
-    yajl_gen_string(gen, (const unsigned char *)"items", 5);
-    yajl_gen_array_open(gen);
-
-    size_t count = YAJL_GET_ARRAY(tree)->len;
-    for (size_t i = 0; i < count; i++) {
-        yajl_val item = YAJL_GET_ARRAY(tree)->values[i];
-        if (!YAJL_IS_OBJECT(item)) continue;
-
-        const char *p_id[] = {"id", NULL};
-        const char *p_name[] = {"name", NULL};
-        const char *p_cat[] = {"category", NULL};
-        const char *p_price[] = {"price", NULL};
-        const char *p_qty[] = {"quantity", NULL};
-        const char *p_active[] = {"active", NULL};
-        const char *p_tags[] = {"tags", NULL};
-        const char *p_rating[] = {"rating", NULL};
-
-        yajl_val vid = yajl_tree_get(item, p_id, yajl_t_number);
-        yajl_val vname = yajl_tree_get(item, p_name, yajl_t_string);
-        yajl_val vcat = yajl_tree_get(item, p_cat, yajl_t_string);
-        yajl_val vprice = yajl_tree_get(item, p_price, yajl_t_number);
-        yajl_val vqty = yajl_tree_get(item, p_qty, yajl_t_number);
-        yajl_val vactive = yajl_tree_get(item, p_active, yajl_t_any);
-        yajl_val vtags = yajl_tree_get(item, p_tags, yajl_t_array);
-        yajl_val vrating = yajl_tree_get(item, p_rating, yajl_t_object);
-
-        double price = vprice ? YAJL_GET_DOUBLE(vprice) : 0;
-        long long qty = vqty ? YAJL_GET_INTEGER(vqty) : 0;
-        double total = round(price * (double)qty * 100.0) / 100.0;
-
-        yajl_gen_map_open(gen);
-
-        yajl_gen_string(gen, (const unsigned char *)"id", 2);
-        yajl_gen_integer(gen, vid ? YAJL_GET_INTEGER(vid) : 0);
-
-        yajl_gen_string(gen, (const unsigned char *)"name", 4);
-        const char *name = vname ? YAJL_GET_STRING(vname) : "";
-        yajl_gen_string(gen, (const unsigned char *)name, strlen(name));
-
-        yajl_gen_string(gen, (const unsigned char *)"category", 8);
-        const char *cat = vcat ? YAJL_GET_STRING(vcat) : "";
-        yajl_gen_string(gen, (const unsigned char *)cat, strlen(cat));
-
-        yajl_gen_string(gen, (const unsigned char *)"price", 5);
-        yajl_gen_double(gen, price);
-
-        yajl_gen_string(gen, (const unsigned char *)"quantity", 8);
-        yajl_gen_integer(gen, qty);
-
-        yajl_gen_string(gen, (const unsigned char *)"active", 6);
-        yajl_gen_bool(gen, vactive ? YAJL_IS_TRUE(vactive) : 0);
-
-        yajl_gen_string(gen, (const unsigned char *)"tags", 4);
-        yajl_gen_array_open(gen);
-        if (vtags) {
-            for (size_t j = 0; j < YAJL_GET_ARRAY(vtags)->len; j++) {
-                yajl_val t = YAJL_GET_ARRAY(vtags)->values[j];
-                if (YAJL_IS_STRING(t)) {
-                    const char *s = YAJL_GET_STRING(t);
-                    yajl_gen_string(gen, (const unsigned char *)s, strlen(s));
-                }
-            }
-        }
-        yajl_gen_array_close(gen);
-
-        yajl_gen_string(gen, (const unsigned char *)"rating", 6);
-        yajl_gen_map_open(gen);
-        if (vrating) {
-            const char *ps[] = {"score", NULL};
-            const char *pc[] = {"count", NULL};
-            yajl_val vs = yajl_tree_get(vrating, ps, yajl_t_number);
-            yajl_val vc = yajl_tree_get(vrating, pc, yajl_t_number);
-            yajl_gen_string(gen, (const unsigned char *)"score", 5);
-            yajl_gen_double(gen, vs ? YAJL_GET_DOUBLE(vs) : 0);
-            yajl_gen_string(gen, (const unsigned char *)"count", 5);
-            yajl_gen_integer(gen, vc ? YAJL_GET_INTEGER(vc) : 0);
-        }
-        yajl_gen_map_close(gen);
-
-        yajl_gen_string(gen, (const unsigned char *)"total", 5);
-        yajl_gen_double(gen, total);
-
-        yajl_gen_map_close(gen);
-    }
-
-    yajl_gen_array_close(gen);
-    yajl_gen_string(gen, (const unsigned char *)"count", 5);
-    yajl_gen_integer(gen, (long long)count);
-    yajl_gen_map_close(gen);
-
-    const unsigned char *buf;
-    size_t len;
-    yajl_gen_get_buf(gen, &buf, &len);
-    json_response = malloc(len);
-    memcpy(json_response, buf, len);
-    json_response_len = len;
-
-    yajl_gen_free(gen);
-    yajl_tree_free(tree);
+    dataset_tree = tree;
+    dataset_count = YAJL_GET_ARRAY(tree)->len;
+    printf("Loaded dataset: %zu items\n", dataset_count);
 }
 
 /* Load dataset-large.json and pre-serialize the /compression response with yajl */

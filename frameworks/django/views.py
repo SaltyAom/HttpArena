@@ -29,16 +29,6 @@ try:
 except Exception:
     pass
 
-# Pre-compute JSON response for /json endpoint
-json_response_buf = None
-if dataset_items:
-    items = []
-    for d in dataset_items:
-        item = dict(d)
-        item['total'] = round(d['price'] * d['quantity'] * 100) / 100
-        items.append(item)
-    json_response_buf = json.dumps({'items': items, 'count': len(items)}).encode()
-
 # SQLite
 db_available = os.path.exists('/data/benchmark.db')
 DB_QUERY = 'SELECT id, name, category, price, quantity, active, tags, rating_score, rating_count FROM items WHERE price BETWEEN ? AND ? LIMIT 50'
@@ -101,11 +91,17 @@ def baseline2(request):
 
 @require_GET
 def json_endpoint(request):
-    if json_response_buf:
-        resp = HttpResponse(json_response_buf, content_type='application/json')
-        resp['Server'] = 'django'
-        return resp
-    return HttpResponse('No dataset', status=500)
+    if dataset_items is None:
+        return HttpResponse('No dataset', status=500)
+    items = []
+    for d in dataset_items:
+        item = dict(d)
+        item['total'] = round(d['price'] * d['quantity'] * 100) / 100
+        items.append(item)
+    body = json.dumps({'items': items, 'count': len(items)}).encode()
+    resp = HttpResponse(body, content_type='application/json')
+    resp['Server'] = 'django'
+    return resp
 
 
 @require_GET

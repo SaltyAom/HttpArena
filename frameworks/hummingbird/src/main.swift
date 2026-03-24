@@ -48,16 +48,14 @@ struct JsonResponse: Codable, Sendable {
 
 final class AppState: Sendable {
     let dataset: [DatasetItem]
-    let jsonCache: [UInt8]
     let jsonLargeCache: [UInt8]
     let staticFiles: [String: StaticFile]
     let dbPath: String
     let dbAvailable: Bool
 
-    init(dataset: [DatasetItem], jsonCache: [UInt8], jsonLargeCache: [UInt8],
+    init(dataset: [DatasetItem], jsonLargeCache: [UInt8],
          staticFiles: [String: StaticFile], dbPath: String, dbAvailable: Bool) {
         self.dataset = dataset
-        self.jsonCache = jsonCache
         self.jsonLargeCache = jsonLargeCache
         self.staticFiles = staticFiles
         self.dbPath = dbPath
@@ -193,7 +191,6 @@ func queryDb(dbPath: String, minPrice: Double, maxPrice: Double) -> [UInt8] {
 
 let datasetPath = ProcessInfo.processInfo.environment["DATASET_PATH"] ?? "/data/dataset.json"
 let dataset = loadDataset(path: datasetPath)
-let jsonCache = buildJsonCache(dataset)
 
 let largeDataset = loadDataset(path: "/data/dataset-large.json")
 let jsonLargeCache = buildJsonCache(largeDataset)
@@ -203,7 +200,6 @@ let dbAvailable = FileManager.default.fileExists(atPath: dbPath)
 
 let state = AppState(
     dataset: dataset,
-    jsonCache: jsonCache,
     jsonLargeCache: jsonLargeCache,
     staticFiles: loadStaticFiles(),
     dbPath: dbPath,
@@ -279,10 +275,11 @@ router.get("json") { _, _ -> Response in
     if state.dataset.isEmpty {
         return Response(status: .internalServerError)
     }
+    let jsonBytes = buildJsonCache(state.dataset)
     return Response(
         status: .ok,
         headers: [.contentType: "application/json"],
-        body: .init(byteBuffer: ByteBuffer(bytes: state.jsonCache))
+        body: .init(byteBuffer: ByteBuffer(bytes: jsonBytes))
     )
 }
 

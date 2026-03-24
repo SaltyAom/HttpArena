@@ -13,15 +13,9 @@ class App < Sinatra::Base
     # Load dataset
     dataset_path = ENV.fetch('DATASET_PATH', '/data/dataset.json')
     if File.exist?(dataset_path)
-      raw = JSON.parse(File.read(dataset_path))
-      items = raw.map do |d|
-        d.merge('total' => (d['price'] * d['quantity'] * 100).round / 100.0)
-      end
-      set :dataset_items, raw
-      set :json_payload, JSON.generate({ 'items' => items, 'count' => items.length })
+      set :dataset_items, JSON.parse(File.read(dataset_path))
     else
       set :dataset_items, nil
-      set :json_payload, nil
     end
 
     # Large dataset for compression
@@ -88,11 +82,14 @@ class App < Sinatra::Base
   end
 
   get '/json' do
-    payload = settings.json_payload
-    halt 500, 'No dataset' unless payload
+    dataset = settings.dataset_items
+    halt 500, 'No dataset' unless dataset
+    items = dataset.map do |d|
+      d.merge('total' => (d['price'] * d['quantity'] * 100).round / 100.0)
+    end
     content_type 'application/json'
     headers 'Server' => 'sinatra'
-    payload
+    JSON.generate({ 'items' => items, 'count' => items.length })
   end
 
   get '/compression' do

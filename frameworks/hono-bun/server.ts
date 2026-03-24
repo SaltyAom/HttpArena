@@ -12,14 +12,6 @@ const MIME_TYPES: Record<string, string> = {
 // Load datasets
 const datasetItems: any[] = JSON.parse(readFileSync("/data/dataset.json", "utf8"));
 
-const processedItems = datasetItems.map((d: any) => ({
-  id: d.id, name: d.name, category: d.category,
-  price: d.price, quantity: d.quantity, active: d.active,
-  tags: d.tags, rating: d.rating,
-  total: Math.round(d.price * d.quantity * 100) / 100,
-}));
-const smallPayload = Buffer.from(JSON.stringify({ items: processedItems, count: processedItems.length }));
-
 const largeData = JSON.parse(readFileSync("/data/dataset-large.json", "utf8"));
 const largeItems = largeData.map((d: any) => ({
   id: d.id, name: d.name, category: d.category,
@@ -108,10 +100,17 @@ app.get("/baseline2", (c) => {
 
 // --- /json ---
 app.get("/json", (c) => {
-  return new Response(smallPayload, {
+  const processedItems = datasetItems.map((d: any) => ({
+    id: d.id, name: d.name, category: d.category,
+    price: d.price, quantity: d.quantity, active: d.active,
+    tags: d.tags, rating: d.rating,
+    total: Math.round(d.price * d.quantity * 100) / 100,
+  }));
+  const body = JSON.stringify({ items: processedItems, count: processedItems.length });
+  return new Response(body, {
     headers: {
       "content-type": "application/json",
-      "content-length": String(smallPayload.length),
+      "content-length": String(Buffer.byteLength(body)),
       server: SERVER_NAME,
     },
   });
