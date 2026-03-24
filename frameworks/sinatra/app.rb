@@ -31,15 +31,9 @@ class App < Sinatra::Base
       items = raw.map do |d|
         d.merge('total' => (d['price'] * d['quantity'] * 100).round / 100.0)
       end
-      payload = JSON.generate({ 'items' => items, 'count' => items.length })
-      # Pre-compress with gzip level 1
-      sio = StringIO.new
-      gz = Zlib::GzipWriter.new(sio, 1)
-      gz.write(payload)
-      gz.close
-      set :compressed_payload, sio.string
+      set :large_json_payload, JSON.generate({ 'items' => items, 'count' => items.length })
     else
-      set :compressed_payload, nil
+      set :large_json_payload, nil
     end
 
     # SQLite
@@ -102,11 +96,15 @@ class App < Sinatra::Base
   end
 
   get '/compression' do
-    compressed = settings.compressed_payload
-    halt 500, 'No dataset' unless compressed
+    payload = settings.large_json_payload
+    halt 500, 'No dataset' unless payload
+    sio = StringIO.new
+    gz = Zlib::GzipWriter.new(sio, 1)
+    gz.write(payload)
+    gz.close
     content_type 'application/json'
     headers 'Content-Encoding' => 'gzip', 'Server' => 'sinatra'
-    compressed
+    sio.string
   end
 
   get '/db' do

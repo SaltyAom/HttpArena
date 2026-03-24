@@ -8,7 +8,6 @@ const SERVER_NAME = 'koa';
 
 let datasetItems;
 let largeJsonBuf;
-let largeJsonGzip;
 let jsonBuf;
 let dbStmt;
 const staticFiles = {};
@@ -52,7 +51,6 @@ function loadLargeDataset() {
             total: Math.round(d.price * d.quantity * 100) / 100
         }));
         largeJsonBuf = Buffer.from(JSON.stringify({ items, count: items.length }));
-        largeJsonGzip = zlib.gzipSync(largeJsonBuf, { level: 1 });
     } catch (e) {}
 }
 
@@ -148,16 +146,17 @@ function startWorker() {
 
     // --- /compression ---
     router.get('/compression', (ctx) => {
-        if (!largeJsonGzip) {
+        if (!largeJsonBuf) {
             ctx.status = 500;
             ctx.body = 'No dataset';
             return;
         }
+        const compressed = zlib.gzipSync(largeJsonBuf, { level: 1 });
         ctx.set('server', SERVER_NAME);
         ctx.set('content-type', 'application/json');
         ctx.set('content-encoding', 'gzip');
-        ctx.set('content-length', String(largeJsonGzip.length));
-        ctx.body = largeJsonGzip;
+        ctx.set('content-length', String(compressed.length));
+        ctx.body = compressed;
     });
 
     // --- /db ---

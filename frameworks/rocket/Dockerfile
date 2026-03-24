@@ -7,5 +7,6 @@ RUN RUSTFLAGS="-C target-cpu=native" cargo build --release
 
 FROM debian:bookworm-slim
 COPY --from=build /app/target/release/httparena-rocket /server
+ENV ROCKET_WORKERS=64
 EXPOSE 8080
 CMD ["/server"]

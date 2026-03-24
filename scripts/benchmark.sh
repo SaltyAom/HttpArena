@@ -27,7 +27,7 @@ CERTS_DIR="$ROOT_DIR/certs"
 #           "grpc" = gRPC unary (h2load h2c), "grpc-tls" = gRPC unary (h2load TLS),
 #           "ws-echo" = WebSocket echo (gcannon --ws)
 declare -A PROFILES=(
-    [baseline]="1|0||512,4096,16384|"
+    [baseline]="1|0|64|512,4096,16384|"
     [pipelined]="16|0||512,4096,16384|pipeline"
     [limited-conn]="1|10||512,4096|"
     [json]="1|0||4096,16384|json"
@@ -104,7 +104,15 @@ import json, sys, os, glob
 
 data_file = sys.argv[1]
 conn_dir = sys.argv[2]
-new_fws = set(sys.argv[3].split())
+
+# Build map of new results keyed by framework display name
+new_entries = {}
+for f in sorted(glob.glob(os.path.join(conn_dir, '*.json'))):
+    try:
+        entry = json.load(open(f))
+        new_entries[entry.get('framework', '')] = entry
+    except:
+        pass
 
 # Load existing data
 existing = []
@@ -114,20 +122,30 @@ if os.path.exists(data_file):
     except:
         existing = []
 
-# Remove entries for frameworks being updated (case-insensitive match)
-new_fws_lower = {fw.lower() for fw in new_fws}
-merged = [e for e in existing if e.get('framework', '').lower() not in new_fws_lower]
+# Remove entries whose framework name matches any new result
+merged = [e for e in existing if e.get('framework', '') not in new_entries]
 
 # Add new results
-for f in sorted(glob.glob(os.path.join(conn_dir, '*.json'))):
-    try:
-        merged.append(json.load(open(f)))
-    except:
-        pass
+merged.extend(new_entries.values())
+
+# Deduplicate by framework name (keep highest RPS)
+seen = {}
+for e in merged:
+    name = e.get('framework', '')
+    if name not in seen or e.get('rps', 0) > seen[name].get('rps', 0):
+        seen[name] = e
+deduped = [seen[e.get('framework', '')] for e in merged if e.get('framework', '') in seen]
+seen2 = set()
+final = []
+for e in deduped:
+    name = e.get('framework', '')
+    if name not in seen2:
+        final.append(e)
+        seen2.add(name)
 
 with open(data_file, 'w') as out:
-    json.dump(merged, out, indent=2)
-" "$data_file" "$conn_dir" "$new_fws"
+    json.dump(final, out, indent=2)
+" "$data_file" "$conn_dir"
 
             echo "[updated] site/data/${profile}-${conns}.json"
         done
@@ -338,7 +356,11 @@ for profile in "${profiles_to_run[@]}"; do
         -v "$ROOT_DIR/data/static:/data/static:ro"
         -v "$CERTS_DIR:/certs:ro")
     if [ -n "$cpu_limit" ]; then
-        docker_args+=(--cpus="$cpu_limit")
+        if [[ "$cpu_limit" == *-* ]]; then
+            docker_args+=(--cpuset-cpus="$cpu_limit")
+        else
+            docker_args+=(--cpus="$cpu_limit")
+        fi
     fi
     docker run "${docker_args[@]}" "$IMAGE_NAME"
 

@@ -149,7 +149,6 @@ struct StaticFile {
 struct AppState {
     dataset: Vec<DatasetItem>,
     json_large_cache: Vec<u8>,
-    gzip_large_cache: Vec<u8>,
     static_files: HashMap<String, StaticFile>,
     db_pool: Vec<Mutex<Connection>>,
     db_counter: AtomicUsize,
@@ -317,10 +316,14 @@ fn json_endpoint(state: &State<Arc<AppState>>) -> ServerResponse {
 
 #[get("/compression")]
 fn compression_endpoint(state: &State<Arc<AppState>>) -> ServerResponse {
+    if state.json_large_cache.is_empty() {
+        return ServerResponse::error("No dataset");
+    }
+    let compressed = gzip_compress(&state.json_large_cache);
     ServerResponse {
         status: Status::Ok,
         content_type: ContentType::JSON,
-        body: state.gzip_large_cache.clone(),
+        body: compressed,
         extra_headers: vec![],
     }
     .with_header("Content-Encoding", "gzip".to_string())
@@ -433,8 +436,21 @@ fn build_rocket(
 
 // ─── Main ───
 
-#[rocket::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let workers = std::env::var("ROCKET_WORKERS")
+        .ok()
+        .and_then(|v| v.parse().ok())
+        .unwrap_or_else(num_cpus::get);
+
+    let rt = tokio::runtime::Builder::new_multi_thread()
+        .worker_threads(workers)
+        .enable_all()
+        .build()?;
+
+    rt.block_on(async_main())
+}
+
+async fn async_main() -> Result<(), Box<dyn std::error::Error>> {
     let dataset = load_dataset();
     let large_dataset: Vec<DatasetItem> =
         match std::fs::read_to_string("/data/dataset-large.json") {
@@ -442,13 +458,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             Err(_) => Vec::new(),
         };
     let json_large_cache = build_json_cache(&large_dataset);
-    let gzip_large_cache = gzip_compress(&json_large_cache);
 
-    let workers = num_cpus::get();
+    let workers = std::env::var("ROCKET_WORKERS")
+        .ok()
+        .and_then(|v| v.parse().ok())
+        .unwrap_or_else(num_cpus::get);
     let state = Arc::new(AppState {
         dataset,
         json_large_cache,
-        gzip_large_cache,
         static_files: load_static_files(),
         db_pool: open_db_pool(workers),
         db_counter: AtomicUsize::new(0),
