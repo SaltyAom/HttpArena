@@ -1,5 +1,5 @@
 use ntex::http::header::{ContentEncoding, CONTENT_TYPE, SERVER};
-use ntex::util::BytesMut;
+use ntex::util::{Bytes, BytesMut};
 use ntex::web::{self, App, BodyEncoding, HttpRequest, HttpResponse};
 use rusqlite::Connection;
 use serde::{Deserialize, Serialize};
@@ -184,7 +184,7 @@ async fn baseline2(req: HttpRequest) -> HttpResponse {
         .body(sum.to_string())
 }
 
-async fn upload(body: web::types::Bytes) -> HttpResponse {
+async fn upload(body: Bytes) -> HttpResponse {
     HttpResponse::Ok()
         .header(SERVER, SERVER_NAME)
         .header(CONTENT_TYPE, "text/plain")
