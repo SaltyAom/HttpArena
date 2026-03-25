@@ -63,7 +63,7 @@ struct AppState {
     static_files: HashMap<String, StaticFile>,
 }
 
-struct WorkerDb(RefCell<Connection>);
+struct WorkerDb(RefCell<Option<Connection>>);
 
 fn load_dataset() -> Vec<DatasetItem> {
     let path = std::env::var("DATASET_PATH").unwrap_or_else(|_| "/data/dataset.json".to_string());
@@ -233,7 +233,13 @@ async fn db_endpoint(req: HttpRequest, db: web::types::State<WorkerDb>) -> HttpR
                 .find_map(|p| p.strip_prefix("max=").and_then(|v| v.parse().ok()))
         })
         .unwrap_or(50.0);
-    let conn = db.0.borrow();
+    let borrow = db.0.borrow();
+    let conn = match borrow.as_ref() {
+        Some(c) => c,
+        None => {
+            return HttpResponse::InternalServerError().body("Database not available");
+        }
+    };
     let mut stmt = conn
         .prepare_cached(
             "SELECT id, name, category, price, quantity, active, tags, rating_score, rating_count FROM items WHERE price BETWEEN ?1 AND ?2 LIMIT 50",
@@ -304,16 +310,17 @@ async fn main() -> std::io::Result<()> {
             "/data/benchmark.db",
             rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY,
         )
+        .ok()
         .map(|conn| {
             conn.execute_batch("PRAGMA mmap_size=268435456").ok();
-            WorkerDb(RefCell::new(conn))
-        })
-        .expect("Failed to open database");
+            conn
+        });
+        let db_state = WorkerDb(RefCell::new(worker_db));
 
         App::new()
             .middleware(web::middleware::Compress::default())
             .state(state.clone())
-            .state(worker_db)
+            .state(db_state)
             .state(web::types::PayloadConfig::new(25 * 1024 * 1024))
             .route("/pipeline", web::get().to(pipeline))
             .route("/baseline11", web::get().to(baseline11_get))
