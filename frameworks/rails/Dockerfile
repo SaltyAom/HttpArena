@@ -5,6 +5,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 ENV RUBY_YJIT_ENABLE=1
+ENV RACK_ENV=production
 
 WORKDIR /app
 
