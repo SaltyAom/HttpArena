@@ -136,6 +136,10 @@ fn handleJson(_: *blitz.Request, res: *blitz.Response) void {
     _ = res.json(buf[0..pos]);
 }
 
+// Thread-local buffers for compression (avoids heap alloc + use-after-free with rawResponse)
+threadlocal var tls_gzip_buf: [1048576]u8 = undefined;
+threadlocal var tls_resp_buf: [1048576 + 256]u8 = undefined;
+
 fn handleCompression(req: *blitz.Request, res: *blitz.Response) void {
     // Check if client accepts gzip
     if (req.headers.get("Accept-Encoding")) |ae| {
@@ -146,15 +150,7 @@ fn handleCompression(req: *blitz.Request, res: *blitz.Response) void {
                 return;
             }
 
-            // Heap-allocate buffers to avoid stack overflow on worker threads
-            const alloc = std.heap.c_allocator;
-            const gzip_buf = alloc.alloc(u8, 1048576) catch {
-                _ = res.json(compression_json_body);
-                return;
-            };
-            defer alloc.free(gzip_buf);
-
-            var fbs = std.io.fixedBufferStream(gzip_buf);
+            var fbs = std.io.fixedBufferStream(&tls_gzip_buf);
             var compressor = std.compress.gzip.compressor(fbs.writer(), .{
                 .level = .fast,
             }) catch {
@@ -171,19 +167,13 @@ fn handleCompression(req: *blitz.Request, res: *blitz.Response) void {
             };
             const gzip_data = fbs.getWritten();
 
-            // Build raw HTTP response with gzip headers
-            const resp_buf = alloc.alloc(u8, gzip_data.len + 256) catch {
+            // Build raw HTTP response with gzip headers into thread-local buffer
+            const header = std.fmt.bufPrint(&tls_resp_buf, "HTTP/1.1 200 OK\r\nServer: blitz\r\nContent-Type: application/json\r\nContent-Encoding: gzip\r\nVary: Accept-Encoding\r\nContent-Length: {d}\r\n\r\n", .{gzip_data.len}) catch {
                 _ = res.json(compression_json_body);
                 return;
             };
-            defer alloc.free(resp_buf);
-
-            const header = std.fmt.bufPrint(resp_buf, "HTTP/1.1 200 OK\r\nServer: blitz\r\nContent-Type: application/json\r\nContent-Encoding: gzip\r\nVary: Accept-Encoding\r\nContent-Length: {d}\r\n\r\n", .{gzip_data.len}) catch {
-                _ = res.json(compression_json_body);
-                return;
-            };
-            @memcpy(resp_buf[header.len .. header.len + gzip_data.len], gzip_data);
-            _ = res.rawResponse(resp_buf[0 .. header.len + gzip_data.len]);
+            @memcpy(tls_resp_buf[header.len .. header.len + gzip_data.len], gzip_data);
+            _ = res.rawResponse(tls_resp_buf[0 .. header.len + gzip_data.len]);
             return;
         }
     }
