@@ -42,6 +42,7 @@
   "nginx-openresty": {"description": "OpenResty (Nginx + LuaJIT) with Lua content handlers for all benchmark endpoints.", "repo": "https://github.com/openresty/openresty", "type": "framework", "engine": "openresty"},
   "node": {"description": "Bare Node.js HTTP server using the cluster module for multi-core scaling.", "repo": "https://github.com/nodejs/node", "type": "framework", "engine": "V8"},
   "node-websocket": {"description": "Node.js WebSocket echo server using ws package", "repo": "https://github.com/websockets/ws", "type": "framework", "engine": "V8"},
+  "ntex": {"description": "ntex web framework with neon-uring runtime (io_uring), compiled with -O3 and thin LTO.", "repo": "https://github.com/ntex-rs/ntex", "type": "framework", "engine": "io_uring"},
   "phoenix": {"description": "Phoenix 1.7 on Cowboy — the most popular Elixir web framework. First Elixir entry in HttpArena.", "repo": "https://github.com/phoenixframework/phoenix", "type": "framework", "engine": "BEAM"},
   "prologue": {"description": "Prologue web framework for Nim — compiles to native C with powerful routing and middleware support.", "repo": "https://github.com/planety/prologue", "type": "framework", "engine": "asynchserver"},
   "quarkus-jvm": {"description": "Quarkus with RESTEasy Reactive on Vert.x/Netty, JDK 21, optimized JVM tuning.", "repo": "https://github.com/quarkusio/quarkus", "type": "framework", "engine": "Netty"},
