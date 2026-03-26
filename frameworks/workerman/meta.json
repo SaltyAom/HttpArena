@@ -1,0 +1,19 @@
+{
+  "display_name": "workerman",
+  "language": "PHP",
+  "type": "framework",
+  "engine": "workerman",
+  "description": "Workerman with PHP content handlers for all benchmark endpoints.",
+  "repo": "https://github.com/walkor/Workerman",
+  "enabled": true,
+  "tests": [
+    "pipelined",
+    "baseline",
+    "noisy",
+    "json",
+    "compression",
+    "upload",
+    "limited-conn",
+    "mixed"
+  ]
+}
