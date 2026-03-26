@@ -7,7 +7,7 @@ class DB
 
     public static function init()
     {
-        self::$db = new Sqlite3('/data/benchmark.db');
+        self::$db = new Sqlite3('/data/benchmark.db', SQLITE3_OPEN_READONLY);
 
         self::$prepared = self::$db->prepare('SELECT id, name, category, price, quantity, active, tags, rating_score, rating_count
                             FROM items
