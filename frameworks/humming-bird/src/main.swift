@@ -6,9 +6,9 @@ import NIOFoundationCompat
 import PostgresNIO
 
 #if canImport(CSQLite)
-import CSQLite
+    import CSQLite
 #elseif canImport(SQLite3)
-import SQLite3
+    import SQLite3
 #endif
 
 // MARK: - Data Models
@@ -97,7 +97,8 @@ func buildJsonCache(_ items: [DatasetItem]) -> ByteBuffer {
         )
     }
     let resp = JsonResponse(items: processed, count: processed.count)
-    return (try? JSONEncoder().encodeAsByteBuffer(resp, allocator: ByteBufferAllocator())) ?? ByteBuffer()
+    return (try? JSONEncoder().encodeAsByteBuffer(resp, allocator: ByteBufferAllocator()))
+        ?? ByteBuffer()
 }
 
 func loadStaticFiles() -> [String: StaticFile] {
@@ -204,13 +205,14 @@ func queryDb(dbPath: String, minPrice: Double, maxPrice: Double) -> [UInt8] {
 // MARK: - Postgres
 
 func parseDatabaseURL(_ url: String) -> PostgresClient.Configuration? {
-    guard let u = URL(string: url.replacingOccurrences(of: "postgres://", with: "postgresql://")) else { return nil }
+    guard let u = URL(string: url.replacingOccurrences(of: "postgres://", with: "postgresql://"))
+    else { return nil }
     let user = u.user ?? "bench"
     let password = u.password ?? "bench"
     let host = u.host ?? "localhost"
     let port = u.port ?? 5432
     let database = String(u.path.dropFirst())
-    var config = PostgresClient.Configuration(
+    let config = PostgresClient.Configuration(
         host: host, port: port, username: user, password: password, database: database,
         tls: .disable
     )
@@ -225,12 +227,15 @@ func queryPgDb(client: PostgresClient, minPrice: Double, maxPrice: Double) async
         var items: [[String: Any]] = []
         for try await row in rows {
             let (id, name, category, price, quantity, active, tagsStr, ratingScore, ratingCount) =
-                try row.decode((Int, String, String, Double, Int, Bool, String, Double, Int).self, context: .default)
+                try row.decode(
+                    (Int, String, String, Double, Int, Bool, String, Double, Int).self,
+                    context: .default)
             let tags = (try? JSONSerialization.jsonObject(with: Data(tagsStr.utf8))) ?? []
             items.append([
                 "id": id, "name": name, "category": category,
                 "price": price, "quantity": quantity, "active": active,
-                "tags": tags, "rating": ["score": ratingScore, "count": ratingCount] as [String: Any]
+                "tags": tags,
+                "rating": ["score": ratingScore, "count": ratingCount] as [String: Any],
             ])
         }
         let response: [String: Any] = ["items": items, "count": items.count]
@@ -343,8 +348,10 @@ router.get("compression") { _, _ -> Response in
 
 // POST /upload
 router.post("upload") { request, _ -> Response in
-    let body = try await request.body.collect(upTo: 25 * 1024 * 1024)
-    let size = body.readableBytes
+    var size = 0
+    for try await buffer in request.body {
+        size += buffer.readableBytes
+    }
     return Response(
         status: .ok,
         headers: [.contentType: "text/plain"],
@@ -406,17 +413,12 @@ router.get("static/{filename}") { _, context -> Response in
 }
 
 // Start server
-let app = Application(
+var app = Application(
     router: router,
     configuration: .init(address: .hostname("0.0.0.0", port: 8080), serverName: "hummingbird")
 )
 
 if let client = pgClient {
-    try await withThrowingTaskGroup(of: Void.self) { group in
-        group.addTask { try await client.run() }
-        group.addTask { try await app.runService() }
-        try await group.next()
-    }
-} else {
-    try await app.runService()
+    app.addServices(client)
 }
+try await app.runService()
