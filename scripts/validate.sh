@@ -48,10 +48,13 @@ else
 fi
 
 # Mount volumes based on subscribed tests
+HARD_NOFILE=$(ulimit -Hn)
 if has_test "async-db"; then
-    docker_args=(-d --name "$CONTAINER_NAME" --network host --security-opt seccomp=unconfined)
+    docker_args=(-d --name "$CONTAINER_NAME" --network host --security-opt seccomp=unconfined
+        --ulimit memlock=-1:-1 --ulimit nofile="$HARD_NOFILE:$HARD_NOFILE")
 else
-    docker_args=(-d --name "$CONTAINER_NAME" -p "$PORT:8080")
+    docker_args=(-d --name "$CONTAINER_NAME" -p "$PORT:8080"
+        --ulimit memlock=-1:-1 --ulimit nofile="$HARD_NOFILE:$HARD_NOFILE")
 fi
 docker_args+=(-v "$DATA_DIR/dataset.json:/data/dataset.json:ro")
 
