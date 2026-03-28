@@ -525,6 +525,20 @@ print(f'{count} {has_rating} {has_tags} {has_active_bool}')
     fi
 fi
 
+# ───── WebSocket Echo (ws://localhost/ws) ─────
+
+if has_test "echo-ws"; then
+    echo "[test] echo-ws endpoint"
+    WS_OUTPUT=$(python3 "$SCRIPT_DIR/validate-ws.py" localhost "$PORT" /ws 2>&1)
+    echo "$WS_OUTPUT"
+
+    # Parse pass/fail counts from the script output
+    WS_PASS=$(echo "$WS_OUTPUT" | grep -oP '(\d+) passed' | grep -oP '\d+')
+    WS_FAIL=$(echo "$WS_OUTPUT" | grep -oP '(\d+) failed' | grep -oP '\d+')
+    PASS=$((PASS + ${WS_PASS:-0}))
+    FAIL=$((FAIL + ${WS_FAIL:-0}))
+fi
+
 # ───── Summary ─────
 
 echo ""

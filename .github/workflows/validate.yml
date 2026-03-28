@@ -5,6 +5,7 @@ on:
     paths:
       - 'frameworks/**'
       - 'scripts/validate.sh'
+      - 'scripts/validate-ws.py'
 
 jobs:
   detect:
