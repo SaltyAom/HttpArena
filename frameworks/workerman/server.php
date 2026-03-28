@@ -1,0 +1,100 @@
+<?php
+
+use Workerman\Worker;
+use Workerman\Protocols\Http\Response;
+
+require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/db.php';
+
+// #### http worker ####
+$http_worker = new Worker('http://0.0.0.0:8080');
+$http_worker->reusePort = true;
+
+// 1 process per CPU core
+$http_worker->count = (int) shell_exec('nproc');
+
+// benchmark data
+define('JSON_DATA', json_decode(file_get_contents('/data/dataset.json'), true));
+define('LARGE_JSON', largeJson());
+
+function largeJson()
+{
+    $data = json_decode(file_get_contents('/data/dataset-large.json'), true);
+    foreach ($data as &$item) {
+        $item['total'] = $item['price'] * $item['quantity'];
+    }
+
+    return json_encode(['items' => $data, 'count' => count($data)]);
+}
+
+$http_worker->onWorkerStart = static function () {
+    DB::Init();
+};
+
+// Data received
+$http_worker->onMessage = static function ($connection, $request) {
+    switch ($request->path()) {
+        case '/pipeline':
+            $connection->headers = ['Content-Type' => 'text/plain'];
+            return $connection->send('ok');
+        
+        case '/baseline11':
+            $sum = array_sum($request->get());
+            if($request->method() === 'POST') {
+                $sum += $request->rawBody();
+            }
+            
+            $connection->headers = ['Content-Type' => 'text/plain'];
+            return $connection->send($sum);
+
+        case '/json':
+            $total = [];
+            foreach (JSON_DATA as $item) {
+                $item['total'] = $item['price'] * $item['quantity'];
+                $total[] = $item;
+            }
+
+            $connection->headers = ['Content-Type' => 'application/json'];
+            return $connection->send(json_encode(['items' => $total, 'count' => count($total)]));
+        
+        // case '/upload':
+        //     $connection->headers = ['Content-Type' => 'text/plain'];
+        //     return $connection->send(strlen($request->rawBody()));
+
+        case '/compression':
+            if (str_contains($request->header('Accept-Encoding', ''), 'gzip')) {
+                 $connection->headers = [
+                    'Content-Type' => 'application/json',
+                    'Content-Encoding' => 'gzip'
+                ];
+                return $connection->send(gzencode(LARGE_JSON, 1));
+            }
+
+            $resp = new Response(200, ['Content-Type' => 'application/json'], LARGE_JSON);
+            return $connection->send($resp);
+
+        case '/db':
+            $connection->headers = ['Content-Type' => 'application/json'];
+            return $connection->send(
+                DB::query(
+                    $request->get('min', 10),
+                    $request->get('max', 50)
+                )
+            );
+    }
+
+    // Serve static files
+    // if (str_starts_with($request->path(), '/static/')) {
+    //     $response = (new Response())->withFile('/data' . $request->path());
+    //     return $connection->send($response);
+    // }
+
+    return $connection->send(new Response(
+        404,
+        ['Content-Type' => 'text/plain'],
+        '404 Not Found')
+    );
+};
+
+// Run all workers
+Worker::runAll();
