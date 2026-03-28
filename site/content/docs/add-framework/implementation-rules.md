@@ -3,7 +3,11 @@ title: Implementation Rules
 weight: 5
 ---
 
-These rules exist to keep HttpArena results meaningful and representative of real-world framework performance. They apply to all framework submissions and serve as a reference during PR reviews.
+These rules exist to keep HttpArena results meaningful and representative of real-world framework performance. They apply to all **framework-type** submissions and serve as a reference during PR reviews.
+
+{{< callout type="info" >}}
+**Framework vs Engine entries:** HttpArena distinguishes between _framework_ entries (Express, Flask, Actix-web, etc.) and _engine_ entries (raw Node.js HTTP, CPython `http.server`, etc.). These rules apply to framework entries, where the goal is to measure what the framework gives you out of the box. Engine entries have more latitude since they _are_ the low-level layer — there is no higher-level API to bypass.
+{{< /callout >}}
 
 ## Benchmark the framework as people use it
 
