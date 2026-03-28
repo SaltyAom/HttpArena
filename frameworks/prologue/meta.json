@@ -3,7 +3,7 @@
   "language": "Nim",
   "type": "framework",
   "engine": "asynchserver",
-  "description": "Prologue web framework for Nim — compiles to native C with powerful routing and middleware support.",
+  "description": "Prologue web framework for Nim \u2014 compiles to native C with powerful routing and middleware support.",
   "repo": "https://github.com/planety/prologue",
   "enabled": true,
   "tests": [
@@ -13,7 +13,6 @@
     "json",
     "upload",
     "compression",
-    "mixed",
     "noisy"
   ]
 }

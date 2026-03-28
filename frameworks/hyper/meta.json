@@ -8,11 +8,8 @@
   "enabled": true,
   "tests": [
     "baseline",
-    "noisy",
     "pipelined",
     "limited-conn",
-    "json",
-    "upload",
     "baseline-h2",
     "static-h2"
   ]

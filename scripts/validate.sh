@@ -80,7 +80,7 @@ if has_test "mixed"; then
     docker_args+=(-v "$DB_FILE:/data/benchmark.db:ro")
 fi
 
-if has_test "static-h2" || has_test "static-h3"; then
+if has_test "static" || has_test "static-h2" || has_test "static-h3"; then
     docker_args+=(-v "$DATA_DIR/static:/data/static:ro")
 fi
 
@@ -452,6 +452,32 @@ if has_test "baseline-h2"; then
         check "GET /baseline2?a=$A3&b=$B3 over HTTP/2 (random)" "$((A3 + B3))" \
             -sk --http2 "https://localhost:$H2PORT/baseline2?a=$A3&b=$B3"
     fi
+fi
+
+# ───── Static Files H1 (GET /static/* over HTTP/1.1) ─────
+
+if has_test "static"; then
+    echo "[test] static endpoint"
+    check_header "GET /static/reset.css Content-Type" "Content-Type" "text/css" \
+        -s "http://localhost:$PORT/static/reset.css"
+
+    check_header "GET /static/app.js Content-Type" "Content-Type" "application/javascript" \
+        -s "http://localhost:$PORT/static/app.js"
+
+    check_header "GET /static/manifest.json Content-Type" "Content-Type" "application/json" \
+        -s "http://localhost:$PORT/static/manifest.json"
+
+    static_size=$(curl -s -o /dev/null -w '%{size_download}' "http://localhost:$PORT/static/reset.css")
+    if [ "$static_size" -gt 0 ]; then
+        echo "  PASS [static response size] ($static_size bytes)"
+        PASS=$((PASS + 1))
+    else
+        echo "  FAIL [static response size]: empty response"
+        FAIL=$((FAIL + 1))
+    fi
+
+    check_status "GET /static/nonexistent.txt" "404" \
+        -s "http://localhost:$PORT/static/nonexistent.txt"
 fi
 
 # ───── Static Files H2 (GET /static/* over HTTP/2 + TLS) ─────

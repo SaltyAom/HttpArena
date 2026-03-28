@@ -42,6 +42,7 @@ Create a `meta.json` file in your framework directory:
 | `compression` | HTTP/1.1 | `/compression` |
 | `noisy` | HTTP/1.1 | `/baseline11` |
 | `mixed` | HTTP/1.1 | `/baseline11`, `/json`, `/db`, `/upload`, `/compression` |
+| `static` | HTTP/1.1 | `/static/*` (port 8080) |
 | `baseline-h2` | HTTP/2 | `/baseline2` (TLS, port 8443) |
 | `static-h2` | HTTP/2 | `/static/*` (TLS, port 8443) |
 | `baseline-h3` | HTTP/3 | `/baseline2` (QUIC, port 8443) |
