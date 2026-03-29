@@ -49,6 +49,11 @@ jobs:
       - name: Commit saved results
         if: inputs.save == 'true'
         run: |
+          # Get the PR's source branch and repo
+          PR_DATA=$(gh api "/repos/${{ github.repository }}/pulls/${{ inputs.pr }}" --jq '.head.ref + " " + .head.repo.full_name')
+          PR_BRANCH=$(echo "$PR_DATA" | awk '{print $1}')
+          PR_REPO=$(echo "$PR_DATA" | awk '{print $2}')
+
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add results/ site/data/ site/static/logs/ 2>/dev/null || true
@@ -56,7 +61,8 @@ jobs:
             echo "No results to commit"
           else
             git commit -m "Benchmark results: ${{ inputs.framework }} ${{ inputs.profile }}"
-            git push origin HEAD:refs/pull/${{ inputs.pr }}/head
+            git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${PR_REPO}.git"
+            git push origin HEAD:"${PR_BRANCH}"
           fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
