@@ -57,9 +57,9 @@ $http_worker->onMessage = static function ($connection, $request) {
             $connection->headers = ['Content-Type' => 'application/json'];
             return $connection->send(json_encode(['items' => $total, 'count' => count($total)]));
         
-        // case '/upload':
-        //     $connection->headers = ['Content-Type' => 'text/plain'];
-        //     return $connection->send(strlen($request->rawBody()));
+        case '/upload':
+            $connection->headers = ['Content-Type' => 'text/plain'];
+            return $connection->send(strlen($request->rawBody()));
 
         case '/compression':
             if (str_contains($request->header('Accept-Encoding', ''), 'gzip')) {
@@ -83,11 +83,11 @@ $http_worker->onMessage = static function ($connection, $request) {
             );
     }
 
-    // Serve static files
-    // if (str_starts_with($request->path(), '/static/')) {
-    //     $response = (new Response())->withFile('/data' . $request->path());
-    //     return $connection->send($response);
-    // }
+    //Serve static files
+    if (str_starts_with($request->path(), '/static/')) {
+        $response = (new Response())->withFile('/data' . $request->path());
+        return $connection->send($response);
+    }
 
     return $connection->send(new Response(
         404,
