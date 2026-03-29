@@ -5,6 +5,7 @@ import threading
 import multiprocessing
 import zlib
 import sqlite3
+import mimetypes
 from urllib.parse import parse_qs
 
 import orjson
@@ -14,6 +15,39 @@ import psycopg.rows
 # -- Dataset and constants --------------------------------------------------------
 
 CPU_COUNT = int(multiprocessing.cpu_count())
+WRK_COUNT = min(len(os.sched_getaffinity(0)), 128)
+
+MIME_TYPES = {
+    '.css'  : 'text/css',
+    '.js'   : 'application/javascript',
+    '.html' : 'text/html',
+    '.woff2': 'font/woff2',
+    '.svg'  : 'image/svg+xml',
+    '.webp' : 'image/webp',
+    '.json' : 'application/json',
+}
+STATIC_DIR = '/data/static/'
+STATIC_FILES = { }
+def load_static_files():
+    global STATIC_FILES, STATIC_DIR, MIME_TYPES
+    for root, dirs, files in os.walk(STATIC_DIR):
+        for filename in files:
+            full_path = os.path.join(root, filename)
+            key = full_path.replace(os.sep, '/')
+            try:
+                with open(full_path, 'rb') as file:
+                    data = file.read()
+            except Exception as e:
+                continue
+            ext = os.path.splitext(filename)[1]
+            content_type = MIME_TYPES.get(ext)
+            if content_type is None:
+                content_type, encoding = mimetypes.guess_type(full_path)
+                if content_type is None:
+                    content_type = 'application/octet-stream'
+            STATIC_FILES[key] = (data, content_type)
+
+load_static_files()
 
 DB_PATH = "/data/benchmark.db"
 DB_AVAILABLE = os.path.exists(DB_PATH)
@@ -56,7 +90,7 @@ try:
 except Exception:
     pass
 
-# -- SQLite (thread-local, sync — runs in threadpool via run_in_executor) --
+# -- SQLite (thread-local) --------------------------------------------------
 
 _local = threading.local()
 
@@ -85,7 +119,7 @@ def db_close():
     DATABASE_POOL = None
 
 def db_setup():
-    global DATABASE_POOL, DATABASE_URL, CPU_COUNT
+    global DATABASE_POOL, DATABASE_URL, WRK_COUNT
     db_close()
     max_pool_size = 0
     try:
@@ -230,6 +264,16 @@ def async_db_endpoint(env):
     except Exception:
         return json_resp( { "items": [ ], "count": 0 } )
 
+def static_file_endpoint(env):
+    global STATIC_FILES, STATIC_DIR
+    path = env["PATH_INFO"]
+    filename = STATIC_DIR + path.removeprefix('/static/')
+    entry = STATIC_FILES.get(filename)
+    if entry is None:
+        return text_resp(b'Not found', status = 404)
+    data, ct = entry
+    return 200, [ ('Content-Type', ct) ], data
+
 
 READ_BUF_SIZE = 256*1024
 
@@ -280,8 +324,11 @@ def app(env, start_response):
     if req_method not in [ 'GET', 'POST' ]:
         status, headers, body = handle_405(env)
     else:
-        path = env["PATH_INFO"]    
-        app_handler = ROUTES.get(path, handle_404)
+        path = env["PATH_INFO"]
+        if path.startswith('/static/'):
+            app_handler = static_file_endpoint
+        else:
+            app_handler = ROUTES.get(path, handle_404)
         status, headers, body = app_handler(env)
     start_response(HTTP_STATUS.get(status, str(status)), headers)
     return [ body ]
@@ -295,5 +342,5 @@ if __name__ == "__main__":
     port = 8080
 
     fastpysgi.server.read_buffer_size = READ_BUF_SIZE
-    fastpysgi.server.backlog = 4096
-    fastpysgi.run(app, host, port, workers = CPU_COUNT, loglevel = 0)
+    fastpysgi.server.backlog = 16*1024
+    fastpysgi.run(app, host, port, workers = WRK_COUNT, loglevel = 0)

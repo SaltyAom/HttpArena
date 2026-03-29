@@ -6,6 +6,7 @@ import threading
 import multiprocessing
 import zlib
 import sqlite3
+import mimetypes
 from urllib.parse import parse_qs
 
 import orjson
@@ -14,6 +15,39 @@ import asyncpg
 # -- Dataset and constants --------------------------------------------------------
 
 CPU_COUNT = int(multiprocessing.cpu_count())
+WRK_COUNT = min(len(os.sched_getaffinity(0)), 128)
+
+MIME_TYPES = {
+    '.css'  : 'text/css',
+    '.js'   : 'application/javascript',
+    '.html' : 'text/html',
+    '.woff2': 'font/woff2',
+    '.svg'  : 'image/svg+xml',
+    '.webp' : 'image/webp',
+    '.json' : 'application/json',
+}
+STATIC_DIR = '/data/static/'
+STATIC_FILES = { }
+def load_static_files():
+    global STATIC_FILES, STATIC_DIR, MIME_TYPES
+    for root, dirs, files in os.walk(STATIC_DIR):
+        for filename in files:
+            full_path = os.path.join(root, filename)
+            key = full_path.replace(os.sep, '/')
+            try:
+                with open(full_path, 'rb') as file:
+                    data = file.read()
+            except Exception as e:
+                continue
+            ext = os.path.splitext(filename)[1]
+            content_type = MIME_TYPES.get(ext)
+            if content_type is None:
+                content_type, encoding = mimetypes.guess_type(full_path)
+                if content_type is None:
+                    content_type = 'application/octet-stream'
+            STATIC_FILES[key] = (data, content_type.encode())
+
+load_static_files()
 
 DB_PATH = "/data/benchmark.db"
 DB_AVAILABLE = os.path.exists(DB_PATH)
@@ -57,7 +91,7 @@ try:
 except Exception:
     pass
 
-# -- SQLite (thread-local, sync — runs in threadpool via run_in_executor) --
+# -- SQLite (thread-local) --------------------------------------------------
 
 _local = threading.local()
 
@@ -74,7 +108,7 @@ def _get_db() -> sqlite3.Connection:
 # -- Postgres DB ------------------------------------------------------------
 
 PG_POOL_MIN_SIZE = 2
-PG_POOL_MAX_SIZE = 3
+PG_POOL_MAX_SIZE = 2
 
 class NoResetConnection(asyncpg.Connection):
     __slots__ = ()
@@ -91,7 +125,7 @@ async def db_close():
     DATABASE_POOL = None
 
 async def db_setup():
-    global DATABASE_POOL, DATABASE_URL, CPU_COUNT
+    global DATABASE_POOL, DATABASE_URL, WRK_COUNT
     await db_close()
     max_pool_size = 0
     '''
@@ -107,7 +141,7 @@ async def db_setup():
         pass
     if not max_connections:
         return
-    max_pool_size = int(max_connections * 0.87 / CPU_COUNT) + 1
+    max_pool_size = int(max_connections * 0.87 / WRK_COUNT) + 1
     '''
     try:
         DATABASE_POOL = await asyncpg.create_pool(
@@ -254,6 +288,16 @@ async def async_db_endpoint(scope, receive, send):
     ]
     return json_resp( { "items": items, "count": len(items) } )
 
+async def static_file_endpoint(scope, receive, send):
+    global STATIC_FILES, STATIC_DIR
+    path = scope['path']
+    filename = STATIC_DIR + path.removeprefix('/static/')
+    entry = STATIC_FILES.get(filename)
+    if entry is None:
+        return text_resp(b'Not found', status = 404)
+    data, ct = entry
+    return 200, [[ b'Content-Type', ct ]], data
+
 async def upload_endpoint(scope, receive, send):
     size = 0
     while True:
@@ -306,7 +350,10 @@ async def app(scope, receive, send):
         await send( { 'type': 'http.response.body', 'body': b'Method Not Allowed', 'more_body': False } )
         return
     path = scope['path']
-    app_handler = ROUTES.get(path, handle_404)
+    if path.startswith('/static/'):
+        app_handler = static_file_endpoint
+    else:
+        app_handler = ROUTES.get(path, handle_404)
     status, headers, body = await app_handler(scope, receive, None)
     await send( { 'type': 'http.response.start', 'status': status, 'headers': headers } )
     await send( { 'type': 'http.response.body', 'body': body, 'more_body': False } )
@@ -320,6 +367,6 @@ if __name__ == "__main__":
     port = 8080
 
     fastpysgi.server.read_buffer_size = 256*1024
-    fastpysgi.server.backlog = 4096
+    fastpysgi.server.backlog = 16*1024
     fastpysgi.server.loop_timeout = 1
-    fastpysgi.run(app, host, port, workers = CPU_COUNT, loglevel = 0)
+    fastpysgi.run(app, host, port, workers = WRK_COUNT, loglevel = 0)
