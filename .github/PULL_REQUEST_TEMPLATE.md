@@ -13,3 +13,6 @@
 | `/benchmark` | Run all benchmark tests |
 | `/benchmark -t baseline` | Run a specific test |
 | `/benchmark -f <framework> -t <test>` | Run a specific framework and test |
+| `/benchmark --save` | Run and save results (updates leaderboard on merge) |
+
+Results are automatically compared against the current leaderboard.

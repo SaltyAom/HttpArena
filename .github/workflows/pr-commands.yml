@@ -40,11 +40,18 @@ jobs:
               EXPLICIT_TEST=$(echo "$COMMENT_BODY" | grep -oP '/benchmark\s+\K[^-]\S*' || echo "")
             fi
 
+            # Parse --save flag
+            SAVE_FLAG=""
+            if echo "$COMMENT_BODY" | grep -q '\-\-save'; then
+              SAVE_FLAG="true"
+            fi
+
             FRAMEWORK="${EXPLICIT_FW:-$AUTO_FRAMEWORK}"
             echo "framework=$FRAMEWORK" >> "$GITHUB_OUTPUT"
             echo "profile=$EXPLICIT_TEST" >> "$GITHUB_OUTPUT"
+            echo "save=$SAVE_FLAG" >> "$GITHUB_OUTPUT"
             echo "Detected framework: $FRAMEWORK (auto: $AUTO_FRAMEWORK, explicit: $EXPLICIT_FW)"
-            echo "Profile: $EXPLICIT_TEST"
+            echo "Profile: $EXPLICIT_TEST, Save: $SAVE_FLAG"
 
           elif echo "$COMMENT_BODY" | grep -q '/validate'; then
             echo "command=validate" >> "$GITHUB_OUTPUT"
@@ -89,9 +96,10 @@ jobs:
           gh workflow run benchmark-pr.yml \
             -f pr=${{ steps.parse.outputs.pr }} \
             -f framework=${{ steps.parse.outputs.framework }} \
-            -f profile="${{ steps.parse.outputs.profile }}"
+            -f profile="${{ steps.parse.outputs.profile }}" \
+            -f save="${{ steps.parse.outputs.save }}"
 
-          gh pr comment "${{ steps.parse.outputs.pr }}" --body "🚀 Benchmark run triggered for \`${{ steps.parse.outputs.framework }}\`${{ steps.parse.outputs.profile && format(' (test: {0})', steps.parse.outputs.profile) || ' (all tests)' }}. Results will be posted here when done."
+          gh pr comment "${{ steps.parse.outputs.pr }}" --body "🚀 Benchmark run triggered for \`${{ steps.parse.outputs.framework }}\`${{ steps.parse.outputs.profile && format(' (test: {0})', steps.parse.outputs.profile) || ' (all tests)' }}${{ steps.parse.outputs.save == 'true' && ' with --save' || '' }}. Results will be posted here when done."
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

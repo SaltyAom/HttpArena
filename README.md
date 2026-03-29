@@ -12,11 +12,17 @@ HTTP framework benchmark platform.
 
 Tag **@BennyFranciscus** on your PR for help with implementation or benchmark questions.
 
-| Command | Action |
-|---------|--------|
-| `/validate` | Run the 18-point validation suite |
-| `/benchmark` | Run all benchmark profiles |
-| `/benchmark baseline` | Run a specific profile |
+| Command | Description |
+|---------|-------------|
+| `/validate` | Run the 18-point validation suite (auto-detects framework from PR) |
+| `/validate -f <framework>` | Validate a specific framework |
+| `/benchmark` | Run all benchmark tests (auto-detects framework) |
+| `/benchmark -t <test>` | Run a specific test profile |
+| `/benchmark -f <framework> -t <test>` | Run a specific framework and test |
+| `/benchmark --save` | Run and save results (updates leaderboard on merge) |
+| `/benchmark -f <framework> -t <test> --save` | Run, compare with main, and save results |
+
+Results are automatically compared against the current leaderboard and deltas are posted in the PR comment.
 
 ---
 

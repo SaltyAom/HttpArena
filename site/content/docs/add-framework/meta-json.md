@@ -41,8 +41,9 @@ Create a `meta.json` file in your framework directory:
 | `upload` | HTTP/1.1 | `/upload` |
 | `compression` | HTTP/1.1 | `/compression` |
 | `noisy` | HTTP/1.1 | `/baseline11` |
-| `mixed` | HTTP/1.1 | `/baseline11`, `/json`, `/db`, `/upload`, `/compression` |
+| `mixed` | HTTP/1.1 | `/baseline11`, `/json`, `/db`, `/upload`, `/compression`, `/static/*`, `/async-db` |
 | `static` | HTTP/1.1 | `/static/*` (port 8080) |
+| `async-db` | HTTP/1.1 | `/async-db` (requires `DATABASE_URL` env var) |
 | `baseline-h2` | HTTP/2 | `/baseline2` (TLS, port 8443) |
 | `static-h2` | HTTP/2 | `/static/*` (TLS, port 8443) |
 | `baseline-h3` | HTTP/3 | `/baseline2` (QUIC, port 8443) |
@@ -52,3 +53,13 @@ Create a `meta.json` file in your framework directory:
 | `echo-ws` | WebSocket | `/ws` echo (port 8080) |
 
 Only include profiles your framework supports. Frameworks missing a profile simply don't appear in that profile's leaderboard.
+
+### async-db
+
+The `async-db` profile requires an async PostgreSQL driver. The benchmark script starts a Postgres sidecar with 100K rows and passes `DATABASE_URL=postgres://bench:bench@localhost:5432/benchmark` to your container. Your framework must:
+
+1. Connect to Postgres using the `DATABASE_URL` environment variable
+2. Implement `GET /async-db?min=X&max=Y` that queries: `SELECT id, name, category, price, quantity, active, tags, rating_score, rating_count FROM items WHERE price BETWEEN $1 AND $2 LIMIT 50`
+3. Return JSON: `{"items": [...], "count": N}` with nested `rating: {score, count}` and `tags` as a JSON array
+4. Return `{"items":[],"count":0}` if the database is unavailable
+5. Use lazy connection initialization — retry connecting if Postgres isn't ready at startup
