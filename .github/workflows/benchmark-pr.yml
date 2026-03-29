@@ -38,13 +38,20 @@ jobs:
           ./scripts/benchmark.sh "${{ inputs.framework }}" ${{ inputs.profile }} 2>&1 | tee "$log"
           echo "log_file=$log" >> "$GITHUB_OUTPUT"
 
+      - name: Compare with main
+        id: compare
+        run: |
+          comparison=$(./scripts/compare.sh "${{ inputs.framework }}" ${{ inputs.profile }} 2>/dev/null || echo "")
+          # Save to file to preserve formatting
+          echo "$comparison" > /tmp/bench_comparison.md
+
       - name: Post results to PR
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           log="${{ steps.bench.outputs.log_file }}"
           profile="${{ inputs.profile }}"
-          profile_label="${profile:-all profiles}"
+          profile_label="${profile:-all tests}"
 
           # Extract best results
           results=$(grep -E "^=== Best:" "$log" | sed 's/^=== //' || echo "No results")
@@ -52,7 +59,7 @@ jobs:
 
           # Build table
           body="## Benchmark Results"$'\n\n'
-          body+="**Framework:** \`${{ inputs.framework }}\` | **Profile:** \`${profile_label}\`"$'\n\n'
+          body+="**Framework:** \`${{ inputs.framework }}\` | **Test:** \`${profile_label}\`"$'\n\n'
           body+='```'$'\n'
 
           # Interleave headers and results
@@ -65,11 +72,18 @@ jobs:
 
           body+=$(cat /tmp/bench_table.txt)
           body+=$'\n```\n\n'
+
+          # Add comparison if available
+          comparison=$(cat /tmp/bench_comparison.md 2>/dev/null || echo "")
+          if [ -n "$comparison" ]; then
+            body+="## Comparison with main"$'\n\n'
+            body+="$comparison"$'\n\n'
+          fi
+
           body+="<details><summary>Full log</summary>"$'\n\n```\n'
-          # Trim log to last 200 lines to stay under comment limit
           tail -200 "$log" >> /tmp/bench_full.txt
           body+=$(cat /tmp/bench_full.txt)
           body+=$'\n```\n</details>'
 
           gh pr comment "${{ inputs.pr }}" --body "$body"
-          rm -f "$log" /tmp/bench_table.txt /tmp/bench_full.txt
+          rm -f "$log" /tmp/bench_table.txt /tmp/bench_full.txt /tmp/bench_comparison.md
