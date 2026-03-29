@@ -1,0 +1,14 @@
+name: httparena_fletch
+description: Fletch HTTP framework — HttpArena benchmark server
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: '>=3.6.0 <4.0.0'
+
+dependencies:
+  fletch: ^2.2.0
+  postgres: ^3.0.0
+  sqlite3: ^2.4.0
+  logger: ^2.5.0
+
