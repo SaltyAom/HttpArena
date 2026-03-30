@@ -30,7 +30,4 @@ https://www.workerman.net/
 
 ## Notes
 
-- No chunked requests for now (WIP)
-- Chunked responses OK
-- Per-worker database connection
-
+- Per-worker sqlite database connection
