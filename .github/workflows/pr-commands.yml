@@ -25,8 +25,8 @@ jobs:
           PR="$PR_NUMBER"
           echo "pr=$PR" >> "$GITHUB_OUTPUT"
 
-          # Detect changed frameworks from PR files via API (fallback)
-          AUTO_FRAMEWORK=$(gh api "/repos/$REPO/pulls/$PR/files" --jq '.[].filename' | grep '^frameworks/' | cut -d'/' -f2 | sort -u | head -1)
+          # Detect changed frameworks from PR files via API (paginated, fallback)
+          AUTO_FRAMEWORK=$(gh api "/repos/$REPO/pulls/$PR/files" --paginate --jq '.[].filename' | grep '^frameworks/' | cut -d'/' -f2 | sort -u | head -1)
 
           if echo "$COMMENT_BODY" | grep -q '/benchmark'; then
             echo "command=benchmark" >> "$GITHUB_OUTPUT"

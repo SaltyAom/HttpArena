@@ -33,7 +33,13 @@ jobs:
       - uses: actions/checkout@v5
         with:
           ref: refs/pull/${{ inputs.pr }}/head
-          fetch-depth: 1
+          fetch-depth: 0
+
+      - name: Fetch main branch data for comparison
+        run: |
+          git fetch origin main --depth=1
+          git checkout origin/main -- site/data/ 2>/dev/null || true
+          git checkout refs/pull/${{ inputs.pr }}/head -- . 2>/dev/null || true
 
       - name: Run benchmarks
         id: bench
@@ -45,6 +51,12 @@ jobs:
           fi
           ./scripts/benchmark.sh "${{ inputs.framework }}" ${{ inputs.profile }} $SAVE_FLAG 2>&1 | tee "$log"
           echo "log_file=$log" >> "$GITHUB_OUTPUT"
+
+      - name: Compare with main
+        id: compare
+        run: |
+          comparison=$(./scripts/compare.sh "${{ inputs.framework }}" ${{ inputs.profile }} 2>/dev/null || echo "")
+          echo "$comparison" > /tmp/bench_comparison.md
 
       - name: Commit saved results
         if: inputs.save == 'true'
@@ -62,17 +74,10 @@ jobs:
           else
             git commit -m "Benchmark results: ${{ inputs.framework }} ${{ inputs.profile }}"
             git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${PR_REPO}.git"
-            git push origin HEAD:"${PR_BRANCH}"
+            git push origin HEAD:"${PR_BRANCH}" || echo "Warning: could not push to fork (permissions)"
           fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Compare with main
-        id: compare
-        run: |
-          comparison=$(./scripts/compare.sh "${{ inputs.framework }}" ${{ inputs.profile }} 2>/dev/null || echo "")
-          # Save to file to preserve formatting
-          echo "$comparison" > /tmp/bench_comparison.md
 
       - name: Post results to PR
         env:
@@ -114,5 +119,5 @@ jobs:
           body+=$(cat /tmp/bench_full.txt)
           body+=$'\n```\n</details>'
 
-          gh pr comment "${{ inputs.pr }}" --body "$body"
+          gh pr comment "${{ inputs.pr }}" --repo "${{ github.repository }}" --body "$body"
           rm -f "$log" /tmp/bench_table.txt /tmp/bench_full.txt /tmp/bench_comparison.md
