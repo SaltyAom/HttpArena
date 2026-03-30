@@ -17,6 +17,7 @@
     "mixed",
     "async-db",
     "static",
+    "tcp-frag",
     "baseline-h2",
     "static-h2"
   ]

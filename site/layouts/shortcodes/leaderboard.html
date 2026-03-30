@@ -402,6 +402,7 @@ html.dark .lb-filters-toggle:hover .lb-toggle-icon { color: #60a5fa; }
   (dict "id" "noisy"       "label" "Noisy"                 "conns" (slice 512 4096 16384) "desc" "Valid baseline requests interleaved with malformed noise — nonexistent paths, bad content-length, and raw binary. Only 2xx responses count. Measures resilience: how well a framework maintains throughput while rejecting garbage traffic.")
   (dict "id" "mixed"        "label" "Mixed Workload"        "conns" (slice 4096 16384) "desc" "A realistic mix of request types: 3 baseline GETs, 2 baseline POSTs, 1 JSON processing, 1 SQLite DB lookup, 1 file upload (1 MB), 2 compression requests, 2 static file serves, and 2 async Postgres queries. Connections limited to 5 requests each. Measures overall framework performance under a diverse, real-world-like workload that exercises multiple code paths simultaneously.")
   (dict "id" "static"       "label" "Static Files"          "conns" (slice 4096 16384) "desc" "Serves 20 pre-loaded static files (CSS, JS, HTML, fonts, images, JSON) from <code>/static/{filename}</code> over HTTP/1.1. Files are loaded into memory at startup. Requests cycle through all 20 files. Measures static file serving throughput, MIME type handling, and memory-mapped I/O efficiency.")
+  (dict "id" "tcp-frag"     "label" "TCP Fragmentation"     "conns" (slice 512 4096 16384) "desc" "Same baseline workload but with loopback MTU forced to 69 bytes, causing extreme TCP fragmentation. Every request and response is split into multiple tiny segments (~29 bytes payload each). Measures how efficiently a framework's TCP stack handles segment reassembly, small-buffer I/O, and syscall overhead under fragmented network conditions.")
   (dict "id" "pipelined"    "label" "Pipelined (16)"        "conns" (slice 512 4096 16384) "desc" "16 HTTP requests are sent back-to-back on each connection before waiting for responses. Uses a lightweight <code>GET /pipeline</code> endpoint that returns a fixed response, isolating raw I/O and pipeline handling from application logic. Frameworks that batch pipelined requests from the read buffer gain a significant advantage.")
   (dict "id" "async-db"    "label" "Async DB"              "conns" (slice 512 1024) "desc" "Async Postgres query over 100K rows with no index on price, forcing a sequential scan per request. The framework manages its own connection pool and uses an async Postgres driver. Measures event loop scheduling, connection pooling efficiency, and async I/O throughput. Framework-only — engines are excluded.")
 }}
@@ -476,6 +477,83 @@ var lbProfiles = {{ $profiles | jsonify | safeJS }};
   </div>
 
   <div class="lb-desc">{{ $p.desc | safeHTML }}</div>
+  {{ if eq $p.id "tcp-frag" }}
+  <details style="margin-top:0.5rem; margin-bottom:0.75rem; padding:0.5rem 1rem; border-radius:0.5rem; background:rgba(59,130,246,0.04); border:1px solid rgba(59,130,246,0.15); font-size:0.8rem;">
+    <summary style="cursor:pointer; font-weight:600; color:#3b82f6; user-select:none;">View request templates (8 templates, MTU 69)</summary>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; margin-top:0.75rem;">
+      <div>
+        <div style="font-weight:600; font-size:0.7rem; margin-bottom:0.25rem;"><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#3b82f6;margin-right:4px;"></span>GET (×2) — 355B, 13 segments</div>
+        <pre style="font-size:0.6rem; background:rgba(0,0,0,0.04); padding:0.4rem; border-radius:4px; overflow-x:auto; margin:0; line-height:1.3;">GET /baseline11?a=13&b=42 HTTP/1.1
+Host: localhost:8080
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) ...
+Accept: text/html,application/xhtml+xml,...
+Accept-Language: en-US,en;q=0.9,pt;q=0.8
+Cache-Control: no-cache
+Pragma: no-cache</pre>
+      </div>
+      <div>
+        <div style="font-weight:600; font-size:0.7rem; margin-bottom:0.25rem;"><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#8b5cf6;margin-right:4px;"></span>POST — 360B, 13 segments</div>
+        <pre style="font-size:0.6rem; background:rgba(0,0,0,0.04); padding:0.4rem; border-radius:4px; overflow-x:auto; margin:0; line-height:1.3;">POST /baseline11?a=13&b=42 HTTP/1.1
+Host: localhost:8080
+User-Agent: Mozilla/5.0 ...
+Content-Type: text/plain
+Content-Length: 2
+
+20</pre>
+      </div>
+      <div>
+        <div style="font-weight:600; font-size:0.7rem; margin-bottom:0.25rem;"><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#f59e0b;margin-right:4px;"></span>Chunked — 379B, 14 segments (header boundary splits at segment edge)</div>
+        <pre style="font-size:0.6rem; background:rgba(0,0,0,0.04); padding:0.4rem; border-radius:4px; overflow-x:auto; margin:0; line-height:1.3;">POST /baseline11?a=13&b=42 HTTP/1.1
+Host: localhost:8080
+User-Agent: Mozilla/5.0 ...
+Content-Type: text/plain
+Transfer-Encoding: chunked
+        &#8592; \r\n\r\n splits across segment boundary
+2\r\n20\r\n0\r\n\r\n</pre>
+      </div>
+      <div>
+        <div style="font-weight:600; font-size:0.7rem; margin-bottom:0.25rem;"><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#64748b;margin-right:4px;"></span>Noise — 843B, 30 segments (500-char junk path)</div>
+        <pre style="font-size:0.6rem; background:rgba(0,0,0,0.04); padding:0.4rem; border-radius:4px; overflow-x:auto; margin:0; line-height:1.3;">POST /AAAAAAA...500 A's...AAAA HTTP/1.1
+Host: localhost:8080
+User-Agent: Mozilla/5.0 ...
+Content-Type: text/plain
+Content-Length: 5
+
+hello</pre>
+      </div>
+      <div>
+        <div style="font-weight:600; font-size:0.7rem; margin-bottom:0.25rem;"><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#10b981;margin-right:4px;"></span>Cookie bomb — 2,097B, 73 segments</div>
+        <pre style="font-size:0.6rem; background:rgba(0,0,0,0.04); padding:0.4rem; border-radius:4px; overflow-x:auto; margin:0; line-height:1.3;">GET /baseline11?a=13&b=42 HTTP/1.1
+Host: localhost:8080
+Cookie: session=aaaa...2000 chars...aaaa
+Accept: text/html</pre>
+      </div>
+      <div>
+        <div style="font-weight:600; font-size:0.7rem; margin-bottom:0.25rem;"><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#06b6d4;margin-right:4px;"></span>30 Headers — 380B, 14 segments</div>
+        <pre style="font-size:0.6rem; background:rgba(0,0,0,0.04); padding:0.4rem; border-radius:4px; overflow-x:auto; margin:0; line-height:1.3;">GET /baseline11?a=13&b=42 HTTP/1.1
+Host: localhost:8080
+X-H00: 0
+X-H01: 1
+... (30 tiny headers)
+X-H29: 29</pre>
+      </div>
+      <div>
+        <div style="font-weight:600; font-size:0.7rem; margin-bottom:0.25rem;"><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#ec4899;margin-right:4px;"></span>Body29 — 146B, 6 segments (body fills exactly one segment)</div>
+        <pre style="font-size:0.6rem; background:rgba(0,0,0,0.04); padding:0.4rem; border-radius:4px; overflow-x:auto; margin:0; line-height:1.3;">POST /baseline11?a=0&b=0 HTTP/1.1
+Host: localhost:8080
+Content-Type: text/plain
+Content-Length: 29
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaa42</pre>
+      </div>
+    </div>
+  </details>
+  <style>
+  html.dark details[open] > div pre { background: rgba(255,255,255,0.06) !important; color: #e2e8f0; }
+  html.dark details { background: rgba(59,130,246,0.08) !important; border-color: rgba(59,130,246,0.25) !important; }
+  html.dark details summary { color: #60a5fa !important; }
+  </style>
+  {{ end }}
   {{ if eq $p.id "baseline" }}
   <div class="lb-cpu-warning" style="margin-top:0.5rem; margin-bottom:0.75rem; padding:0.5rem 1rem; border-radius:0.5rem; background:rgba(234,179,8,0.08); border:1px solid rgba(234,179,8,0.3); color:#78350f; font-size:0.85rem;">
     &#9889; <strong>CPU throttled:</strong> Containers are limited to 64 CPU threads (<code>--cpus=64</code>) for this test.
@@ -555,7 +633,7 @@ var lbProfiles = {{ $profiles | jsonify | safeJS }};
     {{ $pct := mul (div (float $r.rps) (float $maxRps)) 100.0 }}
     {{ $meta := index site.Data.frameworks $r.framework }}
     {{ $s2xx := int ($r.status_2xx | default 0) }}{{ $s3xx := int ($r.status_3xx | default 0) }}{{ $s4xx := int ($r.status_4xx | default 0) }}{{ $s5xx := int ($r.status_5xx | default 0) }}{{ $errs := add $s4xx $s5xx }}
-    <div class="lb-row{{ if $isReconn }} lb-row-reconn{{ end }}{{ if $isNoisy }} lb-row-noisy{{ end }}" data-lang="{{ $r.language | default "" }}" data-name="{{ $r.framework }}" data-rps="{{ printf "%.0f" $r.rps }}" data-bandwidth="{{ $r.bandwidth | default "" }}" data-input-bw="{{ $r.input_bw | default "" }}" data-type="{{ with $meta }}{{ .type | default "framework" }}{{ end }}" data-desc="{{ with $meta }}{{ .description }}{{ end }}" data-repo="{{ with $meta }}{{ .repo }}{{ end }}" data-s2xx="{{ $s2xx }}" data-s3xx="{{ $s3xx }}" data-s4xx="{{ $s4xx }}" data-s5xx="{{ $s5xx }}" {{ if $r.tpl_baseline }}data-tpl-baseline="{{ int $r.tpl_baseline }}" data-tpl-json="{{ int ($r.tpl_json | default 0) }}" data-tpl-db="{{ int ($r.tpl_db | default 0) }}" data-tpl-upload="{{ int ($r.tpl_upload | default 0) }}" data-tpl-compression="{{ int ($r.tpl_compression | default 0) }}" data-tpl-static="{{ int ($r.tpl_static | default 0) }}" data-tpl-async-db="{{ int ($r.tpl_async_db | default 0) }}"{{ end }}>
+    <div class="lb-row{{ if $isReconn }} lb-row-reconn{{ end }}{{ if $isNoisy }} lb-row-noisy{{ end }}" data-lang="{{ $r.language | default "" }}" data-name="{{ $r.framework }}" data-rps="{{ printf "%.0f" $r.rps }}" data-bandwidth="{{ $r.bandwidth | default "" }}" data-input-bw="{{ $r.input_bw | default "" }}" data-type="{{ with $meta }}{{ .type | default "framework" }}{{ end }}" data-desc="{{ with $meta }}{{ .description }}{{ end }}" data-repo="{{ with $meta }}{{ .repo }}{{ end }}" data-s2xx="{{ $s2xx }}" data-s3xx="{{ $s3xx }}" data-s4xx="{{ $s4xx }}" data-s5xx="{{ $s5xx }}" {{ if $r.tpl_baseline }}data-tpl-baseline="{{ int $r.tpl_baseline }}" data-tpl-json="{{ int ($r.tpl_json | default 0) }}" data-tpl-db="{{ int ($r.tpl_db | default 0) }}" data-tpl-upload="{{ int ($r.tpl_upload | default 0) }}" data-tpl-compression="{{ int ($r.tpl_compression | default 0) }}" data-tpl-static="{{ int ($r.tpl_static | default 0) }}" data-tpl-async-db="{{ int ($r.tpl_async_db | default 0) }}"{{ end }}{{ if $r.tf_get }} data-tf-get="{{ int $r.tf_get }}" data-tf-get-err="{{ int ($r.tf_get_err | default 0) }}" data-tf-post="{{ int ($r.tf_post | default 0) }}" data-tf-post-err="{{ int ($r.tf_post_err | default 0) }}" data-tf-chunked="{{ int ($r.tf_chunked | default 0) }}" data-tf-chunked-err="{{ int ($r.tf_chunked_err | default 0) }}" data-tf-noise="{{ int ($r.tf_noise | default 0) }}" data-tf-noise-err="{{ int ($r.tf_noise_err | default 0) }}" data-tf-cookie="{{ int ($r.tf_cookie | default 0) }}" data-tf-cookie-err="{{ int ($r.tf_cookie_err | default 0) }}" data-tf-headers="{{ int ($r.tf_headers | default 0) }}" data-tf-headers-err="{{ int ($r.tf_headers_err | default 0) }}" data-tf-body29="{{ int ($r.tf_body29 | default 0) }}" data-tf-body29-err="{{ int ($r.tf_body29_err | default 0) }}"{{ end }}>
       {{ $ftype := "framework" }}{{ with $meta }}{{ $ftype = .type | default "framework" }}{{ end }}
       <div class="lb-rank">{{ add $j 1 }}</div>
       <div class="lb-name">{{ $r.framework }}</div>
@@ -742,6 +820,7 @@ function applyFilters() {
 
   applyCompressionScores();
   applyMixedScores();
+  if (typeof applyTcpFragScores === 'function') applyTcpFragScores();
 }
 
 /* Language filters */
@@ -1033,6 +1112,7 @@ window.addEventListener('roundChanged', function(ev) {
   applyFilters();
   if (typeof applyCompressionScores === 'function') applyCompressionScores();
   if (typeof applyMixedScores === 'function') applyMixedScores();
+  if (typeof applyTcpFragScores === 'function') applyTcpFragScores();
 });
 
 /* Compression score: replace bar with bandwidth-adjusted score */
@@ -1395,6 +1475,84 @@ function applyMixedScores() {
     });
   });
 }
+/* TCP Fragmentation: stacked bar showing ok/error per template */
+var tfKeys = ['get','post','chunked','noise','cookie','headers','body29'];
+var tfColors = {get:'#3b82f6', post:'#8b5cf6', chunked:'#f59e0b', noise:'#64748b', cookie:'#10b981', headers:'#06b6d4', body29:'#ec4899'};
+var tfLabels = {get:'GET', post:'POST', chunked:'Chunked', noise:'Noise', cookie:'Cookie', headers:'30 Headers', body29:'Body29'};
+var tfGrid = '2.5rem 10rem 5.5rem 4.95rem 4.5rem 3.5rem 5.5rem 5.5rem 1fr 5.5rem 5rem 5.5rem 4.5rem';
+
+function buildTfBar(ok, err) {
+  var total = 0;
+  tfKeys.forEach(function(k) { total += (ok[k] || 0) + (err[k] || 0); });
+  if (total === 0) return '';
+  var tipLines = tfKeys.map(function(k) {
+    var o = ok[k] || 0, e = err[k] || 0;
+    return tfLabels[k] + ': ' + fmtK(o) + ' ok, ' + fmtK(e) + ' err';
+  }).join('&#10;');
+  var html = '<div class="lb-mix-wrap" title="' + tipLines + '">';
+  tfKeys.forEach(function(k) {
+    var o = ok[k] || 0;
+    if (o > 0) {
+      var pct = o / total * 100;
+      html += '<div class="lb-mix-seg" style="width:' + pct.toFixed(1) + '%;background:' + tfColors[k] + ' !important;"></div>';
+    }
+  });
+  tfKeys.forEach(function(k) {
+    var e = err[k] || 0;
+    if (e > 0) {
+      var pct = e / total * 100;
+      html += '<div class="lb-mix-seg" style="width:' + pct.toFixed(1) + '%;background:' + tfColors[k] + ' !important;opacity:0.3;"></div>';
+    }
+  });
+  html += '</div>';
+  return html;
+}
+
+function applyTcpFragPanel(panel) {
+  var rows = Array.from(panel.querySelectorAll('.lb-row:not(.lb-header)'));
+  if (rows.length === 0) return;
+  var hasData = rows.some(function(r) { return r.dataset.tfGet; });
+  if (!hasData) return;
+
+  var header = panel.querySelector('.lb-row.lb-header');
+  if (header && !header.dataset.tfDone) {
+    header.style.gridTemplateColumns = tfGrid;
+    var barHeader = header.querySelector('.lb-bar-cell');
+    if (barHeader) {
+      barHeader.className = 'lb-mix-header';
+      barHeader.innerHTML = '<div style="font-size:0.65rem;font-weight:600;margin-bottom:1px;">Request Mix (solid=ok, faded=err)</div>' +
+        '<div style="display:flex;gap:0.3rem;flex-wrap:wrap;">' +
+        tfKeys.map(function(k) {
+          return '<span style="display:inline-flex;align-items:center;gap:2px;font-size:0.55rem;color:#94a3b8;line-height:1;">' +
+            '<span style="width:6px;height:6px;border-radius:1px;background:' + tfColors[k] + ';flex-shrink:0;"></span>' +
+            tfLabels[k] + '</span>';
+        }).join('') + '</div>';
+    }
+    header.dataset.tfDone = '1';
+  }
+
+  rows.forEach(function(row) {
+    if (row.dataset.tfDone) return;
+    row.style.gridTemplateColumns = tfGrid;
+    var ok = {}, err = {};
+    tfKeys.forEach(function(k) {
+      var dKey = 'tf' + k.charAt(0).toUpperCase() + k.slice(1);
+      ok[k] = Number(row.dataset[dKey]) || 0;
+      err[k] = Number(row.dataset[dKey + 'Err']) || 0;
+    });
+    var barCell = row.querySelector('.lb-bar-cell');
+    if (barCell) {
+      barCell.outerHTML = '<div class="lb-mix-cell">' + buildTfBar(ok, err) + '</div>';
+    }
+    row.dataset.tfDone = '1';
+  });
+}
+
+function applyTcpFragScores() {
+  document.querySelectorAll('.lb-conn-panel[data-profile="tcp-frag"]').forEach(applyTcpFragPanel);
+}
+applyTcpFragScores();
+
 applyFilters();
 
 /* Floating header on scroll */

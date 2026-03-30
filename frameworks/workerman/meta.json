@@ -15,6 +15,7 @@
     "compression",
     "noisy",
     "static",
+    "tcp-frag",
     "mixed"
   ]
 }

@@ -9,6 +9,7 @@
   "tests": [
     "pipelined",
     "baseline",
+    "tcp-frag",
     "json",
     "upload",
     "limited-conn",

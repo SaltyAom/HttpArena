@@ -13,6 +13,7 @@
     "limited-conn",
     "json",
     "compression",
-    "mixed"
+    "mixed",
+    "tcp-frag"
   ]
 }

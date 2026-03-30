@@ -3,7 +3,7 @@
   "language": "TS",
   "type": "framework",
   "engine": "JSC",
-  "description": "Ultrafast Web Standards framework running natively on Bun — no adapter overhead.",
+  "description": "Ultrafast Web Standards framework running natively on Bun \u2014 no adapter overhead.",
   "repo": "https://github.com/honojs/hono",
   "enabled": true,
   "tests": [
@@ -15,6 +15,7 @@
     "compression",
     "mixed",
     "async-db",
-    "static"
+    "static",
+    "tcp-frag"
   ]
 }

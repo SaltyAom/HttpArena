@@ -16,6 +16,7 @@
     "compression",
     "mixed",
     "async-db",
-    "static"
+    "static",
+    "tcp-frag"
   ]
 }

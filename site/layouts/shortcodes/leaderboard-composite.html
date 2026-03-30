@@ -8,6 +8,7 @@
   (dict "id" "noisy" "label" "Noisy" "sublabel" "HTTP/1.1" "proto" "h1" "conns" (slice 512 4096 16384) "scored" false "engineScored" false)
   (dict "id" "mixed" "label" "Mixed" "sublabel" "HTTP/1.1" "proto" "h1" "conns" (slice 4096 16384) "scored" true "engineScored" false)
   (dict "id" "static" "label" "Static" "sublabel" "HTTP/1.1" "proto" "h1" "conns" (slice 4096 16384) "scored" true "engineScored" false)
+  (dict "id" "tcp-frag" "label" "TCP Frag" "sublabel" "HTTP/1.1" "proto" "h1" "conns" (slice 512 4096 16384) "scored" true "engineScored" false)
   (dict "id" "baseline-h2" "label" "Baseline" "sublabel" "HTTP/2" "proto" "h2" "conns" (slice 256 1024) "scored" true "engineScored" true)
   (dict "id" "static-h2" "label" "Static" "sublabel" "HTTP/2" "proto" "h2" "conns" (slice 256 1024) "scored" true "engineScored" true)
   (dict "id" "unary-grpc" "label" "Unary" "sublabel" "gRPC" "proto" "grpc" "conns" (slice 256 1024) "scored" true "engineScored" true)

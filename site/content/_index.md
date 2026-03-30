@@ -62,7 +62,7 @@ html.dark .test-card-endpoint { color: #64748b; }
 </style>
 
 <div class="tests-section">
-<h2>17 Test Profiles Across HTTP/1.1, HTTP/2, HTTP/3, gRPC and WebSocket</h2>
+<h2>18 Test Profiles Across HTTP/1.1, HTTP/2, HTTP/3, gRPC and WebSocket</h2>
 <p class="tests-sub">Every framework is tested under diverse, realistic workloads — from raw throughput to compression, gRPC unary calls, and WebSocket echo.</p>
 
 <div class="tests-proto">
@@ -112,6 +112,11 @@ html.dark .test-card-endpoint { color: #64748b; }
     <div class="test-card-title">Static Files</div>
     <div class="test-card-desc">Round-robin across 20 pre-loaded static files — CSS, JS, HTML, fonts, images.</div>
     <div class="test-card-endpoint">GET /static/*</div>
+  </a>
+  <a class="test-card" href="docs/add-framework/test-profiles/h1/tcp-frag">
+    <div class="test-card-title">TCP Fragmentation</div>
+    <div class="test-card-desc">Baseline workload with MTU 69 — every packet fragmented into ~29-byte segments. Stress tests TCP reassembly.</div>
+    <div class="test-card-endpoint">GET/POST /baseline11 (MTU 69)</div>
   </a>
   <a class="test-card" href="docs/add-framework/test-profiles/h1/pipelined">
     <div class="test-card-title">Pipelined (16x)</div>
