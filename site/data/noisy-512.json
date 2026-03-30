@@ -274,25 +274,6 @@
     "status_5xx": 0
   },
   {
-    "framework": "go-fasthttp",
-    "language": "Go",
-    "rps": 1220870,
-    "avg_latency": "299us",
-    "p99_latency": "1.12ms",
-    "cpu": "7064.7%",
-    "memory": "77.9MiB",
-    "connections": 512,
-    "threads": 64,
-    "duration": "5s",
-    "pipeline": 1,
-    "bandwidth": "144.08MB/s",
-    "reconnects": 102,
-    "status_2xx": 6104351,
-    "status_3xx": 0,
-    "status_4xx": 99,
-    "status_5xx": 0
-  },
-  {
     "framework": "h2o-mruby",
     "language": "Ruby",
     "rps": 1365945,
@@ -864,6 +845,26 @@
     "status_2xx": 542349,
     "status_3xx": 0,
     "status_4xx": 197138,
+    "status_5xx": 0
+  },
+  {
+    "framework": "go-fasthttp",
+    "language": "Go",
+    "rps": 782589,
+    "avg_latency": "378us",
+    "p99_latency": "4.78ms",
+    "cpu": "3828.7%",
+    "memory": "84.2MiB",
+    "connections": 512,
+    "threads": 64,
+    "duration": "5s",
+    "pipeline": 1,
+    "bandwidth": "115.37MB/s",
+    "input_bw": "79.11MB/s",
+    "reconnects": 75,
+    "status_2xx": 3912949,
+    "status_3xx": 0,
+    "status_4xx": 1198387,
     "status_5xx": 0
   }
 ]

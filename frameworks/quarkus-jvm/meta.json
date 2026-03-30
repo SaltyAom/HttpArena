@@ -16,6 +16,7 @@
     "noisy",
     "mixed",
     "static",
+    "tcp-frag",
     "baseline-h2",
     "static-h2",
     "async-db"

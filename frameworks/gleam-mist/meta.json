@@ -3,7 +3,7 @@
   "language": "Gleam",
   "type": "framework",
   "engine": "BEAM",
-  "description": "Mist HTTP server for Gleam on the BEAM VM — first Gleam and first BEAM entry in HttpArena.",
+  "description": "Mist HTTP server for Gleam on the BEAM VM \u2014 first Gleam and first BEAM entry in HttpArena.",
   "repo": "https://github.com/rawhat/mist",
   "enabled": true,
   "tests": [
@@ -14,6 +14,7 @@
     "json",
     "upload",
     "compression",
-    "static"
+    "static",
+    "tcp-frag"
   ]
 }

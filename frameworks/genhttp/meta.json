@@ -16,6 +16,7 @@
     "async-db",
     "noisy",
     "mixed",
-    "static"
+    "static",
+    "tcp-frag"
   ]
 }

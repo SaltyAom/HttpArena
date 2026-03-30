@@ -6,9 +6,7 @@ import (
 	"encoding/json"
 	"log"
 	"math"
-	"mime"
 	"os"
-	"path/filepath"
 	"runtime"
 	"strconv"
 	"strings"
@@ -55,16 +53,10 @@ type ProcessResponse struct {
 	Count int             `json:"count"`
 }
 
-type StaticFile struct {
-	Data        []byte
-	ContentType string
-}
-
 var dataset []DatasetItem
 var jsonLargeResponse []byte
 var db *sql.DB
 var pgPool *pgxpool.Pool
-var staticFiles map[string]StaticFile
 
 func loadDataset() {
 	path := os.Getenv("DATASET_PATH")
@@ -109,13 +101,10 @@ func loadDatasetLarge() {
 }
 
 func baseline11Handler(ctx *fasthttp.RequestCtx) {
-	sum := 0
-
-	ctx.QueryArgs().VisitAll(func(key, value []byte) {
-		if n, err := strconv.Atoi(string(value)); err == nil {
-			sum += n
-		}
-	})
+	args := ctx.QueryArgs()
+	a := args.GetUintOrZero("a")
+	b := args.GetUintOrZero("b")
+	sum := a + b
 
 	body := ctx.PostBody()
 	if len(body) > 0 {
@@ -158,47 +147,13 @@ func processHandler(ctx *fasthttp.RequestCtx) {
 	ctx.SetBody(body)
 }
 
-func loadStaticFiles() {
-	staticFiles = make(map[string]StaticFile)
-	entries, err := os.ReadDir("/data/static")
-	if err != nil {
-		return
-	}
-	for _, entry := range entries {
-		if entry.IsDir() {
-			continue
-		}
-		name := entry.Name()
-		data, err := os.ReadFile(filepath.Join("/data/static", name))
-		if err != nil {
-			continue
-		}
-		ct := mime.TypeByExtension(filepath.Ext(name))
-		if ct == "" {
-			ct = "application/octet-stream"
-		}
-		staticFiles[name] = StaticFile{Data: data, ContentType: ct}
-	}
-}
-
-func staticHandler(ctx *fasthttp.RequestCtx) {
-	path := string(ctx.Path())
-	filename := strings.TrimPrefix(path, "/static/")
-	if sf, ok := staticFiles[filename]; ok {
-		ctx.Response.Header.Set("Server", "go-fasthttp")
-		ctx.SetContentType(sf.ContentType)
-		ctx.SetBody(sf.Data)
-	} else {
-		ctx.SetStatusCode(404)
-	}
-}
-
 func loadDB() {
 	d, err := sql.Open("sqlite", "file:/data/benchmark.db?mode=ro&immutable=1")
 	if err != nil {
 		return
 	}
 	d.SetMaxOpenConns(runtime.NumCPU())
+	d.SetMaxIdleConns(runtime.NumCPU())
 	db = d
 }
 
@@ -261,7 +216,7 @@ func asyncDbHandler(ctx *fasthttp.RequestCtx) {
 		items = append(items, map[string]interface{}{
 			"id": id, "name": name, "category": category,
 			"price": price, "quantity": quantity, "active": active,
-			"tags": tagsArr,
+			"tags":   tagsArr,
 			"rating": map[string]interface{}{"score": ratingScore, "count": ratingCount},
 		})
 	}
@@ -320,7 +275,7 @@ func dbHandler(ctx *fasthttp.RequestCtx) {
 		items = append(items, map[string]interface{}{
 			"id": id, "name": name, "category": category,
 			"price": price, "quantity": quantity, "active": active == 1,
-			"tags": tagsArr,
+			"tags":   tagsArr,
 			"rating": map[string]interface{}{"score": ratingScore, "count": ratingCount},
 		})
 	}
@@ -338,7 +293,6 @@ func main() {
 	loadDatasetLarge()
 	loadDB()
 	loadPgPool()
-	loadStaticFiles()
 
 	compressedHandler = fasthttp.CompressHandlerLevel(func(ctx *fasthttp.RequestCtx) {
 		ctx.Response.Header.Set("Server", "go-fasthttp")
@@ -346,7 +300,25 @@ func main() {
 		ctx.SetBody(jsonLargeResponse)
 	}, flate.BestSpeed)
 
+	fsHandler := (&fasthttp.FS{
+		Root:            "/data/static",
+		Compress:        true,
+		AcceptByteRange: true,
+	}).NewRequestHandler()
+
+	staticHandler := func(ctx *fasthttp.RequestCtx) {
+		ctx.URI().SetPathBytes(ctx.Path()[len("/static"):])
+		fsHandler(ctx)
+	}
+
 	handler := func(ctx *fasthttp.RequestCtx) {
+		method := string(ctx.Method())
+
+		if method != "GET" && method != "POST" {
+			ctx.SetStatusCode(fasthttp.StatusMethodNotAllowed)
+			return
+		}
+
 		switch string(ctx.Path()) {
 		case "/pipeline":
 			pipelineHandler(ctx)
@@ -365,7 +337,12 @@ func main() {
 				staticHandler(ctx)
 				return
 			}
-			baseline11Handler(ctx)
+			if strings.HasPrefix(string(ctx.Path()), "/baseline") {
+				baseline11Handler(ctx)
+				return
+			}
+
+			ctx.SetStatusCode(fasthttp.StatusNotFound)
 		}
 	}
 	numCPU := runtime.NumCPU()

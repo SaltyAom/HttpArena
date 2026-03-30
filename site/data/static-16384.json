@@ -380,26 +380,6 @@
     "status_5xx": 0
   },
   {
-    "framework": "go-fasthttp",
-    "language": "Go",
-    "rps": 409106,
-    "avg_latency": "27.25ms",
-    "p99_latency": "873.60ms",
-    "cpu": "5645.1%",
-    "memory": "573.2MiB",
-    "connections": 16384,
-    "threads": 64,
-    "duration": "5s",
-    "pipeline": 1,
-    "bandwidth": "6.16GB/s",
-    "input_bw": "22.24MB/s",
-    "reconnects": 217288,
-    "status_2xx": 2049625,
-    "status_3xx": 0,
-    "status_4xx": 0,
-    "status_5xx": 0
-  },
-  {
     "framework": "Hono (Bun)",
     "language": "TS",
     "rps": 300896,

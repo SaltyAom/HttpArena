@@ -36,6 +36,7 @@ declare -A PROFILES=(
     [noisy]="1|0||512,4096,16384|noisy"
     [mixed]="1|5||4096,16384|mixed"
     [static]="1|10||4096,16384|static"
+    [tcp-frag]="1|2||512,4096,16384|tcp-frag"
     [baseline-h2]="1|0||256,1024|h2"
     [static-h2]="1|0||256,1024|static-h2"
     [baseline-h3]="32|0||256,512|h3"
@@ -45,7 +46,7 @@ declare -A PROFILES=(
     [echo-ws]="1|0||512,4096,16384|ws-echo"
     [async-db]="1|0||512,1024|async-db"
 )
-PROFILE_ORDER=(baseline pipelined limited-conn json upload compression noisy mixed static async-db baseline-h2 static-h2 baseline-h3 static-h3 unary-grpc unary-grpc-tls echo-ws)
+PROFILE_ORDER=(baseline pipelined limited-conn json upload compression noisy mixed static tcp-frag async-db baseline-h2 static-h2 baseline-h3 static-h3 unary-grpc unary-grpc-tls echo-ws)
 
 # Parse flags
 SAVE_RESULTS=false
@@ -294,6 +295,8 @@ restore_settings() {
             done
         fi
     fi
+    # Restore loopback MTU in case tcp-frag test was interrupted
+    sudo ip link set lo mtu 65536 2>/dev/null || true
 }
 trap restore_settings EXIT
 
@@ -324,6 +327,9 @@ sudo sysctl -w net.core.netdev_max_backlog=65535 > /dev/null 2>&1 || true
 echo "[tune] Setting UDP buffer sizes for QUIC..."
 sudo sysctl -w net.core.rmem_max=7500000 > /dev/null 2>&1 || true
 sudo sysctl -w net.core.wmem_max=7500000 > /dev/null 2>&1 || true
+
+echo "[tune] Ensuring loopback MTU is 65536..."
+sudo ip link set lo mtu 65536 2>/dev/null || true
 
 echo "[clean] Restarting Docker daemon..."
 if sudo systemctl restart docker 2>/dev/null; then
@@ -550,6 +556,13 @@ for profile in "${profiles_to_run[@]}"; do
     elif [ "$endpoint" = "async-db" ]; then
         gc_args=("http://localhost:$PORT/async-db?min=10&max=50"
             -c "$CONNS" -t "$THREADS" -d "$DURATION" -p "$pipeline")
+    elif [ "$endpoint" = "tcp-frag" ]; then
+        # Set loopback MTU to 69 to force heavy TCP fragmentation
+        echo "[tune] Setting loopback MTU to 69 for TCP fragmentation test..."
+        sudo ip link set lo mtu 69
+        gc_args=("http://localhost:$PORT"
+            --raw "$REQUESTS_DIR/get-frag.raw,$REQUESTS_DIR/get-frag.raw,$REQUESTS_DIR/post-frag.raw,$REQUESTS_DIR/post-chunked-frag.raw,$REQUESTS_DIR/noise-frag.raw,$REQUESTS_DIR/cookie-frag.raw,$REQUESTS_DIR/manyheaders-frag.raw,$REQUESTS_DIR/body29-frag.raw"
+            -c "$CONNS" -t "$THREADS" -d "$DURATION" -p "$pipeline")
     elif [ "$endpoint" = "noisy" ]; then
         gc_args=("http://localhost:$PORT"
             --raw "$REQUESTS_DIR/get.raw,$REQUESTS_DIR/post_cl.raw,$REQUESTS_DIR/noise-badpath.raw,$REQUESTS_DIR/noise-badcl.raw,$REQUESTS_DIR/noise-binary.raw"
@@ -727,6 +740,35 @@ else: print(f'{bps}B/s')
   \"tpl_static\": $t_static,
   \"tpl_async_db\": $t_async_db"
         fi
+        if [ -n "$tpl_line" ] && [ "$endpoint" = "tcp-frag" ]; then
+            # TCP frag templates: get-frag×2, post-frag×1, post-chunked-frag×1, noise-frag×1, cookie-frag×1, manyheaders-frag×1, body29-frag×1
+            tpl_all_line=$(echo "$best_output" | grep -oP 'Per-template: \K.*' || echo "")
+            IFS=',' read -ra tpl_ok <<< "$tpl_line"
+            IFS=',' read -ra tpl_all <<< "$tpl_all_line"
+            tf_get=$(( ${tpl_ok[0]:-0} + ${tpl_ok[1]:-0} ))
+            tf_post=${tpl_ok[2]:-0}
+            tf_chunked=${tpl_ok[3]:-0}
+            tf_noise=${tpl_ok[4]:-0}
+            tf_cookie=${tpl_ok[5]:-0}
+            tf_headers=${tpl_ok[6]:-0}
+            tf_body29=${tpl_ok[7]:-0}
+            # Errors = total - ok
+            tf_get_err=$(( ${tpl_all[0]:-0} + ${tpl_all[1]:-0} - tf_get ))
+            tf_post_err=$(( ${tpl_all[2]:-0} - tf_post ))
+            tf_chunked_err=$(( ${tpl_all[3]:-0} - tf_chunked ))
+            tf_noise_err=$(( ${tpl_all[4]:-0} - tf_noise ))
+            tf_cookie_err=$(( ${tpl_all[5]:-0} - tf_cookie ))
+            tf_headers_err=$(( ${tpl_all[6]:-0} - tf_headers ))
+            tf_body29_err=$(( ${tpl_all[7]:-0} - tf_body29 ))
+            tpl_json=",
+  \"tf_get\": $tf_get, \"tf_get_err\": $tf_get_err,
+  \"tf_post\": $tf_post, \"tf_post_err\": $tf_post_err,
+  \"tf_chunked\": $tf_chunked, \"tf_chunked_err\": $tf_chunked_err,
+  \"tf_noise\": $tf_noise, \"tf_noise_err\": $tf_noise_err,
+  \"tf_cookie\": $tf_cookie, \"tf_cookie_err\": $tf_cookie_err,
+  \"tf_headers\": $tf_headers, \"tf_headers_err\": $tf_headers_err,
+  \"tf_body29\": $tf_body29, \"tf_body29_err\": $tf_body29_err"
+        fi
     fi
 
     # Save results only with --save flag
@@ -774,6 +816,12 @@ EOF
     docker rm -f "$CONTAINER_NAME" 2>/dev/null || true
 
     done # CONNS loop
+
+    # Restore loopback MTU if tcp-frag test changed it
+    if [ "$endpoint" = "tcp-frag" ]; then
+        echo "[tune] Restoring loopback MTU to 65536..."
+        sudo ip link set lo mtu 65536
+    fi
 done
 
 # Rebuild site data only with --save

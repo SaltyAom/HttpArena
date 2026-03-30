@@ -3,7 +3,7 @@
   "language": "Elixir",
   "type": "framework",
   "engine": "BEAM",
-  "description": "Phoenix 1.7 on Cowboy — the most popular Elixir web framework. First Elixir entry in HttpArena.",
+  "description": "Phoenix 1.7 on Cowboy \u2014 the most popular Elixir web framework. First Elixir entry in HttpArena.",
   "repo": "https://github.com/phoenixframework/phoenix",
   "enabled": true,
   "tests": [
@@ -16,6 +16,7 @@
     "compression",
     "async-db",
     "mixed",
-    "static"
+    "static",
+    "tcp-frag"
   ]
 }
