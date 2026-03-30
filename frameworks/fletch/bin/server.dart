@@ -147,15 +147,7 @@ Future<void> _run(dynamic _) async {
     );
   });
 
-  // Use Content-Length header when available — avoids buffering the entire
-  // upload body just to count bytes, which matters for large payloads.
   app.post('/upload', (req, res) async {
-    final cl = req.httpRequest.contentLength;
-    if (cl >= 0) {
-      res.text('$cl');
-      return;
-    }
-    // Fallback for chunked transfers: buffer and count.
     final body = await req.body;
     int size = 0;
     if (body is Uint8List) {
