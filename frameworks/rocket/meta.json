@@ -1,7 +1,7 @@
 {
   "display_name": "rocket",
   "language": "Rust",
-  "type": "framework",
+  "type": "tuned",
   "engine": "rocket",
   "description": "Rocket 0.5 on Tokio with Rustls for HTTP/2, compiled with -O3 and thin LTO.",
   "repo": "https://github.com/SergioBenitez/Rocket",

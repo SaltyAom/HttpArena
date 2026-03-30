@@ -1,7 +1,7 @@
 {
   "display_name": "GenHTTP",
   "language": "C#",
-  "type": "framework",
+  "type": "production",
   "engine": "GenHTTP",
   "description": "Lightweight, embeddable and modular C# web server.",
   "repo": "https://github.com/Kaliumhexacyanoferrat/GenHTTP",

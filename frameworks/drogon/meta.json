@@ -1,7 +1,7 @@
 {
   "display_name": "drogon",
   "language": "C++",
-  "type": "framework",
+  "type": "tuned",
   "engine": "drogon",
   "description": "Drogon C++ framework using HttpController with async callbacks, mimalloc allocator, and -flto optimization.",
   "repo": "https://github.com/drogonframework/drogon",

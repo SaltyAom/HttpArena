@@ -1,7 +1,7 @@
 {
   "display_name": "aspnet-grpc",
   "language": "C#",
-  "type": "framework",
+  "type": "tuned",
   "engine": "Kestrel",
   "description": "ASP.NET Core gRPC server using .NET 10 preview with Kestrel.",
   "repo": "https://github.com/dotnet/aspnetcore",

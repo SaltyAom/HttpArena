@@ -192,7 +192,7 @@ html.dark .lb-filters-hint { color: #4b5563; }
   background: rgba(245, 158, 11, 0.06);
   font-weight: 600;
 }
-.lb-type-framework.active {
+.lb-type-production.active {
   color: #22c55e;
   border-color: #22c55e;
   background: rgba(34, 197, 94, 0.06);
@@ -202,7 +202,9 @@ html.dark .lb-type-filter { color: #64748b; border-color: #334155; }
 html.dark .lb-type-filter:hover { color: #94a3b8; border-color: #475569; background: rgba(255, 255, 255, 0.03); }
 html.dark .lb-type-all.active { color: #60a5fa; border-color: #3b82f6; background: rgba(59, 130, 246, 0.12); }
 html.dark .lb-type-engine.active { color: #fbbf24; border-color: #f59e0b; background: rgba(245, 158, 11, 0.12); }
-html.dark .lb-type-framework.active { color: #4ade80; border-color: #22c55e; background: rgba(34, 197, 94, 0.12); }
+html.dark .lb-type-production.active { color: #4ade80; border-color: #22c55e; background: rgba(34, 197, 94, 0.12); }
+.lb-type-tuned.active { color: #ca8a04; border-color: #eab308; background: rgba(234, 179, 8, 0.06); font-weight: 600; }
+html.dark .lb-type-tuned.active { color: #fbbf24; border-color: #eab308; background: rgba(234, 179, 8, 0.12); }
 
 
 /* Sortable headers */
@@ -296,12 +298,21 @@ html.dark .lb-popup-link { color: #60a5fa; }
 html.dark .lb-header-floating { background: #0d1117; box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
 .lb-rank { font-weight: 400; font-size: 0.85rem; color: #000; }
 .lb-name { font-weight: 400; font-size: 0.8rem; color: #000; text-transform: lowercase; }
-.lb-show-all .lb-row[data-type="engine"]:not(.lb-header) { background: rgba(220, 38, 38, 0.06); }
-.lb-show-all .lb-row[data-type="engine"]:not(.lb-header):hover { background: rgba(220, 38, 38, 0.12); }
-.lb-show-all .lb-row[data-type="engine"] .lb-name::after { content: " *"; }
-html.dark .lb-show-all .lb-row[data-type="engine"]:not(.lb-header) { background: rgba(248, 113, 113, 0.08); }
-html.dark .lb-show-all .lb-row[data-type="engine"]:not(.lb-header):hover { background: rgba(248, 113, 113, 0.15); }
-html.dark .lb-engine-warning { color: #fecaca !important; background: rgba(220, 38, 38, 0.1) !important; border-color: rgba(220, 38, 38, 0.3) !important; }
+.lb-row[data-type="production"] .lb-name,
+.lb-row[data-type="production"] .lb-lang { background: rgba(34, 197, 94, 0.08); border-radius: 3px; padding: 0 0.2rem; margin: 0 -0.2rem; }
+html.dark .lb-row[data-type="production"] .lb-name,
+html.dark .lb-row[data-type="production"] .lb-lang { background: rgba(34, 197, 94, 0.1); }
+.lb-row[data-type="production"] .lb-name::after { content: " $"; }
+.lb-row[data-type="engine"] .lb-name,
+.lb-row[data-type="engine"] .lb-lang { background: rgba(220, 38, 38, 0.08); border-radius: 3px; padding: 0 0.2rem; margin: 0 -0.2rem; }
+html.dark .lb-row[data-type="engine"] .lb-name,
+html.dark .lb-row[data-type="engine"] .lb-lang { background: rgba(248, 113, 113, 0.1); }
+.lb-row[data-type="engine"] .lb-name::after { content: " *"; }
+.lb-row[data-type="tuned"] .lb-name,
+.lb-row[data-type="tuned"] .lb-lang { background: rgba(234, 179, 8, 0.08); border-radius: 3px; padding: 0 0.2rem; margin: 0 -0.2rem; }
+html.dark .lb-row[data-type="tuned"] .lb-name,
+html.dark .lb-row[data-type="tuned"] .lb-lang { background: rgba(234, 179, 8, 0.1); }
+.lb-row[data-type="tuned"] .lb-name::after { content: " #"; }
 .lb-lang { font-size: 0.8rem; color: #000; }
 .lb-conns { font-size: 0.8rem; color: #000; text-align: right; font-variant-numeric: tabular-nums; }
 .lb-rps { font-weight: 700; font-size: 0.95rem; text-align: right; font-variant-numeric: tabular-nums; color: #000; }
@@ -462,9 +473,19 @@ var lbProfiles = {{ $profiles | jsonify | safeJS }};
   </div>
 </div>
 
-<div class="lb-engine-warning" style="margin-top:1rem; margin-bottom:0.75rem; padding:0.75rem 1rem; border-radius:0.5rem; background:rgba(220,38,38,0.06); border:1px solid rgba(220,38,38,0.2); color:#7f1d1d; font-size:0.9rem; display:none;">
-  * <strong>Engine</strong> entries are bare-metal HTTP servers without framework overhead. They are shown for reference but are not directly comparable to full frameworks.
+<div class="lb-type-note" style="margin-top:1rem; margin-bottom:0.75rem; padding:0.85rem 1.25rem; border-radius:0.5rem; background:linear-gradient(135deg, rgba(59,130,246,0.04), rgba(139,92,246,0.04)); border:1px solid rgba(59,130,246,0.15); color:#1e293b; font-size:1.02rem; line-height:1.7;">
 </div>
+<style>
+html.dark .lb-type-note { color: #e2e8f0 !important; background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(139,92,246,0.08)) !important; border-color: rgba(59,130,246,0.25) !important; }
+.lb-type-note strong { font-weight: 700; }
+.lb-type-badge { display:inline-block; padding:0.1rem 0.4rem; border-radius:4px; font-size:0.75rem; font-weight:700; margin-right:0.25rem; vertical-align:middle; }
+.lb-type-badge-production { background:rgba(34,197,94,0.12); color:#15803d; border:1px solid rgba(34,197,94,0.3); }
+.lb-type-badge-tuned { background:rgba(234,179,8,0.1); color:#92400e; border:1px solid rgba(234,179,8,0.3); }
+.lb-type-badge-engine { background:rgba(220,38,38,0.08); color:#991b1b; border:1px solid rgba(220,38,38,0.25); }
+html.dark .lb-type-badge-production { background:rgba(34,197,94,0.15); color:#4ade80; border-color:rgba(34,197,94,0.4); }
+html.dark .lb-type-badge-tuned { background:rgba(234,179,8,0.12); color:#fbbf24; border-color:rgba(234,179,8,0.35); }
+html.dark .lb-type-badge-engine { background:rgba(220,38,38,0.12); color:#f87171; border-color:rgba(220,38,38,0.35); }
+</style>
 
 {{ range $i, $p := $profiles }}
 <div class="lb-panel{{ if eq $i 0 }} active{{ end }}" data-panel="{{ $p.id }}" data-conns="{{ delimit $p.conns "," }}">
@@ -566,8 +587,9 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaa42</pre>
 
   <div class="lb-filters" style="margin:0 0 0.5rem 0;">
     <span class="lb-filters-label">Type</span>
-    <div class="lb-type-filter lb-type-all active" data-type="all">All</div>
-    <div class="lb-type-filter lb-type-framework" data-type="framework">Framework</div>
+    <div class="lb-type-filter lb-type-all" data-type="all">All</div>
+    <div class="lb-type-filter lb-type-production active" data-type="production">Production</div>
+    <div class="lb-type-filter lb-type-tuned active" data-type="tuned">Tuned</div>
     <div class="lb-type-filter lb-type-engine" data-type="engine">Engine</div>
   </div>
   <div class="lb-filters" style="margin:0 0 0 0;">
@@ -633,8 +655,8 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaa42</pre>
     {{ $pct := mul (div (float $r.rps) (float $maxRps)) 100.0 }}
     {{ $meta := index site.Data.frameworks $r.framework }}
     {{ $s2xx := int ($r.status_2xx | default 0) }}{{ $s3xx := int ($r.status_3xx | default 0) }}{{ $s4xx := int ($r.status_4xx | default 0) }}{{ $s5xx := int ($r.status_5xx | default 0) }}{{ $errs := add $s4xx $s5xx }}
-    <div class="lb-row{{ if $isReconn }} lb-row-reconn{{ end }}{{ if $isNoisy }} lb-row-noisy{{ end }}" data-lang="{{ $r.language | default "" }}" data-name="{{ $r.framework }}" data-rps="{{ printf "%.0f" $r.rps }}" data-bandwidth="{{ $r.bandwidth | default "" }}" data-input-bw="{{ $r.input_bw | default "" }}" data-type="{{ with $meta }}{{ .type | default "framework" }}{{ end }}" data-desc="{{ with $meta }}{{ .description }}{{ end }}" data-repo="{{ with $meta }}{{ .repo }}{{ end }}" data-s2xx="{{ $s2xx }}" data-s3xx="{{ $s3xx }}" data-s4xx="{{ $s4xx }}" data-s5xx="{{ $s5xx }}" {{ if $r.tpl_baseline }}data-tpl-baseline="{{ int $r.tpl_baseline }}" data-tpl-json="{{ int ($r.tpl_json | default 0) }}" data-tpl-db="{{ int ($r.tpl_db | default 0) }}" data-tpl-upload="{{ int ($r.tpl_upload | default 0) }}" data-tpl-compression="{{ int ($r.tpl_compression | default 0) }}" data-tpl-static="{{ int ($r.tpl_static | default 0) }}" data-tpl-async-db="{{ int ($r.tpl_async_db | default 0) }}"{{ end }}{{ if $r.tf_get }} data-tf-get="{{ int $r.tf_get }}" data-tf-get-err="{{ int ($r.tf_get_err | default 0) }}" data-tf-post="{{ int ($r.tf_post | default 0) }}" data-tf-post-err="{{ int ($r.tf_post_err | default 0) }}" data-tf-chunked="{{ int ($r.tf_chunked | default 0) }}" data-tf-chunked-err="{{ int ($r.tf_chunked_err | default 0) }}" data-tf-noise="{{ int ($r.tf_noise | default 0) }}" data-tf-noise-err="{{ int ($r.tf_noise_err | default 0) }}" data-tf-cookie="{{ int ($r.tf_cookie | default 0) }}" data-tf-cookie-err="{{ int ($r.tf_cookie_err | default 0) }}" data-tf-headers="{{ int ($r.tf_headers | default 0) }}" data-tf-headers-err="{{ int ($r.tf_headers_err | default 0) }}" data-tf-body29="{{ int ($r.tf_body29 | default 0) }}" data-tf-body29-err="{{ int ($r.tf_body29_err | default 0) }}"{{ end }}>
-      {{ $ftype := "framework" }}{{ with $meta }}{{ $ftype = .type | default "framework" }}{{ end }}
+    <div class="lb-row{{ if $isReconn }} lb-row-reconn{{ end }}{{ if $isNoisy }} lb-row-noisy{{ end }}" data-lang="{{ $r.language | default "" }}" data-name="{{ $r.framework }}" data-rps="{{ printf "%.0f" $r.rps }}" data-bandwidth="{{ $r.bandwidth | default "" }}" data-input-bw="{{ $r.input_bw | default "" }}" data-type="{{ with $meta }}{{ .type | default "production" }}{{ end }}" data-desc="{{ with $meta }}{{ .description }}{{ end }}" data-repo="{{ with $meta }}{{ .repo }}{{ end }}" data-s2xx="{{ $s2xx }}" data-s3xx="{{ $s3xx }}" data-s4xx="{{ $s4xx }}" data-s5xx="{{ $s5xx }}" {{ if $r.tpl_baseline }}data-tpl-baseline="{{ int $r.tpl_baseline }}" data-tpl-json="{{ int ($r.tpl_json | default 0) }}" data-tpl-db="{{ int ($r.tpl_db | default 0) }}" data-tpl-upload="{{ int ($r.tpl_upload | default 0) }}" data-tpl-compression="{{ int ($r.tpl_compression | default 0) }}" data-tpl-static="{{ int ($r.tpl_static | default 0) }}" data-tpl-async-db="{{ int ($r.tpl_async_db | default 0) }}"{{ end }}{{ if $r.tf_get }} data-tf-get="{{ int $r.tf_get }}" data-tf-get-err="{{ int ($r.tf_get_err | default 0) }}" data-tf-post="{{ int ($r.tf_post | default 0) }}" data-tf-post-err="{{ int ($r.tf_post_err | default 0) }}" data-tf-chunked="{{ int ($r.tf_chunked | default 0) }}" data-tf-chunked-err="{{ int ($r.tf_chunked_err | default 0) }}" data-tf-noise="{{ int ($r.tf_noise | default 0) }}" data-tf-noise-err="{{ int ($r.tf_noise_err | default 0) }}" data-tf-cookie="{{ int ($r.tf_cookie | default 0) }}" data-tf-cookie-err="{{ int ($r.tf_cookie_err | default 0) }}" data-tf-headers="{{ int ($r.tf_headers | default 0) }}" data-tf-headers-err="{{ int ($r.tf_headers_err | default 0) }}" data-tf-body29="{{ int ($r.tf_body29 | default 0) }}" data-tf-body29-err="{{ int ($r.tf_body29_err | default 0) }}"{{ end }}>
+      {{ $ftype := "framework" }}{{ with $meta }}{{ $ftype = .type | default "production" }}{{ end }}
       <div class="lb-rank">{{ add $j 1 }}</div>
       <div class="lb-name">{{ $r.framework }}</div>
       <div class="lb-lang">{{ $r.language | default "—" }}</div>
@@ -763,12 +785,19 @@ function applyFilters() {
   var activePanel = document.querySelector('.lb-panel.active') || document;
   var showAll = activePanel.querySelector('.lb-type-filter[data-type="all"]').classList.contains('active');
   var showEngine = showAll || activePanel.querySelector('.lb-type-filter[data-type="engine"]').classList.contains('active');
-  var showFramework = showAll || activePanel.querySelector('.lb-type-filter[data-type="framework"]').classList.contains('active');
+  var showTuned = showAll || activePanel.querySelector('.lb-type-filter[data-type="tuned"]').classList.contains('active');
+  var showProduction = showAll || activePanel.querySelector('.lb-type-filter[data-type="production"]').classList.contains('active');
 
   var lbWrapper = document.getElementById('lb-wrapper');
   if (lbWrapper) lbWrapper.classList.toggle('lb-show-all', showAll);
-  var engineWarning = document.querySelector('.lb-engine-warning');
-  if (engineWarning) engineWarning.style.display = showAll ? 'block' : 'none';
+  var typeNote = document.querySelector('.lb-type-note');
+  if (typeNote) {
+    var defs = [];
+    if (showProduction) defs.push('<span class="lb-type-badge lb-type-badge-production">$ Production</span> Standard framework configuration. Must follow production-specific implementation rules for each test.');
+    if (showTuned) defs.push('<span class="lb-type-badge lb-type-badge-tuned"># Tuned</span> May use experimental flags and non-default optimizations. Not bound by production implementation rules.');
+    if (showEngine) defs.push('<span class="lb-type-badge lb-type-badge-engine">* Engine</span> Bare-metal HTTP servers — not frameworks. A different breed entirely.');
+    typeNote.innerHTML = defs.join('<br>');
+  }
 
   var searchVal = document.querySelector('.lb-search-input').value.toLowerCase().trim();
   var terms = searchVal ? searchVal.split(',').map(function(s) { return s.trim(); }).filter(Boolean) : [];
@@ -784,9 +813,9 @@ function applyFilters() {
     rows.forEach(function(row) {
       var lang = row.dataset.lang;
       var name = row.dataset.name.toLowerCase();
-      var type = row.dataset.type || 'framework';
+      var type = row.dataset.type || 'production';
       var langMatch = allLangs || activeLangs.has(lang);
-      var typeMatch = (type === 'engine' && showEngine) || (type !== 'engine' && showFramework);
+      var typeMatch = (type === 'engine' && showEngine) || (type === 'tuned' && showTuned) || (type === 'production' && showProduction) || (type !== 'engine' && type !== 'tuned' && showProduction);
       var textMatch = terms.length === 0 || terms.some(function(t) {
         return name.indexOf(t) !== -1 || lang.toLowerCase().indexOf(t) !== -1;
       });
@@ -860,9 +889,35 @@ document.querySelector('.lb-search-input').addEventListener('input', function() 
 document.querySelectorAll('.lb-type-filter').forEach(function(btn) {
   btn.addEventListener('click', function() {
     var type = btn.dataset.type;
-    document.querySelectorAll('.lb-type-filter').forEach(function(f) {
-      f.classList.toggle('active', f.dataset.type === type);
-    });
+    // Sync across ALL panels so switching tabs preserves filter state
+    var allBtns = document.querySelectorAll('.lb-type-filter[data-type="all"]');
+    var typeBtns = document.querySelectorAll('.lb-type-filter:not([data-type="all"])');
+    if (type === 'all') {
+      var allActive = btn.classList.contains('active');
+      typeBtns.forEach(function(f) { f.classList.toggle('active', !allActive); });
+      allBtns.forEach(function(f) { f.classList.toggle('active', !allActive); });
+    } else {
+      // Toggle all buttons of this type across all panels
+      var isNowActive = !btn.classList.contains('active');
+      document.querySelectorAll('.lb-type-filter[data-type="' + type + '"]').forEach(function(f) {
+        f.classList.toggle('active', isNowActive);
+      });
+      // Update All buttons
+      var allOn = Array.from(document.querySelectorAll('.lb-type-filter:not([data-type="all"])')).filter(function(f) {
+        return f.closest('.lb-panel.active') || f.closest('#lb-wrapper');
+      });
+      var firstPanel = document.querySelector('.lb-panel') || document;
+      var panelTypeBtns = firstPanel.querySelectorAll('.lb-type-filter:not([data-type="all"])');
+      var everyOn = Array.from(panelTypeBtns).every(function(f) { return f.classList.contains('active'); });
+      allBtns.forEach(function(f) { f.classList.toggle('active', everyOn); });
+      // Ensure at least one is active
+      var anyOn = Array.from(panelTypeBtns).some(function(f) { return f.classList.contains('active'); });
+      if (!anyOn) {
+        document.querySelectorAll('.lb-type-filter[data-type="' + type + '"]').forEach(function(f) {
+          f.classList.add('active');
+        });
+      }
+    }
     applyFilters();
   });
 });
@@ -1056,7 +1111,7 @@ window.addEventListener('roundChanged', function(ev) {
 
     sorted.forEach(function(r, j) {
       var m = fwMeta[r.framework] || {};
-      var ftype = m.type || 'framework';
+      var ftype = m.type || 'production';
       var pct = (r.rps / maxRps * 100).toFixed(1);
       var rank = String(j + 1);
       var rs2 = r.status_2xx || 0, rs3 = r.status_3xx || 0, rs4 = r.status_4xx || 0, rs5 = r.status_5xx || 0;

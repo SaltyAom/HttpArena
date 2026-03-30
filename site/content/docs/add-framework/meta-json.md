@@ -24,7 +24,7 @@ Create a `meta.json` file in your framework directory:
 | `display_name` | Name shown on the leaderboard |
 | `language` | Programming language (e.g., `Go`, `Rust`, `C#`, `Java`) |
 | `engine` | HTTP server engine (e.g., `Kestrel`, `Tomcat`, `hyper`) |
-| `type` | `framework` for production-ready frameworks, `engine` for bare-metal/engine-level implementations |
+| `type` | `production` for standard framework usage, `tuned` for optimized/non-default configurations, `engine` for bare-metal implementations |
 | `description` | Shown in the framework detail popup on the leaderboard |
 | `repo` | Link to the framework's source repository |
 | `enabled` | Set to `false` to skip this framework during benchmark runs |

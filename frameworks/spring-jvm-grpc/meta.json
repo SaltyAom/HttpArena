@@ -1,7 +1,7 @@
 {
   "display_name": "spring-jvm-grpc",
   "language": "Java",
-  "type": "framework",
+  "type": "tuned",
   "engine": "Netty (gRPC)",
   "description": "Spring Boot gRPC server using grpc-spring-boot-starter with Netty transport on JDK 24.",
   "repo": "https://github.com/grpc-ecosystem/grpc-spring",

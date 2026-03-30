@@ -64,11 +64,8 @@ jobs:
         id: bench
         run: |
           log=$(mktemp)
-          SAVE_FLAG=""
-          if [ "${{ inputs.save }}" = "true" ]; then
-            SAVE_FLAG="--save"
-          fi
-          ./scripts/benchmark.sh "${{ inputs.framework }}" "${{ inputs.profile }}" $SAVE_FLAG 2>&1 | tee "$log"
+          # Always save results to disk for comparison; only commit if --save requested
+          ./scripts/benchmark.sh "${{ inputs.framework }}" "${{ inputs.profile }}" --save 2>&1 | tee "$log"
           echo "log_file=$log" >> "$GITHUB_OUTPUT"
 
       - name: Compare with main
@@ -94,7 +91,7 @@ jobs:
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add results/ site/data/ site/static/logs/ 2>/dev/null || true
+          git add "results/"*"/${{ inputs.framework }}.json" site/static/logs/*/"${{ inputs.framework }}.log" 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "No results to commit"
           else

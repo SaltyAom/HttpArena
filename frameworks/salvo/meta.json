@@ -1,7 +1,7 @@
 {
   "display_name": "salvo",
   "language": "Rust",
-  "type": "framework",
+  "type": "tuned",
   "engine": "Salvo",
   "description": "Salvo web framework with Quinn HTTP/3 support on Tokio runtime, compiled with -O3 and thin LTO.",
   "repo": "https://github.com/salvo-rs/salvo",

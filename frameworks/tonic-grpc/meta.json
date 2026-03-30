@@ -1,7 +1,7 @@
 {
   "display_name": "tonic-grpc",
   "language": "Rust",
-  "type": "framework",
+  "type": "tuned",
   "engine": "Tonic",
   "description": "Rust gRPC server using tonic, a native Rust gRPC implementation built on top of hyper and tower.",
   "repo": "https://github.com/hyperium/tonic",

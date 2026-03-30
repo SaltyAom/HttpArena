@@ -1,7 +1,7 @@
 {
   "display_name": "chi",
   "language": "Go",
-  "type": "framework",
+  "type": "tuned",
   "engine": "chi",
   "description": "Chi is a lightweight, idiomatic and composable router for building Go HTTP services, built on top of net/http.",
   "repo": "https://github.com/go-chi/chi",

@@ -1,7 +1,7 @@
 {
   "display_name": "nginx-openresty",
   "language": "Lua",
-  "type": "framework",
+  "type": "tuned",
   "engine": "openresty",
   "description": "OpenResty (Nginx + LuaJIT) with Lua content handlers for all benchmark endpoints.",
   "repo": "https://github.com/openresty/openresty",

@@ -1,7 +1,7 @@
 {
   "display_name": "echo",
   "language": "Go",
-  "type": "framework",
+  "type": "tuned",
   "engine": "echo",
   "description": "Echo is a high performance, extensible, minimalist Go web framework with optimized HTTP router, middleware support, and data binding.",
   "repo": "https://github.com/labstack/echo",

@@ -65,10 +65,11 @@ html.dark .h3-disclaimer { color: #fff !important; background: rgba(234,179,8,0.
   </div>
 </div>
 
-<div class="lb-engine-warning-h3" style="margin-top:1rem; margin-bottom:0.75rem; padding:0.75rem 1rem; border-radius:0.5rem; background:rgba(220,38,38,0.06); border:1px solid rgba(220,38,38,0.2); color:#7f1d1d; font-size:0.9rem; display:none;">
-  * <strong>Engine</strong> entries are bare-metal HTTP servers without framework overhead. They are shown for reference but are not directly comparable to full frameworks.
+<div class="lb-type-note-h3" style="margin-top:1rem; margin-bottom:0.75rem; padding:0.85rem 1.25rem; border-radius:0.5rem; background:linear-gradient(135deg, rgba(59,130,246,0.04), rgba(139,92,246,0.04)); border:1px solid rgba(59,130,246,0.15); color:#1e293b; font-size:1.02rem; line-height:1.7;">
 </div>
-<style>html.dark .lb-engine-warning-h3 { color: #fecaca !important; background: rgba(220, 38, 38, 0.1) !important; border-color: rgba(220, 38, 38, 0.3) !important; }</style>
+<style>
+html.dark .lb-type-note-h3 { color: #e2e8f0 !important; background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(139,92,246,0.08)) !important; border-color: rgba(59,130,246,0.25) !important; }
+</style>
 
 {{ range $i, $p := $profiles }}
 <div class="lb-panel-h3{{ if eq $i 0 }} active{{ end }}" data-panel="{{ $p.id }}" data-conns="{{ delimit $p.conns "," }}" style="margin-top:1rem;">
@@ -84,8 +85,9 @@ html.dark .h3-disclaimer { color: #fff !important; background: rgba(234,179,8,0.
 
   <div class="lb-filters" style="margin:0 0 0.5rem 0;">
     <span class="lb-filters-label">Type</span>
-    <div class="lb-type-filter lb-type-all active" data-type="all">All</div>
-    <div class="lb-type-filter lb-type-framework" data-type="framework">Framework</div>
+    <div class="lb-type-filter lb-type-all" data-type="all">All</div>
+    <div class="lb-type-filter lb-type-production active" data-type="production">Production</div>
+    <div class="lb-type-filter lb-type-tuned active" data-type="tuned">Tuned</div>
     <div class="lb-type-filter lb-type-engine" data-type="engine">Engine</div>
   </div>
   <div class="lb-filters" style="margin:0 0 0 0;">
@@ -146,8 +148,8 @@ html.dark .h3-disclaimer { color: #fff !important; background: rgba(234,179,8,0.
     {{ $pct := mul (div (float $r.rps) (float $maxRps)) 100.0 }}
     {{ $meta := index site.Data.frameworks $r.framework }}
     {{ $s2xx := int ($r.status_2xx | default 0) }}{{ $s3xx := int ($r.status_3xx | default 0) }}{{ $s4xx := int ($r.status_4xx | default 0) }}{{ $s5xx := int ($r.status_5xx | default 0) }}{{ $errs := add $s4xx $s5xx }}
-    <div class="lb-row" data-lang="{{ $r.language | default "" }}" data-name="{{ $r.framework }}" data-rps="{{ printf "%.0f" $r.rps }}" data-type="{{ with $meta }}{{ .type | default "framework" }}{{ end }}" data-desc="{{ with $meta }}{{ .description }}{{ end }}" data-repo="{{ with $meta }}{{ .repo }}{{ end }}" data-s2xx="{{ $s2xx }}" data-s3xx="{{ $s3xx }}" data-s4xx="{{ $s4xx }}" data-s5xx="{{ $s5xx }}">
-      {{ $ftype := "framework" }}{{ with $meta }}{{ $ftype = .type | default "framework" }}{{ end }}
+    <div class="lb-row" data-lang="{{ $r.language | default "" }}" data-name="{{ $r.framework }}" data-rps="{{ printf "%.0f" $r.rps }}" data-type="{{ with $meta }}{{ .type | default "production" }}{{ end }}" data-desc="{{ with $meta }}{{ .description }}{{ end }}" data-repo="{{ with $meta }}{{ .repo }}{{ end }}" data-s2xx="{{ $s2xx }}" data-s3xx="{{ $s3xx }}" data-s4xx="{{ $s4xx }}" data-s5xx="{{ $s5xx }}">
+      {{ $ftype := "framework" }}{{ with $meta }}{{ $ftype = .type | default "production" }}{{ end }}
       <div class="lb-rank">{{ add $j 1 }}</div>
       <div class="lb-name">{{ $r.framework }}</div>
       <div class="lb-lang">{{ $r.language | default "—" }}</div>
@@ -291,11 +293,19 @@ function applyFilters() {
 
   var showAll = w.querySelector('.lb-type-filter[data-type="all"]').classList.contains('active');
   var showEngine = showAll || w.querySelector('.lb-type-filter[data-type="engine"]').classList.contains('active');
-  var showFramework = showAll || w.querySelector('.lb-type-filter[data-type="framework"]').classList.contains('active');
+  var showTuned = showAll || w.querySelector('.lb-type-filter[data-type="tuned"]').classList.contains('active');
+  var showProduction = showAll || w.querySelector('.lb-type-filter[data-type="production"]').classList.contains('active');
 
   w.classList.toggle('lb-show-all', showAll);
-  var engineWarning = document.querySelector('.lb-engine-warning-h3');
-  if (engineWarning) engineWarning.style.display = showAll ? 'block' : 'none';
+
+  var typeNote = document.querySelector('.lb-type-note-h3');
+  if (typeNote) {
+    var defs = [];
+    if (showProduction) defs.push('<span class="lb-type-badge lb-type-badge-production">$ Production</span> Standard framework configuration. Must follow production-specific implementation rules for each test.');
+    if (showTuned) defs.push('<span class="lb-type-badge lb-type-badge-tuned"># Tuned</span> May use experimental flags and non-default optimizations. Not bound by production implementation rules.');
+    if (showEngine) defs.push('<span class="lb-type-badge lb-type-badge-engine">* Engine</span> Bare-metal HTTP servers — not frameworks. A different breed entirely.');
+    typeNote.innerHTML = defs.join('<br>');
+  }
 
   var searchVal = w.querySelector('.lb-search-input').value.toLowerCase().trim();
   var terms = searchVal ? searchVal.split(',').map(function(s) { return s.trim(); }).filter(Boolean) : [];
@@ -309,9 +319,9 @@ function applyFilters() {
     rows.forEach(function(row) {
       var lang = row.dataset.lang;
       var name = row.dataset.name.toLowerCase();
-      var type = row.dataset.type || 'framework';
+      var type = row.dataset.type || 'production';
       var langMatch = allLangs || activeLangs.has(lang);
-      var typeMatch = (type === 'engine' && showEngine) || (type !== 'engine' && showFramework);
+      var typeMatch = (type === 'engine' && showEngine) || (type === 'tuned' && showTuned) || (type === 'production' && showProduction) || (type !== 'engine' && type !== 'tuned' && showProduction);
       var textMatch = terms.length === 0 || terms.some(function(t) {
         return name.indexOf(t) !== -1 || lang.toLowerCase().indexOf(t) !== -1;
       });
@@ -366,9 +376,19 @@ w.querySelector('.lb-search-input').addEventListener('input', function() { apply
 w.querySelectorAll('.lb-type-filter').forEach(function(btn) {
   btn.addEventListener('click', function() {
     var type = btn.dataset.type;
-    w.querySelectorAll('.lb-type-filter').forEach(function(f) {
-      f.classList.toggle('active', f.dataset.type === type);
-    });
+    var allBtn = w.querySelector('.lb-type-filter[data-type="all"]');
+    var typeButtons = w.querySelectorAll('.lb-type-filter:not([data-type="all"])');
+    if (type === 'all') {
+      var allActive = allBtn.classList.contains('active');
+      typeButtons.forEach(function(f) { f.classList.toggle('active', !allActive); });
+      allBtn.classList.toggle('active', !allActive);
+    } else {
+      btn.classList.toggle('active');
+      var allOn = Array.from(typeButtons).every(function(f) { return f.classList.contains('active'); });
+      allBtn.classList.toggle('active', allOn);
+      var anyOn = Array.from(typeButtons).some(function(f) { return f.classList.contains('active'); });
+      if (!anyOn) { btn.classList.add('active'); }
+    }
     applyFilters();
   });
 });
@@ -529,7 +549,7 @@ window.addEventListener('roundChanged', function(ev) {
 
     sorted.forEach(function(r, j) {
       var m = fwMeta[r.framework] || {};
-      var ftype = m.type || 'framework';
+      var ftype = m.type || 'production';
       var pct = (r.rps / maxRps * 100).toFixed(1);
       var rank = String(j + 1);
       var rs2 = r.status_2xx || 0, rs3 = r.status_3xx || 0, rs4 = r.status_4xx || 0, rs5 = r.status_5xx || 0;

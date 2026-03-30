@@ -1,7 +1,7 @@
 {
   "display_name": "quarkus-jvm-grpc",
   "language": "Java",
-  "type": "framework",
+  "type": "tuned",
   "engine": "Vert.x (gRPC)",
   "description": "Quarkus gRPC server using quarkus-grpc on Vert.x with h2c, JDK 21, optimized JVM tuning.",
   "repo": "https://github.com/quarkusio/quarkus",

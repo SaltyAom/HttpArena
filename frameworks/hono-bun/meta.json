@@ -1,7 +1,7 @@
 {
   "display_name": "Hono (Bun)",
   "language": "TS",
-  "type": "framework",
+  "type": "tuned",
   "engine": "JSC",
   "description": "Ultrafast Web Standards framework running natively on Bun \u2014 no adapter overhead.",
   "repo": "https://github.com/honojs/hono",

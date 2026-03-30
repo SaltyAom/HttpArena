@@ -1,10 +1,14 @@
 {
   "display_name": "lithium",
   "language": "C++",
-  "type": "framework",
+  "type": "tuned",
   "engine": "li/http",
   "description": "Lithium C++ HTTP framework with compile-time reflection, boost::context coroutines, and -O3 -march=native -flto.",
   "repo": "https://github.com/matt-42/lithium",
   "enabled": false,
-  "tests": ["baseline", "pipelined", "limited-conn"]
+  "tests": [
+    "baseline",
+    "pipelined",
+    "limited-conn"
+  ]
 }

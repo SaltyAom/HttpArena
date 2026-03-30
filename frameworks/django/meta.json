@@ -1,7 +1,7 @@
 {
   "display_name": "Django",
   "language": "Python",
-  "type": "framework",
+  "type": "tuned",
   "engine": "gunicorn",
   "description": "Django web framework on Gunicorn with sync workers, one worker per CPU core.",
   "repo": "https://github.com/django/django",

@@ -1,7 +1,7 @@
 {
   "display_name": "ntex-iouring",
   "language": "Rust",
-  "type": "framework",
+  "type": "tuned",
   "engine": "io_uring",
   "description": "ntex web framework with neon-uring runtime (io_uring), compiled with -O3 and thin LTO.",
   "repo": "https://github.com/ntex-rs/ntex",

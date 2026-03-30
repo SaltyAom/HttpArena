@@ -1,7 +1,7 @@
 {
   "display_name": "go-fasthttp",
   "language": "Go",
-  "type": "framework",
+  "type": "tuned",
   "engine": "fasthttp",
   "description": "High-performance Go HTTP server using fasthttp with zero-allocation design and buffer reuse.",
   "repo": "https://github.com/valyala/fasthttp",

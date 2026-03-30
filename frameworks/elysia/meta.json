@@ -1,7 +1,7 @@
 {
   "display_name": "Elysia",
   "language": "TS",
-  "type": "framework",
+  "type": "tuned",
   "engine": "Bun",
   "description": "Ergonomic TypeScript framework built for Bun with end-to-end type safety and excellent DX.",
   "repo": "https://github.com/elysiajs/elysia",

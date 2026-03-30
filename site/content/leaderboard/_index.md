@@ -71,13 +71,14 @@ html.dark .http-ver[data-ver="ws"].active { color: #22d3ee; background: rgba(8,1
       document.getElementById('lb-composite-wrapper').style.display = ver === 'composite' ? '' : 'none';
       document.getElementById('lb-grpc-wrapper').style.display = ver === 'grpc' ? '' : 'none';
       document.getElementById('lb-ws-wrapper').style.display = ver === 'ws' ? '' : 'none';
-      /* Reset all type filters to Framework */
+      /* Reset type filters to Production + Tuned active */
       document.querySelectorAll('.lb-type-filter').forEach(function(f) {
-        f.classList.toggle('active', f.dataset.type === 'framework');
+        var t = f.dataset.type;
+        f.classList.toggle('active', t === 'production' || t === 'tuned');
       });
-      /* Reset composite type filter too */
       document.querySelectorAll('.composite-type-filter').forEach(function(f) {
-        f.classList.toggle('active', f.dataset.type === 'framework');
+        var t = f.dataset.type;
+        f.classList.toggle('active', t === 'production' || t === 'tuned');
       });
       /* Sync language filters — capture active langs, apply to all, then trigger re-filter */
       var activeLangs = new Set();
@@ -92,20 +93,10 @@ html.dark .http-ver[data-ver="ws"].active { color: #22d3ee; background: rgba(8,1
         if (f.dataset.lang === 'all') f.classList.toggle('active', allActive);
         else f.classList.toggle('active', allActive || activeLangs.has(f.dataset.lang));
       });
-      /* Trigger re-filter on the newly visible wrapper by clicking its type filter */
-      var wrapperIds = { h1: 'lb-wrapper', h2: 'lb-h2-wrapper', h3: 'lb-h3-wrapper', grpc: 'lb-grpc-wrapper', ws: 'lb-ws-wrapper' };
-      var wrapperId = wrapperIds[ver];
-      if (wrapperId) {
-        var w = document.getElementById(wrapperId);
-        if (w) {
-          var typeBtn = w.querySelector('.lb-type-filter[data-type="framework"]');
-          if (typeBtn) typeBtn.click();
-        }
-      }
-      if (ver === 'composite') {
-        var compositeBtn = document.querySelector('.composite-type-filter[data-type="framework"]');
-        if (compositeBtn) compositeBtn.click();
-      }
+      /* Trigger re-filter on all visible wrappers */
+      if (typeof applyFilters === 'function') applyFilters();
+      if (typeof renderComposite === 'function') renderComposite();
+      if (typeof updateCompositeNote === 'function') updateCompositeNote();
     });
   });
 })();

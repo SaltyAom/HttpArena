@@ -1,7 +1,7 @@
 {
   "display_name": "deno",
   "language": "TS",
-  "type": "framework",
+  "type": "tuned",
   "engine": "V8",
   "description": "Deno HTTP server using deno serve --parallel with zero-dependency native fetch handler.",
   "repo": "https://github.com/denoland/deno",

@@ -1,7 +1,7 @@
 {
   "display_name": "ulfius",
   "language": "C",
-  "type": "framework",
+  "type": "tuned",
   "engine": "libmicrohttpd",
   "description": "Ulfius C REST framework built on GNU Libmicrohttpd with Jansson JSON. Lightweight with small memory footprint, designed for embedded systems.",
   "repo": "https://github.com/babelouest/ulfius",

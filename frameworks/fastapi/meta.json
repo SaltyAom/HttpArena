@@ -1,7 +1,7 @@
 {
   "display_name": "FastAPI",
   "language": "Python",
-  "type": "framework",
+  "type": "tuned",
   "engine": "uvicorn",
   "description": "FastAPI async web framework on Uvicorn (uvloop), multi-worker via gunicorn.",
   "repo": "https://github.com/fastapi/fastapi",

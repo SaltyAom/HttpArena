@@ -1,0 +1,1 @@
+  || w.querySelector('.lb-type-filter[data-type="production"]').classList.contains('active');

@@ -1,7 +1,7 @@
 {
   "display_name": "workerman",
   "language": "PHP",
-  "type": "framework",
+  "type": "tuned",
   "engine": "workerman",
   "description": "Workerman with PHP content handlers for all benchmark endpoints.",
   "repo": "https://github.com/walkor/Workerman",

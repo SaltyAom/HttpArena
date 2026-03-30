@@ -39,11 +39,10 @@ var compositeProfiles = {{ $profiles | jsonify | safeJS }};
 var compositeMeta = {{ site.Data.frameworks | jsonify | safeJS }};
 </script>
 
-<div id="composite-disclaimer" class="composite-disclaimer" style="margin-top:1rem; padding:0.75rem 1.25rem; border-radius:0.5rem; background:rgba(234,179,8,0.08); border:1px solid rgba(234,179,8,0.3); color:#78350f; font-size:0.95rem; line-height:1.6;">
-  <span style="margin-right:0.4rem;">&#9888;&#65039;</span><strong>Note:</strong> Showing <strong>framework</strong> entries — production-grade HTTP libraries. Use the type filter to switch to engine-level implementations.
+<div id="composite-type-note" style="margin-top:1rem; padding:0.85rem 1.25rem; border-radius:0.5rem; background:linear-gradient(135deg, rgba(59,130,246,0.04), rgba(139,92,246,0.04)); border:1px solid rgba(59,130,246,0.15); color:#1e293b; font-size:1.02rem; line-height:1.7;">
 </div>
 <style>
-html.dark .composite-disclaimer { color: #fff !important; background: rgba(234,179,8,0.12) !important; border-color: rgba(234,179,8,0.4) !important; }
+html.dark #composite-type-note { color: #e2e8f0 !important; background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(139,92,246,0.08)) !important; border-color: rgba(59,130,246,0.25) !important; }
 </style>
 
 <div class="lb-card" style="margin-top:1rem;">
@@ -57,18 +56,21 @@ html.dark .composite-disclaimer { color: #fff !important; background: rgba(234,1
 
   <div class="lb-filters composite-type-wrap" style="margin:0.75rem 0 0 0; padding:0.5rem 1rem; background:rgba(0,0,0,0.04); border-radius:8px; border:1px solid rgba(0,0,0,0.08);">
     <span class="lb-filters-label">Type</span>
-    <div class="composite-type-filter active" data-type="framework">Framework</div>
+    <div class="composite-type-filter active" data-type="production">Production</div>
+    <div class="composite-type-filter active" data-type="tuned">Tuned</div>
     <div class="composite-type-filter" data-type="engine">Engine</div>
   </div>
   <style>
   .composite-type-filter { padding:0.3rem 0.75rem; font-size:0.8rem; font-weight:500; color:#94a3b8; cursor:pointer; border-radius:6px; border:1.5px solid #e2e8f0; background:transparent; transition:all 0.15s ease; user-select:none; }
   .composite-type-filter:hover { color:#475569; border-color:#cbd5e1; transform:translateY(-1px); box-shadow:0 2px 4px rgba(0,0,0,0.08); }
-  .composite-type-filter[data-type="framework"].active { color:#8b5cf6; border-color:#8b5cf6; background:rgba(139,92,246,0.06); font-weight:600; }
+  .composite-type-filter[data-type="production"].active { color:#22c55e; border-color:#22c55e; background:rgba(34,197,94,0.06); font-weight:600; }
+  .composite-type-filter[data-type="tuned"].active { color:#ca8a04; border-color:#eab308; background:rgba(234,179,8,0.06); font-weight:600; }
   .composite-type-filter[data-type="engine"].active { color:#f59e0b; border-color:#f59e0b; background:rgba(245,158,11,0.06); font-weight:600; }
   html.dark .composite-type-wrap { background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.10); }
   html.dark .composite-type-filter { color:#64748b; border-color:#334155; }
   html.dark .composite-type-filter:hover { color:#94a3b8; border-color:#475569; }
-  html.dark .composite-type-filter[data-type="framework"].active { color:#a78bfa; border-color:#8b5cf6; background:rgba(139,92,246,0.12); }
+  html.dark .composite-type-filter[data-type="production"].active { color:#4ade80; border-color:#22c55e; background:rgba(34,197,94,0.12); }
+  html.dark .composite-type-filter[data-type="tuned"].active { color:#fbbf24; border-color:#eab308; background:rgba(234,179,8,0.12); }
   html.dark .composite-type-filter[data-type="engine"].active { color:#fbbf24; border-color:#f59e0b; background:rgba(245,158,11,0.12); }
   </style>
 
@@ -292,9 +294,12 @@ function getActiveProfiles() {
   return active;
 }
 
-function getActiveType() {
-  var el = document.querySelector('.composite-type-filter.active');
-  return el ? el.dataset.type : 'framework';
+function getActiveTypes() {
+  var types = [];
+  document.querySelectorAll('.composite-type-filter.active').forEach(function(el) {
+    types.push(el.dataset.type);
+  });
+  return types.length > 0 ? types : ['production'];
 }
 
 function renderComposite() {
@@ -305,18 +310,20 @@ function renderComposite() {
 
   var useCpu = document.querySelector('.composite-resource-toggle[data-resource="cpu"]').classList.contains('active');
   var useMem = document.querySelector('.composite-resource-toggle[data-resource="mem"]').classList.contains('active');
-  var activeType = getActiveType();
+  var activeTypes = getActiveTypes();
+  var hasEngine = activeTypes.indexOf('engine') >= 0;
 
   // Separate scored and reference-only profiles (engine uses different scored set)
   function isScoredForType(pid) {
-    return activeType === 'engine' ? profileEngineScored[pid] : profileScored[pid];
+    return hasEngine ? profileEngineScored[pid] : profileScored[pid];
   }
   var scoredIds = activeIds.filter(function(pid) { return isScoredForType(pid); });
   var scoredCount = scoredIds.length;
 
   function isExcluded(fw) {
     var fmeta = meta[fw] || {};
-    return (fmeta.type || 'framework') !== activeType;
+    var ftype = fmeta.type || 'production';
+    return activeTypes.indexOf(ftype) < 0;
   }
 
   // Compute max RPS and max efficiency per active profile (filtered by type)
@@ -509,7 +516,7 @@ function renderComposite() {
 
   results.forEach(function(r, idx) {
     var fmeta = meta[r.framework] || {};
-    var ftype = fmeta.type || 'framework';
+    var ftype = fmeta.type || 'production';
     var row = document.createElement('div');
     row.className = 'lb-row';
     row.dataset.name = r.framework;
@@ -629,6 +636,24 @@ function syncTestFilters() {
 syncTestFilters();
 renderComposite();
 
+// Expose for tab switch in _index.md
+window.renderComposite = renderComposite;
+
+function updateCompositeNote() {
+  var note = document.getElementById('composite-type-note');
+  if (!note) return;
+  var prodActive = document.querySelector('.composite-type-filter[data-type="production"]').classList.contains('active');
+  var tunedActive = document.querySelector('.composite-type-filter[data-type="tuned"]').classList.contains('active');
+  var engineActive = document.querySelector('.composite-type-filter[data-type="engine"]').classList.contains('active');
+  var defs = [];
+  if (prodActive) defs.push('<span class="lb-type-badge lb-type-badge-production">$ Production</span> Standard framework configuration. Must follow production-specific implementation rules for each test.');
+  if (tunedActive) defs.push('<span class="lb-type-badge lb-type-badge-tuned"># Tuned</span> May use experimental flags and non-default optimizations. Not bound by production implementation rules.');
+  if (engineActive) defs.push('<span class="lb-type-badge lb-type-badge-engine">* Engine</span> Bare-metal HTTP servers — not frameworks. A different breed entirely.');
+  note.innerHTML = defs.join('<br>');
+}
+updateCompositeNote();
+window.updateCompositeNote = updateCompositeNote;
+
 // Protocol selector — mutually exclusive
 document.querySelectorAll('.composite-proto-select').forEach(function(btn) {
   btn.addEventListener('click', function() {
@@ -673,17 +698,22 @@ document.querySelectorAll('.composite-resource-toggle').forEach(function(btn) {
   });
 });
 
-// Type filter click handlers (mutual exclusion)
+// Type filter click handlers
+// Production and Tuned can be selected together; Engine is always exclusive
 document.querySelectorAll('.composite-type-filter').forEach(function(btn) {
   btn.addEventListener('click', function() {
-    document.querySelectorAll('.composite-type-filter').forEach(function(f) { f.classList.remove('active'); });
-    btn.classList.add('active');
-    var disc = document.getElementById('composite-disclaimer');
-    if (btn.dataset.type === 'engine') {
-      disc.innerHTML = '<span style="margin-right:0.4rem;">&#9888;&#65039;</span><strong>Note:</strong> Showing <strong>engine</strong> entries \u2014 bare-metal and engine-level HTTP implementations. These are normalized independently from framework entries.';
+    var type = btn.dataset.type;
+    if (type === 'engine') {
+      document.querySelectorAll('.composite-type-filter').forEach(function(f) { f.classList.remove('active'); });
+      btn.classList.add('active');
     } else {
-      disc.innerHTML = '<span style="margin-right:0.4rem;">&#9888;&#65039;</span><strong>Note:</strong> Showing <strong>framework</strong> entries \u2014 production-grade HTTP libraries. Use the type filter to switch to engine-level implementations.';
+      document.querySelector('.composite-type-filter[data-type="engine"]').classList.remove('active');
+      btn.classList.toggle('active');
+      var prodActive = document.querySelector('.composite-type-filter[data-type="production"]').classList.contains('active');
+      var tunedActive = document.querySelector('.composite-type-filter[data-type="tuned"]').classList.contains('active');
+      if (!prodActive && !tunedActive) btn.classList.add('active');
     }
+    updateCompositeNote();
     renderComposite();
   });
 });

@@ -1,7 +1,7 @@
 {
   "display_name": "go-websocket",
   "language": "Go",
-  "type": "framework",
+  "type": "tuned",
   "engine": "net/http",
   "description": "Go WebSocket echo server using gobwas/ws",
   "repo": "https://github.com/gobwas/ws",

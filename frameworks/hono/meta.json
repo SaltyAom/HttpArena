@@ -1,7 +1,7 @@
 {
   "display_name": "hono (node)",
   "language": "JS",
-  "type": "framework",
+  "type": "tuned",
   "engine": "Node",
   "description": "Ultrafast web framework built on Web Standards, runs on any JS runtime.",
   "repo": "https://github.com/honojs/hono",

@@ -1,7 +1,7 @@
 {
   "display_name": "ntex-tokio",
   "language": "Rust",
-  "type": "framework",
+  "type": "tuned",
   "engine": "Tokio",
   "description": "ntex web framework with Tokio runtime, compiled with -O3 and thin LTO.",
   "repo": "https://github.com/ntex-rs/ntex",

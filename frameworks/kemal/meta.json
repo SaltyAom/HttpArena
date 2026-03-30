@@ -1,7 +1,7 @@
 {
   "display_name": "kemal",
   "language": "Crystal",
-  "type": "framework",
+  "type": "tuned",
   "engine": "Kemal",
   "description": "Kemal web framework for Crystal, compiled with --release optimizations.",
   "repo": "https://github.com/kemalcr/kemal",

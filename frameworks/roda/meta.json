@@ -1,7 +1,7 @@
 {
   "display_name": "Roda",
   "language": "Ruby",
-  "type": "framework",
+  "type": "tuned",
   "engine": "puma",
   "description": "Roda routing tree web toolkit",
   "repo": "https://github.com/jeremyevans/roda",

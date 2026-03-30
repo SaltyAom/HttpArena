@@ -1,7 +1,7 @@
 {
   "display_name": "Starlette",
   "language": "Python",
-  "type": "framework",
+  "type": "tuned",
   "engine": "uvicorn",
   "description": "Starlette ASGI framework on Uvicorn (uvloop), multi-worker via gunicorn. The foundation FastAPI is built on.",
   "repo": "https://github.com/encode/starlette",
