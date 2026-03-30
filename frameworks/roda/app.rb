@@ -72,6 +72,15 @@ class App < Roda
       sio.string
     end
 
+    r.is 'upload' do
+      size = 0
+      buf = request.body
+      while (chunk = buf.read(65536))
+        size += chunk.bytesize
+      end
+      size.to_s
+    end
+
     r.is 'db' do
       unless opts[:db_available]
         response[RodaResponseHeaders::CONTENT_TYPE] = 'application/json'
