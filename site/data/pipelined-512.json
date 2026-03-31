@@ -767,6 +767,26 @@
     "status_5xx": 0
   },
   {
+    "framework": "aspnet-mvc",
+    "language": "C#",
+    "rps": 3904685,
+    "avg_latency": "2.07ms",
+    "p99_latency": "8.37ms",
+    "cpu": "5746.5%",
+    "memory": "179.6MiB",
+    "connections": 512,
+    "threads": 64,
+    "duration": "5s",
+    "pipeline": 16,
+    "bandwidth": "599.11MB/s",
+    "input_bw": "",
+    "reconnects": 0,
+    "status_2xx": 19523429,
+    "status_3xx": 0,
+    "status_4xx": 0,
+    "status_5xx": 0
+  },
+  {
     "framework": "Carno.js",
     "language": "TS",
     "rps": 116741,

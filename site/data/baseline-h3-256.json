@@ -96,6 +96,26 @@
     "status_5xx": 0
   },
   {
+    "framework": "aspnet-mvc",
+    "language": "C#",
+    "rps": 229881,
+    "avg_latency": "33.90ms",
+    "p99_latency": "197.69ms",
+    "cpu": "8306.9%",
+    "memory": "2.6GiB",
+    "connections": 256,
+    "threads": 64,
+    "duration": "5s",
+    "pipeline": 32,
+    "bandwidth": "0.22MB/s",
+    "input_bw": "",
+    "reconnects": 0,
+    "status_2xx": 1156229,
+    "status_3xx": 0,
+    "status_4xx": 0,
+    "status_5xx": 0
+  },
+  {
     "framework": "ngx-php",
     "language": "PHP",
     "rps": 509364,

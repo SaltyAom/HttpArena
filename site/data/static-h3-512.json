@@ -94,5 +94,25 @@
     "status_3xx": 0,
     "status_4xx": 0,
     "status_5xx": 0
+  },
+  {
+    "framework": "aspnet-mvc",
+    "language": "C#",
+    "rps": 21705,
+    "avg_latency": "628.05ms",
+    "p99_latency": "3463.94ms",
+    "cpu": "9252.0%",
+    "memory": "3.0GiB",
+    "connections": 512,
+    "threads": 64,
+    "duration": "5s",
+    "pipeline": 32,
+    "bandwidth": "265.61MB/s",
+    "input_bw": "",
+    "reconnects": 0,
+    "status_2xx": 99571,
+    "status_3xx": 0,
+    "status_4xx": 0,
+    "status_5xx": 0
   }
 ]

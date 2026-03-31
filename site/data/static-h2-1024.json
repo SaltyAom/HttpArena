@@ -310,6 +310,26 @@
     "status_5xx": 0
   },
   {
+    "framework": "aspnet-mvc",
+    "language": "C#",
+    "rps": 28485,
+    "avg_latency": "1.32s",
+    "p99_latency": "1.32s",
+    "cpu": "9831.9%",
+    "memory": "7.2GiB",
+    "connections": 1024,
+    "threads": 64,
+    "duration": "5s",
+    "pipeline": 1,
+    "bandwidth": "484.77MB/s",
+    "input_bw": "",
+    "reconnects": 0,
+    "status_2xx": 196335,
+    "status_3xx": 0,
+    "status_4xx": 0,
+    "status_5xx": 0
+  },
+  {
     "framework": "quarkus-jvm",
     "language": "Java",
     "rps": 119589,

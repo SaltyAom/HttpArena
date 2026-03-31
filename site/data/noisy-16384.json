@@ -588,6 +588,26 @@
     "status_5xx": 0
   },
   {
+    "framework": "aspnet-mvc",
+    "language": "C#",
+    "rps": 737359,
+    "avg_latency": "8.77ms",
+    "p99_latency": "32.20ms",
+    "cpu": "7577.7%",
+    "memory": "793.9MiB",
+    "connections": 16384,
+    "threads": 64,
+    "duration": "5s",
+    "pipeline": 1,
+    "bandwidth": "142.07MB/s",
+    "input_bw": "74.54MB/s",
+    "reconnects": 2811,
+    "status_2xx": 3686799,
+    "status_3xx": 0,
+    "status_4xx": 1220358,
+    "status_5xx": 0
+  },
+  {
     "framework": "FastPySGI-ASGI",
     "language": "Python",
     "rps": 13761,
