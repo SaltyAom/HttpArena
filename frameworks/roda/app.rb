@@ -22,14 +22,39 @@ class App < Roda
     opts[:large_json_payload] = JSON.generate({ 'items' => items, 'count' => items.length })
   end
 
+  # Load static files into memory
+  MIME_TYPES = {
+    '.css'   => 'text/css',
+    '.js'    => 'application/javascript',
+    '.html'  => 'text/html',
+    '.woff2' => 'font/woff2',
+    '.svg'   => 'image/svg+xml',
+    '.webp'  => 'image/webp',
+    '.json'  => 'application/json'
+  }.freeze
+
+  static_dir = '/data/static'
+  opts[:static_files_cache] = {}
+  if Dir.exist?(static_dir)
+    Dir.foreach(static_dir) do |name|
+      next if name == '.' || name == '..'
+      path = File.join(static_dir, name)
+      next unless File.file?(path)
+      ext = File.extname(name)
+      ct = MIME_TYPES.fetch(ext, 'application/octet-stream')
+      opts[:static_files_cache][name] = { data: File.binread(path), content_type: ct }
+    end
+  end
+
   # SQLite
   opts[:db_available] = File.exist?('/data/benchmark.db')
 
   DB_QUERY = 'SELECT id, name, category, price, quantity, active, tags, rating_score, rating_count FROM items WHERE price BETWEEN ? AND ? LIMIT 50'
+  PG_QUERY = 'SELECT id, name, category, price, quantity, active, tags, rating_score, rating_count FROM items WHERE price BETWEEN $1 AND $2 LIMIT 50'
 
   plugin :default_headers, 'Server' => 'roda'
   plugin :halt
-  plugin :streaming
+  plugin :request_headers
 
   route do |r|
     r.root { 'ok' }
@@ -63,13 +88,18 @@ class App < Roda
     r.is 'compression' do
       payload = opts[:large_json_payload]
       r.halt 500, 'No dataset' unless payload
-      sio = StringIO.new
-      gz = Zlib::GzipWriter.new(sio, 1)
-      gz.write(payload)
-      gz.close
-      response[RodaResponseHeaders::CONTENT_TYPE] = 'application/json'
-      response[RodaResponseHeaders::CONTENT_ENCODING] = 'gzip'
-      sio.string
+      accept_encodings = r.headers['Accept-Encoding'].split(',').map(&:strip)
+      if accept_encodings.include? 'gzip'
+        sio = StringIO.new
+        gz = Zlib::GzipWriter.new(sio, 1)
+        gz.write(payload)
+        gz.close
+        response[RodaResponseHeaders::CONTENT_TYPE] = 'application/json'
+        response[RodaResponseHeaders::CONTENT_ENCODING] = 'gzip'
+        sio.string
+      else
+        payload
+      end
     end
 
     r.is 'upload' do
@@ -101,6 +131,35 @@ class App < Roda
       response[RodaResponseHeaders::CONTENT_TYPE] = 'application/json'
       JSON.generate({ 'items' => items, 'count' => items.length })
     end
+
+    r.is 'async-db' do
+      unless get_pg
+        response[RodaResponseHeaders::CONTENT_TYPE] = 'application/json'
+        return '{"items":[],"count":0}'
+      end
+      min_val = (request.params['min'] || 10).to_i
+      max_val = (request.params['max'] || 50).to_i
+      rows = get_pg.exec_params(PG_QUERY, [min_val, max_val])
+      items = rows.map do |row|
+        {
+          'id' => row['id'], 'name' => row['name'], 'category' => row['category'],
+          'price' => row['price'], 'quantity' => row['quantity'], 'active' => row['active'] == 1,
+          'tags' => JSON.parse(row['tags']),
+          'rating' => { 'score' => row['rating_score'], 'count' => row['rating_count'] }
+        }
+      end
+      response[RodaResponseHeaders::CONTENT_TYPE] = 'application/json'
+      JSON.generate({ 'items' => items, 'count' => items.length })
+    end
+
+    r.on 'static', String do |filename|
+      if entry = opts[:static_files_cache][filename]
+        response[RodaResponseHeaders::CONTENT_TYPE] = entry[:content_type]
+        entry[:data]
+      else
+        r.halt 404
+      end
+    end
   end
 
   def handle_baseline11
@@ -117,12 +176,22 @@ class App < Roda
     total.to_s
   end
 
+  private
+
   def get_db
     Thread.current[:roda_db] ||= begin
       db = SQLite3::Database.new('/data/benchmark.db', readonly: true)
       db.execute('PRAGMA mmap_size=268435456')
       db.results_as_hash = true
       db
+    end
+  end
+
+  def get_pg
+    Thread.current[:pg_conn] ||= begin
+      PG.connect(ENV['DATABASE_URL'])
+    rescue
+      nil
     end
   end
 end
