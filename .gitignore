@@ -14,3 +14,4 @@ frameworks/blitz/.zig-cache
 
 # IDE settings
 *.user
+.vs/
