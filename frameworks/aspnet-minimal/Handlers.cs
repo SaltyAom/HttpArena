@@ -49,7 +49,7 @@ static class Handlers
             Tags = item.Tags,
             Rating = item.Rating,
             Total = Math.Round(item.Price * item.Quantity, 2)
-        });
+        }).ToList();
 
         return TypedResults.Json(new ResponseDto(items, AppData.DatasetItems.Count), AppJsonContext.Default);
     }

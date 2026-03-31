@@ -1,4 +1,4 @@
-record ResponseDto(IEnumerable<ProcessedItem> Items, int Count);
+record ResponseDto(IReadOnlyList<ProcessedItem> Items, int Count);
 
 class DatasetItem
 {
