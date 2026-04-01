@@ -114,44 +114,80 @@ jobs:
           profile_label="${profile:-all tests}"
           fw="${{ inputs.framework }}"
 
-          # Extract this framework's results from the log
+          # Extract headers and best lines, then append deltas from compare.sh
           # Headers: "=== actix / baseline / 512c ... ==="
           # Best lines: "=== Best: 123456 req/s ... ==="
-          # They appear sequentially - each header followed by its best result
-          headers=""
-          results=""
-          in_fw=false
-          while IFS= read -r line; do
-            if echo "$line" | grep -qE "^=== $fw / .* / "; then
-              h=$(echo "$line" | sed 's/^=== //' | sed 's/ ===$//')
-              headers+="$h"$'\n'
-              in_fw=true
-            elif [ "$in_fw" = true ] && echo "$line" | grep -qE "^=== Best:"; then
-              r=$(echo "$line" | sed 's/^=== //' | sed 's/ ===$//')
-              results+="$r"$'\n'
-              in_fw=false
-            fi
-          done < "$log"
+          python3 - "$log" "$fw" /tmp/bench_comparison.md <<'PYEOF'
+import sys, re, os
+
+log_file, fw, comparison_file = sys.argv[1], sys.argv[2], sys.argv[3]
+
+# Parse comparison data (RPS and Memory deltas keyed by profile/conns)
+deltas = {}
+if os.path.exists(comparison_file):
+    with open(comparison_file) as f:
+        comp = f.read()
+    cur_profile = None
+    conn_cols = []
+    for line in comp.splitlines():
+        m = re.match(r'^### (.+)', line)
+        if m:
+            cur_profile = m.group(1).strip()
+            conn_cols = []
+            continue
+        if cur_profile and line.startswith('| Metric'):
+            conn_cols = re.findall(r'(\d+)c', line)
+            continue
+        if cur_profile and conn_cols and line.startswith('| **RPS**'):
+            cells = [c.strip() for c in line.split('|')[1:] if c.strip()]
+            for i, conns in enumerate(conn_cols):
+                idx = i * 2 + 1
+                if idx < len(cells):
+                    deltas.setdefault(f'{cur_profile}/{conns}', {})['rps'] = cells[idx]
+        if cur_profile and conn_cols and line.startswith('| **Memory**'):
+            cells = [c.strip() for c in line.split('|')[1:] if c.strip()]
+            for i, conns in enumerate(conn_cols):
+                idx = i * 2 + 1
+                if idx < len(cells):
+                    deltas.setdefault(f'{cur_profile}/{conns}', {})['mem'] = cells[idx]
+
+# Parse log for headers and best lines
+entries = []
+header = None
+with open(log_file) as f:
+    for line in f:
+        line = line.rstrip()
+        m = re.match(rf'^=== {re.escape(fw)} / (.+) / (\d+)c .* ===', line)
+        if m:
+            header = line.replace('=== ', '').replace(' ===', '')
+            profile = m.group(1)
+            conns = m.group(2)
+            continue
+        if header and re.match(r'^=== Best:', line):
+            best = line.replace('=== ', '').replace(' ===', '')
+            key = f'{profile}/{conns}'
+            d = deltas.get(key, {})
+            parts = []
+            if 'rps' in d:
+                parts.append(f"RPS: {d['rps']}")
+            if 'mem' in d:
+                parts.append(f"Mem: {d['mem']}")
+            delta_str = f" — {', '.join(parts)}" if parts else ""
+            entries.append((header, f"  {best}{delta_str}"))
+            header = None
+
+# Build output
+with open('/tmp/bench_body.txt', 'w') as out:
+    for h, r in entries:
+        out.write(h + '\n')
+        out.write(r + '\n\n')
+PYEOF
 
           body="## Benchmark Results"$'\n\n'
           body+="**Framework:** \`${fw}\` | **Test:** \`${profile_label}\`"$'\n\n'
           body+='```'$'\n'
-
-          paste -d'\n' <(echo "$headers") <(echo "$results") | while IFS= read -r header; do
-            IFS= read -r result || true
-            [ -n "$header" ] && echo "$header"
-            [ -n "$result" ] && echo "  $result"
-            echo ""
-          done >> /tmp/bench_table.txt
-
-          body+=$(cat /tmp/bench_table.txt 2>/dev/null || echo "No results captured")
+          body+=$(cat /tmp/bench_body.txt 2>/dev/null || echo "No results captured")
           body+=$'\n```\n\n'
-
-          comparison=$(cat /tmp/bench_comparison.md 2>/dev/null || echo "")
-          if [ -n "$comparison" ]; then
-            body+="## Comparison with main"$'\n\n'
-            body+="$comparison"$'\n\n'
-          fi
 
           body+="<details><summary>Full log</summary>"$'\n\n```\n'
           tail -200 "$log" >> /tmp/bench_full.txt 2>/dev/null || true
