@@ -97,18 +97,13 @@ jobs:
           find site/static/logs -name "${{ inputs.framework }}.log" -exec git add -f {} +
           git add -f site/data/frameworks.json site/data/current.json 2>/dev/null || true
           # Only add leaderboard files for the profiles that were actually benchmarked
-          profile="${{ inputs.profile }}"
-          if [ -n "$profile" ]; then
-            git add -f site/data/${profile}-*.json 2>/dev/null || true
-          else
-            for f in results/*/*/${{ inputs.framework }}.json; do
-              [ -f "$f" ] || continue
-              dir=$(dirname "$f")
-              conns=$(basename "$dir")
-              prof=$(basename "$(dirname "$dir")")
-              git add -f "site/data/${prof}-${conns}.json" 2>/dev/null || true
-            done
-          fi
+          for f in results/*/*/${{ inputs.framework }}.json; do
+            [ -f "$f" ] || continue
+            dir=$(dirname "$f")
+            conns=$(basename "$dir")
+            prof=$(basename "$(dirname "$dir")")
+            git add -f "site/data/${prof}-${conns}.json" 2>/dev/null || true
+          done
           if git diff --cached --quiet; then
             echo "No results to commit"
           else
