@@ -136,13 +136,13 @@ jobs:
                   if cur_profile and conn_cols and line.startswith("| **RPS**"):
                       cells = [c.strip() for c in line.split("|")[1:] if c.strip()]
                       for i, conns in enumerate(conn_cols):
-                          idx = i * 2 + 1
+                          idx = i * 2 + 2
                           if idx < len(cells):
                               deltas.setdefault(cur_profile + "/" + conns, {})["rps"] = cells[idx]
                   if cur_profile and conn_cols and line.startswith("| **Memory**"):
                       cells = [c.strip() for c in line.split("|")[1:] if c.strip()]
                       for i, conns in enumerate(conn_cols):
-                          idx = i * 2 + 1
+                          idx = i * 2 + 2
                           if idx < len(cells):
                               deltas.setdefault(cur_profile + "/" + conns, {})["mem"] = cells[idx]
           entries = []
