@@ -1,15 +1,12 @@
 use ntex::http::header::{CONTENT_TYPE, SERVER};
-use ntex::util::{Bytes, BytesMut};
-use ntex::web::{self, App, HttpRequest, HttpResponse};
-use flate2::write::GzEncoder;
-use flate2::Compression;
-use std::io::Write;
+use ntex::util::BytesMut;
+use ntex::web::{self, middleware, App, HttpRequest, HttpResponse};
 use deadpool_postgres::{Manager, ManagerConfig, Pool, RecyclingMethod};
 use rusqlite::Connection;
 use serde::{Deserialize, Serialize};
 use std::cell::RefCell;
-use std::collections::HashMap;
 use std::sync::Arc;
+
 
 static SERVER_NAME: &str = "ntex";
 
@@ -56,15 +53,17 @@ struct JsonResponse {
     count: usize,
 }
 
-struct StaticFile {
-    data: Vec<u8>,
-    content_type: String,
+#[derive(Deserialize)]
+struct BaselineParams {
+    #[serde(default)]
+    a: i64,
+    #[serde(default)]
+    b: i64,
 }
 
 struct AppState {
     dataset: Vec<DatasetItem>,
     json_large_cache: Vec<u8>,
-    static_files: HashMap<String, StaticFile>,
 }
 
 struct WorkerDb(RefCell<Option<Connection>>);
@@ -102,48 +101,7 @@ fn process_items(dataset: &[DatasetItem]) -> Vec<u8> {
     serde_json::to_vec(&resp).unwrap_or_default()
 }
 
-fn load_static_files() -> HashMap<String, StaticFile> {
-    let mime_types: HashMap<&str, &str> = [
-        (".css", "text/css"),
-        (".js", "application/javascript"),
-        (".html", "text/html"),
-        (".woff2", "font/woff2"),
-        (".svg", "image/svg+xml"),
-        (".webp", "image/webp"),
-        (".json", "application/json"),
-    ]
-    .into();
-    let mut files = HashMap::new();
-    if let Ok(entries) = std::fs::read_dir("/data/static") {
-        for entry in entries.flatten() {
-            let name = entry.file_name().to_string_lossy().to_string();
-            if let Ok(data) = std::fs::read(entry.path()) {
-                let ext = name.rfind('.').map(|i| &name[i..]).unwrap_or("");
-                let ct = mime_types.get(ext).unwrap_or(&"application/octet-stream");
-                files.insert(
-                    name,
-                    StaticFile {
-                        data,
-                        content_type: ct.to_string(),
-                    },
-                );
-            }
-        }
-    }
-    files
-}
 
-fn parse_query_sum(query: &str) -> i64 {
-    let mut sum: i64 = 0;
-    for pair in query.split('&') {
-        if let Some(val) = pair.split('=').nth(1) {
-            if let Ok(n) = val.parse::<i64>() {
-                sum += n;
-            }
-        }
-    }
-    sum
-}
 
 async fn pipeline() -> HttpResponse {
     HttpResponse::Ok()
@@ -152,8 +110,8 @@ async fn pipeline() -> HttpResponse {
         .body("ok")
 }
 
-async fn baseline11_get(req: HttpRequest) -> HttpResponse {
-    let sum = req.uri().query().map(parse_query_sum).unwrap_or(0);
+async fn baseline11_get(params: web::types::Query<BaselineParams>) -> HttpResponse {
+    let sum = params.a + params.b;
     HttpResponse::Ok()
         .header(SERVER, SERVER_NAME)
         .header(CONTENT_TYPE, "text/plain")
@@ -161,10 +119,10 @@ async fn baseline11_get(req: HttpRequest) -> HttpResponse {
 }
 
 async fn baseline11_post(
-    req: HttpRequest,
+    params: web::types::Query<BaselineParams>,
     mut body: web::types::Payload,
 ) -> Result<HttpResponse, web::error::PayloadError> {
-    let mut sum = req.uri().query().map(parse_query_sum).unwrap_or(0);
+    let mut sum = params.a + params.b;
     let mut buf = BytesMut::new();
     while let Some(chunk) = ntex::util::stream_recv(&mut body).await {
         buf.extend_from_slice(&chunk?);
@@ -180,8 +138,8 @@ async fn baseline11_post(
         .body(sum.to_string()))
 }
 
-async fn baseline2(req: HttpRequest) -> HttpResponse {
-    let sum = req.uri().query().map(parse_query_sum).unwrap_or(0);
+async fn baseline2(params: web::types::Query<BaselineParams>) -> HttpResponse {
+    let sum = params.a + params.b;
     HttpResponse::Ok()
         .header(SERVER, SERVER_NAME)
         .header(CONTENT_TYPE, "text/plain")
@@ -211,14 +169,10 @@ async fn json_endpoint(state: web::types::State<Arc<AppState>>) -> HttpResponse 
 }
 
 async fn compression(state: web::types::State<Arc<AppState>>) -> HttpResponse {
-    let mut encoder = GzEncoder::new(Vec::new(), Compression::fast());
-    encoder.write_all(&state.json_large_cache).unwrap();
-    let compressed = encoder.finish().unwrap();
     HttpResponse::Ok()
         .header(SERVER, SERVER_NAME)
         .header(CONTENT_TYPE, "application/json")
-        .header("Content-Encoding", "gzip")
-        .body(compressed)
+        .body(state.json_large_cache.clone())
 }
 
 async fn db_endpoint(req: HttpRequest, db: web::types::State<WorkerDb>) -> HttpResponse {
@@ -362,20 +316,7 @@ async fn async_db_endpoint(
         .body(result.to_string())
 }
 
-async fn static_file(
-    state: web::types::State<Arc<AppState>>,
-    path: web::types::Path<String>,
-) -> HttpResponse {
-    let filename = path.into_inner();
-    if let Some(sf) = state.static_files.get(&filename) {
-        HttpResponse::Ok()
-            .header(SERVER, SERVER_NAME)
-            .header(CONTENT_TYPE, sf.content_type.as_str())
-            .body(sf.data.clone())
-    } else {
-        HttpResponse::NotFound().finish()
-    }
-}
+
 
 #[ntex::main]
 async fn main() -> std::io::Result<()> {
@@ -391,7 +332,6 @@ async fn main() -> std::io::Result<()> {
     let state = Arc::new(AppState {
         dataset,
         json_large_cache,
-        static_files: load_static_files(),
     });
 
     let pg_pool: Option<Pool> = std::env::var("DATABASE_URL").ok().and_then(|url| {
@@ -432,10 +372,14 @@ async fn main() -> std::io::Result<()> {
             .route("/baseline2", web::get().to(baseline2))
             .route("/upload", web::post().to(upload))
             .route("/json", web::get().to(json_endpoint))
-            .route("/compression", web::get().to(compression))
+            .service(
+                web::resource("/compression")
+                    .middleware(middleware::Compress::default())
+                    .route(web::get().to(compression))
+            )
             .route("/db", web::get().to(db_endpoint))
             .route("/async-db", web::get().to(async_db_endpoint))
-            .route("/static/{filename}", web::get().to(static_file))
+            .service(ntex_files::Files::new("/static", "/data/static"))
     })
     .workers(workers)
     .backlog(4096)
