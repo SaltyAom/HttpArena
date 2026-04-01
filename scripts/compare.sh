@@ -96,15 +96,13 @@ def fmt_rps(n):
         return f'{n/1_000:.1f}K'
     return str(int(n))
 
-def delta_pct(new_val, old_val, lower_is_better=False):
+def delta_pct(new_val, old_val):
     if old_val is None or old_val == 0 or new_val is None:
         return 'NEW'
     pct = ((new_val - old_val) / old_val) * 100
-    if lower_is_better:
-        pct = -pct  # flip sign so positive = improvement
-    sign = '+' if pct > 0 else ''
     if abs(pct) < 0.1:
         return '~0%'
+    sign = '+' if pct > 0 else ''
     return f'{sign}{pct:.1f}%'
 
 def parse_latency_us(s):
@@ -168,13 +166,13 @@ for profile, conns_list in profiles.items():
 
     # Rows: RPS, p99, CPU, Memory
     metrics = [
-        ('RPS', 'rps', False, lambda d: d.get('rps', 0), fmt_rps),
-        ('p99', 'p99_latency', True, lambda d: parse_latency_us(d.get('p99_latency')), lambda v: f'{v:.0f}us' if v and v < 1000 else (f'{v/1000:.2f}ms' if v else '—')),
-        ('CPU', 'cpu', True, lambda d: parse_cpu(d.get('cpu')), lambda v: f'{v:.0f}%' if v else '—'),
-        ('Memory', 'memory', True, lambda d: parse_mem_mb(d.get('memory')), lambda v: f'{v:.0f}MB' if v else '—'),
+        ('RPS', lambda d: d.get('rps', 0), fmt_rps),
+        ('p99', lambda d: parse_latency_us(d.get('p99_latency')), lambda v: f'{v:.0f}us' if v and v < 1000 else (f'{v/1000:.2f}ms' if v else '—')),
+        ('CPU', lambda d: parse_cpu(d.get('cpu')), lambda v: f'{v:.0f}%' if v else '—'),
+        ('Memory', lambda d: parse_mem_mb(d.get('memory')), lambda v: f'{v:.0f}MB' if v else '—'),
     ]
 
-    for label, _, lower_is_better, extract, fmt in metrics:
+    for label, extract, fmt in metrics:
         row = f'| **{label}** |'
         for conns in conns_list:
             key = f'{profile}/{conns}'
@@ -185,11 +183,7 @@ for profile, conns_list in profiles.items():
             old_val = extract(old) if old else None
 
             formatted = fmt(new_val) if new_val is not None else '—'
-
-            if label == 'RPS':
-                d = delta_pct(new_val, old_val, lower_is_better=False)
-            else:
-                d = delta_pct(new_val, old_val, lower_is_better=lower_is_better)
+            d = delta_pct(new_val, old_val)
 
             row += f' {formatted} | {d} |'
         print(row)
