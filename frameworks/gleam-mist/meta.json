@@ -2,7 +2,7 @@
   "display_name": "gleam-mist",
   "language": "Gleam",
   "type": "tuned",
-  "engine": "BEAM",
+  "engine": "beam",
   "description": "Mist HTTP server for Gleam on the BEAM VM \u2014 first Gleam and first BEAM entry in HttpArena.",
   "repo": "https://github.com/rawhat/mist",
   "enabled": true,

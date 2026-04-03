@@ -2,7 +2,7 @@
   "display_name": "vertx",
   "language": "Java",
   "type": "engine",
-  "engine": "Netty",
+  "engine": "netty",
   "description": "Eclipse Vert.x 4.5 \u2014 reactive toolkit on Netty with event-loop threading, JDK 21.",
   "repo": "https://github.com/eclipse-vertx/vert.x",
   "enabled": true,

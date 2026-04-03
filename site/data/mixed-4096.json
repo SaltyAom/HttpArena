@@ -83,32 +83,32 @@
   {
     "framework": "bun",
     "language": "TS",
-    "rps": 45271,
-    "avg_latency": "79.09ms",
-    "p99_latency": "2.45s",
-    "cpu": "8680.1%",
+    "rps": 46733,
+    "avg_latency": "76.02ms",
+    "p99_latency": "1.91s",
+    "cpu": "9114.6%",
     "memory": "7.9GiB",
     "connections": 4096,
     "threads": 64,
     "duration": "5s",
     "pipeline": 1,
-    "bandwidth": "1.46GB/s",
-    "input_bw": "3.16GB/s",
-    "reconnects": 150842,
-    "status_2xx": 679068,
+    "bandwidth": "1.49GB/s",
+    "input_bw": "3.26GB/s",
+    "reconnects": 155683,
+    "status_2xx": 701009,
     "status_3xx": 0,
     "status_4xx": 0,
     "status_5xx": 0,
-    "tpl_baseline": 250951,
-    "tpl_json": 43306,
-    "tpl_db": 44322,
-    "tpl_upload": 56580,
-    "tpl_compression": 93355,
-    "tpl_static": 100852,
-    "tpl_async_db": 89702
+    "tpl_baseline": 263617,
+    "tpl_json": 44745,
+    "tpl_db": 45628,
+    "tpl_upload": 57817,
+    "tpl_compression": 94795,
+    "tpl_static": 102357,
+    "tpl_async_db": 92050
   },
   {
-    "framework": "Carno.js",
+    "framework": "carno.js",
     "language": "TS",
     "rps": 38554,
     "avg_latency": "92.28ms",
@@ -189,7 +189,7 @@
     "tpl_async_db": 72709
   },
   {
-    "framework": "Django",
+    "framework": "django",
     "language": "Python",
     "rps": 31250,
     "avg_latency": "74.66ms",
@@ -270,7 +270,7 @@
     "tpl_async_db": 92071
   },
   {
-    "framework": "Elysia",
+    "framework": "elysia",
     "language": "TS",
     "rps": 47291,
     "avg_latency": "75.53ms",
@@ -297,7 +297,7 @@
     "tpl_async_db": 92866
   },
   {
-    "framework": "Express",
+    "framework": "express",
     "language": "JS",
     "rps": 41298,
     "avg_latency": "23.17ms",
@@ -324,7 +324,7 @@
     "tpl_async_db": 79000
   },
   {
-    "framework": "FastAPI",
+    "framework": "fastapi",
     "language": "Python",
     "rps": 48666,
     "avg_latency": "73.06ms",
@@ -351,7 +351,7 @@
     "tpl_async_db": 104772
   },
   {
-    "framework": "Fastify",
+    "framework": "fastify",
     "language": "JS",
     "rps": 48877,
     "avg_latency": "26.36ms",
@@ -378,7 +378,7 @@
     "tpl_async_db": 93231
   },
   {
-    "framework": "FastPySGI-ASGI",
+    "framework": "fastpysgi-asgi",
     "language": "Python",
     "rps": 15813,
     "avg_latency": "134.09ms",
@@ -405,7 +405,7 @@
     "tpl_async_db": 30914
   },
   {
-    "framework": "FastPySGI-WSGI",
+    "framework": "fastpysgi-wsgi",
     "language": "Python",
     "rps": 53005,
     "avg_latency": "72.87ms",
@@ -486,7 +486,7 @@
     "tpl_async_db": 66154
   },
   {
-    "framework": "Fletch",
+    "framework": "fletch",
     "language": "Dart",
     "rps": 648,
     "avg_latency": "1.01s",
@@ -513,7 +513,7 @@
     "tpl_async_db": 127
   },
   {
-    "framework": "GenHTTP",
+    "framework": "genhttp",
     "language": "C#",
     "rps": 13790,
     "avg_latency": "233.75ms",
@@ -621,7 +621,7 @@
     "tpl_async_db": 40999
   },
   {
-    "framework": "Hono (Bun)",
+    "framework": "hono (bun)",
     "language": "TS",
     "rps": 51987,
     "avg_latency": "69.78ms",
@@ -729,7 +729,7 @@
     "tpl_async_db": 137606
   },
   {
-    "framework": "Koa",
+    "framework": "koa",
     "language": "JS",
     "rps": 60373,
     "avg_latency": "17.06ms",
@@ -945,7 +945,7 @@
     "tpl_async_db": 107401
   },
   {
-    "framework": "Rage",
+    "framework": "rage",
     "language": "Ruby",
     "rps": 14034,
     "avg_latency": "160.26ms",
@@ -972,7 +972,7 @@
     "tpl_async_db": 27776
   },
   {
-    "framework": "Rails",
+    "framework": "rails",
     "language": "Ruby",
     "rps": 26866,
     "avg_latency": "137.45ms",
@@ -1026,7 +1026,7 @@
     "tpl_async_db": 69859
   },
   {
-    "framework": "Roda",
+    "framework": "roda",
     "language": "Ruby",
     "rps": 30767,
     "avg_latency": "119.44ms",
@@ -1080,7 +1080,7 @@
     "tpl_async_db": 148264
   },
   {
-    "framework": "ServiceStack",
+    "framework": "servicestack",
     "language": "C#",
     "rps": 7390,
     "avg_latency": "289.26ms",
@@ -1107,7 +1107,7 @@
     "tpl_async_db": 13904
   },
   {
-    "framework": "SimpleW",
+    "framework": "simplew",
     "language": "C#",
     "rps": 16287,
     "avg_latency": "239.66ms",
@@ -1134,7 +1134,7 @@
     "tpl_async_db": 31115
   },
   {
-    "framework": "Sinatra",
+    "framework": "sinatra",
     "language": "Ruby",
     "rps": 29655,
     "avg_latency": "124.53ms",
@@ -1161,7 +1161,7 @@
     "tpl_async_db": 59550
   },
   {
-    "framework": "Sisk",
+    "framework": "sisk",
     "language": "C#",
     "rps": 3517,
     "avg_latency": "1.11s",
@@ -1215,7 +1215,7 @@
     "tpl_async_db": 115869
   },
   {
-    "framework": "Starlette",
+    "framework": "starlette",
     "language": "Python",
     "rps": 52575,
     "avg_latency": "71.28ms",

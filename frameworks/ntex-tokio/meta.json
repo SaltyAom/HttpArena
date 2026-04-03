@@ -2,7 +2,7 @@
   "display_name": "ntex-tokio",
   "language": "Rust",
   "type": "production",
-  "engine": "Tokio",
+  "engine": "tokio",
   "description": "ntex web framework with Tokio runtime, compiled with -O3 and thin LTO.",
   "repo": "https://github.com/ntex-rs/ntex",
   "enabled": true,
@@ -15,6 +15,8 @@
     "upload",
     "compression",
     "mixed",
+    "api-4",
+    "api-16",
     "async-db",
     "static",
     "tcp-frag"

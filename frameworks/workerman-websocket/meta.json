@@ -2,7 +2,7 @@
   "display_name": "workerman-websocket",
   "language": "PHP",
   "type": "tuned",
-  "engine": "Workerman",
+  "engine": "workerman",
   "description": "Workerman WebSocket echo server",
   "repo": "https://github.com/walkor/Workerman",
   "enabled": true,

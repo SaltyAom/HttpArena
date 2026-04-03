@@ -1,23 +1,24 @@
 {{ $profiles := slice
-  (dict "id" "mixed" "label" "Mixed" "sublabel" "HTTP/1.1" "proto" "h1" "conns" (slice 4096) "scored" true "engineScored" false)
-  (dict "id" "mini" "label" "Mini" "sublabel" "HTTP/1.1" "proto" "h1" "conns" (slice 128) "scored" false "engineScored" false)
-  (dict "id" "baseline" "label" "Baseline" "sublabel" "HTTP/1.1" "proto" "h1" "conns" (slice 512 4096 16384) "scored" true "engineScored" true)
-  (dict "id" "pipelined" "label" "Pipelined" "sublabel" "HTTP/1.1" "proto" "h1" "conns" (slice 512 4096 16384) "scored" false "engineScored" true)
-  (dict "id" "limited-conn" "label" "Short-lived" "sublabel" "HTTP/1.1" "proto" "h1" "conns" (slice 512 4096) "scored" true "engineScored" true)
-  (dict "id" "json" "label" "JSON" "sublabel" "HTTP/1.1" "proto" "h1" "conns" (slice 4096 16384) "scored" true "engineScored" false)
-  (dict "id" "upload" "label" "Upload" "sublabel" "HTTP/1.1" "proto" "h1" "conns" (slice 64 256 512) "scored" true "engineScored" false)
-  (dict "id" "compression" "label" "Compression" "sublabel" "HTTP/1.1" "proto" "h1" "conns" (slice 4096 16384) "scored" true "engineScored" false)
-  (dict "id" "static" "label" "Static" "sublabel" "HTTP/1.1" "proto" "h1" "conns" (slice 4096 16384) "scored" true "engineScored" false)
-  (dict "id" "tcp-frag" "label" "TCP Frag" "sublabel" "HTTP/1.1" "proto" "h1" "conns" (slice 512 4096 16384) "scored" true "engineScored" false)
-  (dict "id" "noisy" "label" "Noisy" "sublabel" "HTTP/1.1" "proto" "h1" "conns" (slice 512 4096 16384) "scored" false "engineScored" false)
-  (dict "id" "baseline-h2" "label" "Baseline" "sublabel" "HTTP/2" "proto" "h2" "conns" (slice 256 1024) "scored" true "engineScored" true)
-  (dict "id" "static-h2" "label" "Static" "sublabel" "HTTP/2" "proto" "h2" "conns" (slice 256 1024) "scored" true "engineScored" true)
+  (dict "id" "mixed" "label" "Mixed" "sublabel" "H/1.1 Workload" "proto" "h1wk" "conns" (slice 4096) "scored" true "engineScored" false)
+  (dict "id" "api-4" "label" "API-4" "sublabel" "H/1.1 Workload" "proto" "h1wk" "conns" (slice 256) "scored" true "engineScored" false)
+  (dict "id" "api-16" "label" "API-16" "sublabel" "H/1.1 Workload" "proto" "h1wk" "conns" (slice 1024) "scored" true "engineScored" false)
+  (dict "id" "baseline" "label" "Baseline" "sublabel" "H/1.1 Isolated" "proto" "h1iso" "conns" (slice 512 4096 16384) "scored" true "engineScored" true)
+  (dict "id" "pipelined" "label" "Pipelined" "sublabel" "H/1.1 Isolated" "proto" "h1iso" "conns" (slice 512 4096 16384) "scored" false "engineScored" true)
+  (dict "id" "limited-conn" "label" "Short-lived" "sublabel" "H/1.1 Isolated" "proto" "h1iso" "conns" (slice 512 4096) "scored" true "engineScored" true)
+  (dict "id" "json" "label" "JSON" "sublabel" "H/1.1 Isolated" "proto" "h1iso" "conns" (slice 4096 16384) "scored" true "engineScored" false)
+  (dict "id" "upload" "label" "Upload" "sublabel" "H/1.1 Isolated" "proto" "h1iso" "conns" (slice 64 256 512) "scored" true "engineScored" false)
+  (dict "id" "compression" "label" "Compression" "sublabel" "H/1.1 Isolated" "proto" "h1iso" "conns" (slice 4096 16384) "scored" true "engineScored" false)
+  (dict "id" "static" "label" "Static" "sublabel" "H/1.1 Isolated" "proto" "h1iso" "conns" (slice 4096 16384) "scored" true "engineScored" false)
+  (dict "id" "tcp-frag" "label" "TCP Frag" "sublabel" "H/1.1 Isolated" "proto" "h1iso" "conns" (slice 512 4096 16384) "scored" true "engineScored" false)
+  (dict "id" "noisy" "label" "Noisy" "sublabel" "H/1.1 Isolated" "proto" "h1iso" "conns" (slice 512 4096 16384) "scored" false "engineScored" false)
+  (dict "id" "async-db" "label" "Async DB" "sublabel" "H/1.1 Isolated" "proto" "h1iso" "conns" (slice 1024) "scored" true "engineScored" false)
+  (dict "id" "baseline-h2" "label" "Baseline" "sublabel" "H/2" "proto" "h2" "conns" (slice 256 1024) "scored" true "engineScored" true)
+  (dict "id" "static-h2" "label" "Static" "sublabel" "H/2" "proto" "h2" "conns" (slice 256 1024) "scored" true "engineScored" true)
   (dict "id" "unary-grpc" "label" "Unary" "sublabel" "gRPC" "proto" "grpc" "conns" (slice 256 1024) "scored" true "engineScored" true)
   (dict "id" "unary-grpc-tls" "label" "Unary TLS" "sublabel" "gRPC" "proto" "grpc" "conns" (slice 256 1024) "scored" true "engineScored" true)
-  (dict "id" "baseline-h3" "label" "Baseline" "sublabel" "HTTP/3" "proto" "h3" "conns" (slice 256 512) "scored" true "engineScored" true)
-  (dict "id" "static-h3" "label" "Static" "sublabel" "HTTP/3" "proto" "h3" "conns" (slice 256 512) "scored" true "engineScored" true)
+  (dict "id" "baseline-h3" "label" "Baseline" "sublabel" "H/3" "proto" "h3" "conns" (slice 256 512) "scored" true "engineScored" true)
+  (dict "id" "static-h3" "label" "Static" "sublabel" "H/3" "proto" "h3" "conns" (slice 256 512) "scored" true "engineScored" true)
   (dict "id" "echo-ws" "label" "Echo" "sublabel" "WebSocket" "proto" "ws" "conns" (slice 512 4096 16384) "scored" true "engineScored" true)
-  (dict "id" "async-db" "label" "Async DB" "sublabel" "HTTP/1.1" "proto" "h1" "conns" (slice 1024) "scored" true "engineScored" false)
 }}
 
 {{/* Build a clean JSON blob: array of {profile, framework, rps, language} entries */}}
@@ -78,9 +79,10 @@ html.dark #composite-type-note { color: #e2e8f0 !important; background: linear-g
   <div class="composite-profiles-wrap" style="margin:0.5rem 0 0 0; padding:0.75rem 1rem; background:rgba(0,0,0,0.04); border-radius:8px; border:1px solid rgba(0,0,0,0.08); display:flex; flex-direction:column; gap:0.5rem;">
     <div class="lb-filters" style="margin:0; padding:0;">
       <span class="lb-filters-label">Protocol</span>
-      <div class="composite-proto-select active" data-proto="h1">HTTP/1.1</div>
-      <div class="composite-proto-select" data-proto="h2">HTTP/2</div>
-      <div class="composite-proto-select" data-proto="h3">HTTP/3</div>
+      <div class="composite-proto-select active" data-proto="h1iso">H/1.1 Isolated</div>
+      <div class="composite-proto-select" data-proto="h1wk">H/1.1 Workload</div>
+      <div class="composite-proto-select" data-proto="h2">H/2</div>
+      <div class="composite-proto-select" data-proto="h3">H/3</div>
       <div class="composite-proto-select" data-proto="grpc">gRPC</div>
       <div class="composite-proto-select" data-proto="ws">WebSocket</div>
     </div>
@@ -96,14 +98,16 @@ html.dark #composite-type-note { color: #e2e8f0 !important; background: linear-g
   <style>
   .composite-proto-select { padding:0.3rem 0.75rem; font-size:0.8rem; font-weight:500; color:#94a3b8; cursor:pointer; border-radius:6px; border:1.5px solid #e2e8f0; background:transparent; transition:all 0.15s ease; user-select:none; }
   .composite-proto-select:hover { color:#475569; border-color:#cbd5e1; transform:translateY(-1px); box-shadow:0 2px 4px rgba(0,0,0,0.08); }
-  .composite-proto-select.active[data-proto="h1"] { color:#3b82f6; border-color:#3b82f6; background:rgba(59,130,246,0.06); font-weight:600; }
+  .composite-proto-select.active[data-proto="h1iso"] { color:#3b82f6; border-color:#3b82f6; background:rgba(59,130,246,0.06); font-weight:600; }
+  .composite-proto-select.active[data-proto="h1wk"] { color:#2563eb; border-color:#2563eb; background:rgba(37,99,235,0.06); font-weight:600; }
   .composite-proto-select.active[data-proto="h2"] { color:#d97706; border-color:#d97706; background:rgba(217,119,6,0.06); font-weight:600; }
   .composite-proto-select.active[data-proto="h3"] { color:#16a34a; border-color:#16a34a; background:rgba(22,163,74,0.06); font-weight:600; }
   .composite-proto-select.active[data-proto="grpc"] { color:#7c3aed; border-color:#7c3aed; background:rgba(124,58,237,0.06); font-weight:600; }
   .composite-proto-select.active[data-proto="ws"] { color:#0891b2; border-color:#0891b2; background:rgba(8,145,178,0.06); font-weight:600; }
   html.dark .composite-proto-select { color:#64748b; border-color:#334155; }
   html.dark .composite-proto-select:hover { color:#94a3b8; border-color:#475569; }
-  html.dark .composite-proto-select.active[data-proto="h1"] { color:#60a5fa; border-color:#3b82f6; background:rgba(59,130,246,0.12); }
+  html.dark .composite-proto-select.active[data-proto="h1iso"] { color:#60a5fa; border-color:#3b82f6; background:rgba(59,130,246,0.12); }
+  html.dark .composite-proto-select.active[data-proto="h1wk"] { color:#93c5fd; border-color:#2563eb; background:rgba(37,99,235,0.12); }
   html.dark .composite-proto-select.active[data-proto="h2"] { color:#fbbf24; border-color:#d97706; background:rgba(217,119,6,0.12); }
   html.dark .composite-proto-select.active[data-proto="h3"] { color:#4ade80; border-color:#16a34a; background:rgba(22,163,74,0.12); }
   html.dark .composite-proto-select.active[data-proto="grpc"] { color:#a78bfa; border-color:#7c3aed; background:rgba(124,58,237,0.12); }
@@ -111,12 +115,14 @@ html.dark #composite-type-note { color: #e2e8f0 !important; background: linear-g
   .composite-profile-filter { padding:0.3rem 0.75rem; font-size:0.8rem; font-weight:500; color:#94a3b8; cursor:pointer; border-radius:6px; border:1.5px solid #e2e8f0; background:transparent; transition:all 0.15s ease; user-select:none; }
   .composite-profile-filter:hover { color:#475569; border-color:#cbd5e1; transform:translateY(-1px); box-shadow:0 2px 4px rgba(0,0,0,0.08); }
   .composite-profile-filter[data-profile="all"].active { color:#8b5cf6; border-color:#8b5cf6; background:rgba(139,92,246,0.06); font-weight:600; }
-  .composite-profile-filter.active.cp-h1 { color:#3b82f6; border-color:#3b82f6; background:rgba(59,130,246,0.06); font-weight:600; }
+  .composite-profile-filter.active.cp-h1iso { color:#3b82f6; border-color:#3b82f6; background:rgba(59,130,246,0.06); font-weight:600; }
+  .composite-profile-filter.active.cp-h1wk { color:#2563eb; border-color:#2563eb; background:rgba(37,99,235,0.06); font-weight:600; }
   .composite-profile-filter.active.cp-h2 { color:#d97706; border-color:#d97706; background:rgba(217,119,6,0.06); font-weight:600; }
   .composite-profile-filter.active.cp-h3 { color:#16a34a; border-color:#16a34a; background:rgba(22,163,74,0.06); font-weight:600; }
   .composite-profile-filter.active.cp-grpc { color:#7c3aed; border-color:#7c3aed; background:rgba(124,58,237,0.06); font-weight:600; }
   .composite-profile-filter.active.cp-ws { color:#0891b2; border-color:#0891b2; background:rgba(8,145,178,0.06); font-weight:600; }
-  .composite-profile-filter.cp-h1:hover { background:rgba(59,130,246,0.06); }
+  .composite-profile-filter.cp-h1iso:hover { background:rgba(59,130,246,0.06); }
+  .composite-profile-filter.cp-h1wk:hover { background:rgba(37,99,235,0.06); }
   .composite-profile-filter.cp-h2:hover { background:rgba(217,119,6,0.06); }
   .composite-profile-filter.cp-h3:hover { background:rgba(22,163,74,0.06); }
   .composite-profile-filter.cp-grpc:hover { background:rgba(124,58,237,0.06); }
@@ -125,7 +131,8 @@ html.dark #composite-type-note { color: #e2e8f0 !important; background: linear-g
   html.dark .composite-profile-filter { color:#64748b; border-color:#334155; }
   html.dark .composite-profile-filter:hover { color:#94a3b8; border-color:#475569; }
   html.dark .composite-profile-filter[data-profile="all"].active { color:#a78bfa; border-color:#8b5cf6; background:rgba(139,92,246,0.12); }
-  html.dark .composite-profile-filter.active.cp-h1 { color:#60a5fa; border-color:#3b82f6; background:rgba(59,130,246,0.12); }
+  html.dark .composite-profile-filter.active.cp-h1iso { color:#60a5fa; border-color:#3b82f6; background:rgba(59,130,246,0.12); }
+  html.dark .composite-profile-filter.active.cp-h1wk { color:#93c5fd; border-color:#2563eb; background:rgba(37,99,235,0.12); }
   html.dark .composite-profile-filter.active.cp-h2 { color:#fbbf24; border-color:#d97706; background:rgba(217,119,6,0.12); }
   html.dark .composite-profile-filter.active.cp-h3 { color:#4ade80; border-color:#16a34a; background:rgba(22,163,74,0.12); }
   html.dark .composite-profile-filter.active.cp-grpc { color:#a78bfa; border-color:#7c3aed; background:rgba(124,58,237,0.12); }
@@ -278,7 +285,7 @@ function loadData(newEntries, newMeta) {
     memSums[key] = (memSums[key] || 0) + parseMem(e.memory);
     bwSums[key] = (bwSums[key] || 0) + parseBandwidth(e.bandwidth);
     counts[key] = (counts[key] || 0) + 1;
-    if (e.profile === 'mixed' || e.profile === 'mini') {
+    if (e.profile === 'mixed' || e.profile === 'api-4' || e.profile === 'api-16') {
       if (!tplSumsByProfile[e.profile]) tplSumsByProfile[e.profile] = {};
       var fw = e.framework;
       if (!tplSumsByProfile[e.profile][fw]) tplSumsByProfile[e.profile][fw] = {baseline:0, json:0, db:0, upload:0, compression:0, static:0, async_db:0, count:0};
@@ -546,7 +553,7 @@ function renderComposite() {
 
   // For mixed: compute weighted scores and re-normalize
   var mixedWeights = {baseline:0.15, json:1, db:10, upload:10, compression:7, static:2, async_db:10};
-  ['mixed', 'mini'].forEach(function(mpid) {
+  ['mixed', 'api-4', 'api-16'].forEach(function(mpid) {
     if (activeIds.indexOf(mpid) >= 0) {
       var maxWeighted = 0;
       Object.keys(avgTplByProfile[mpid] || {}).forEach(function(fw) {
@@ -604,7 +611,7 @@ function renderComposite() {
         var rps = avgByProfile[pid][fw];
         var effectiveRps = rps;
         // For mixed: use weighted template score
-        if ((pid === 'mixed' || pid === 'mini') && avgTplByProfile[pid] && avgTplByProfile[pid][fw]) {
+        if ((pid === 'mixed' || pid === 'api-4' || pid === 'api-16') && avgTplByProfile[pid] && avgTplByProfile[pid][fw]) {
           var t = avgTplByProfile[pid][fw];
           effectiveRps = t.baseline * mixedWeights.baseline + t.json * mixedWeights.json + t.db * mixedWeights.db + t.upload * mixedWeights.upload + t.compression * mixedWeights.compression + (t.static || 0) * mixedWeights.static + (t.async_db || 0) * mixedWeights.async_db;
         }

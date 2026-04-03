@@ -2,7 +2,7 @@
   "display_name": "hummingbird",
   "language": "Swift",
   "type": "tuned",
-  "engine": "Hummingbird",
+  "engine": "hummingbird",
   "description": "Lightweight, flexible HTTP server framework written in Swift, built on SwiftNIO with minimal dependencies.",
   "repo": "https://github.com/hummingbird-project/hummingbird",
   "enabled": true,
@@ -15,6 +15,8 @@
     "upload",
     "compression",
     "mixed",
+    "api-4",
+    "api-16",
     "async-db",
     "static",
     "tcp-frag"

@@ -89,7 +89,11 @@ async def _init_pg_pool():
             if db_url.startswith("postgres://"):
                 db_url = "postgresql://" + db_url[len("postgres://"):]
             max_conn = int(os.environ.get("DATABASE_MAX_CONN", "256"))
-            num_workers = len(os.sched_getaffinity(0)) * 2
+            try:
+                q, p = open('/sys/fs/cgroup/cpu.max').read().strip().split()
+                num_workers = int(q) // int(p) if q != 'max' else len(os.sched_getaffinity(0))
+            except Exception:
+                num_workers = len(os.sched_getaffinity(0))
             pool_size = max(1, max_conn // num_workers)
             pg_pool = await asyncpg.create_pool(dsn=db_url, min_size=1, max_size=pool_size)
         except Exception:

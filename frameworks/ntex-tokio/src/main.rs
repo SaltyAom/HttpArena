@@ -1,3 +1,18 @@
+fn cgroup_cpus() -> usize {
+    std::fs::read_to_string("/sys/fs/cgroup/cpu.max")
+        .ok()
+        .and_then(|s| {
+            let mut parts = s.trim().split(' ');
+            let quota = parts.next()?;
+            if quota == "max" { return None; }
+            let period: usize = parts.next()?.parse().ok()?;
+            let q: usize = quota.parse().ok()?;
+            let cpus = q / period;
+            if cpus >= 1 { Some(cpus) } else { None }
+        })
+        .unwrap_or_else(num_cpus::get)
+}
+
 use ntex::http::header::{CONTENT_TYPE, SERVER};
 use ntex::util::BytesMut;
 use ntex::web::{self, middleware, App, HttpRequest, HttpResponse};
@@ -343,11 +358,11 @@ async fn main() -> std::io::Result<()> {
                 recycling_method: RecyclingMethod::Fast,
             },
         );
-        let pool_size = (num_cpus::get() * 4).max(64);
+        let pool_size = (cgroup_cpus() * 4).max(64);
         Pool::builder(mgr).max_size(pool_size).build().ok()
     });
 
-    let workers = num_cpus::get();
+    let workers = cgroup_cpus();
 
     web::server(async move || {
         let worker_db = Connection::open_with_flags(

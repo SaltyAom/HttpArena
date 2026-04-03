@@ -1,8 +1,8 @@
 {
-  "display_name": "GenHTTP",
+  "display_name": "genhttp",
   "language": "C#",
   "type": "production",
-  "engine": "GenHTTP",
+  "engine": "genhttp",
   "description": "Lightweight, embeddable and modular C# web server.",
   "repo": "https://github.com/Kaliumhexacyanoferrat/GenHTTP",
   "enabled": true,
@@ -19,6 +19,7 @@
     "static",
     "tcp-frag",
     "echo-ws",
-    "mini"
+    "api-4",
+    "api-16"
   ]
 }

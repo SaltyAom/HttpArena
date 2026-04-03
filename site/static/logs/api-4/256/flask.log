@@ -1,0 +1,7 @@
+[2026-04-03 01:55:49 +0000] [1] [INFO] Starting gunicorn 23.0.0
+[2026-04-03 01:55:49 +0000] [1] [INFO] Listening at: http://0.0.0.0:8080 (1)
+[2026-04-03 01:55:49 +0000] [1] [INFO] Using worker: sync
+[2026-04-03 01:55:49 +0000] [7] [INFO] Booting worker with pid: 7
+[2026-04-03 01:55:49 +0000] [8] [INFO] Booting worker with pid: 8
+[2026-04-03 01:55:49 +0000] [9] [INFO] Booting worker with pid: 9
+[2026-04-03 01:55:49 +0000] [10] [INFO] Booting worker with pid: 10

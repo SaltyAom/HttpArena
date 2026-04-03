@@ -2,7 +2,7 @@
   "display_name": "kemal",
   "language": "Crystal",
   "type": "tuned",
-  "engine": "Kemal",
+  "engine": "kemal",
   "description": "Kemal web framework for Crystal, compiled with --release optimizations.",
   "repo": "https://github.com/kemalcr/kemal",
   "enabled": true,
@@ -15,6 +15,8 @@
     "compression",
     "noisy",
     "mixed",
+    "api-4",
+    "api-16",
     "async-db",
     "static",
     "tcp-frag"

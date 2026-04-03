@@ -81,7 +81,17 @@ end
 
 PG_QUERY = "SELECT id, name, category, price, quantity, active, tags, rating_score, rating_count FROM items WHERE price BETWEEN $1 AND $2 LIMIT 50"
 
-PG_POOL_SIZE = {System.cpu_count.to_i * 4, 64}.max
+PG_POOL_SIZE = begin
+  cpus = System.cpu_count.to_i
+  if File.exists?("/sys/fs/cgroup/cpu.max")
+    parts = File.read("/sys/fs/cgroup/cpu.max").strip.split(' ')
+    if parts[0] != "max" && parts.size == 2
+      cg = parts[0].to_i // parts[1].to_i
+      cpus = cg if cg >= 1 && cg < cpus
+    end
+  end
+  {cpus * 4, 64}.max
+end
 
 class PgPool
   @@db : DB::Database? = nil

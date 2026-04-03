@@ -56,7 +56,7 @@ fi
 
 # Mount volumes based on subscribed tests
 HARD_NOFILE=$(ulimit -Hn)
-if has_test "async-db" || has_test "mixed" || has_test "mini"; then
+if has_test "async-db" || has_test "mixed" || has_test "api-4" || has_test "api-16"; then
     docker_args=(-d --name "$CONTAINER_NAME" --network host --security-opt seccomp=unconfined
         --ulimit memlock=-1:-1 --ulimit nofile="$HARD_NOFILE:$HARD_NOFILE")
 else
@@ -74,11 +74,11 @@ if $needs_h2 && [ -d "$CERTS_DIR" ]; then
     docker_args+=(-p "$H2PORT:8443" -v "$CERTS_DIR:/certs:ro")
 fi
 
-if has_test "compression" || has_test "mixed" || has_test "mini"; then
+if has_test "compression" || has_test "mixed"; then
     docker_args+=(-v "$DATA_DIR/dataset-large.json:/data/dataset-large.json:ro")
 fi
 
-if has_test "mixed" || has_test "mini"; then
+if has_test "mixed"; then
     DB_FILE="$DATA_DIR/benchmark.db"
     if [ ! -f "$DB_FILE" ]; then
         echo "[db] benchmark.db not found, generating..."
@@ -87,7 +87,7 @@ if has_test "mixed" || has_test "mini"; then
     docker_args+=(-v "$DB_FILE:/data/benchmark.db:ro")
 fi
 
-if has_test "static" || has_test "static-h2" || has_test "static-h3" || has_test "mixed" || has_test "mini"; then
+if has_test "static" || has_test "static-h2" || has_test "static-h3" || has_test "mixed"; then
     docker_args+=(-v "$DATA_DIR/static:/data/static:ro")
 fi
 
@@ -99,7 +99,7 @@ if [ "$ENGINE" = "io_uring" ]; then
 fi
 
 # Start Postgres sidecar if async-db or mixed is needed
-if has_test "async-db" || has_test "mixed" || has_test "mini"; then
+if has_test "async-db" || has_test "mixed" || has_test "api-4" || has_test "api-16"; then
     echo "[postgres] Starting Postgres sidecar for validation..."
     docker rm -f "$PG_CONTAINER" 2>/dev/null || true
     docker run -d --name "$PG_CONTAINER" --network host \
@@ -231,8 +231,8 @@ wait_h2() {
 
 # ───── Baseline (GET/POST /baseline11) ─────
 
-if has_test "baseline" || has_test "limited-conn" || has_test "mixed" || has_test "mini"; then
-    BASELINE_DOCS="$DOCS_BASE/h1/baseline/validation"
+if has_test "baseline" || has_test "limited-conn" || has_test "mixed" || has_test "api-4" || has_test "api-16"; then
+    BASELINE_DOCS="$DOCS_BASE/h1/isolated/baseline/validation"
     echo "[test] baseline endpoints"
     check "GET /baseline11?a=13&b=42" "55" "$BASELINE_DOCS" \
         "http://localhost:$PORT/baseline11?a=13&b=42"
@@ -266,7 +266,7 @@ fi
 # ───── Pipelined (GET /pipeline) ─────
 
 if has_test "pipelined"; then
-    PIPELINED_DOCS="$DOCS_BASE/h1/pipelined/validation"
+    PIPELINED_DOCS="$DOCS_BASE/h1/isolated/pipelined/validation"
     echo "[test] pipelined endpoint"
     check "GET /pipeline" "ok" "$PIPELINED_DOCS" \
         "http://localhost:$PORT/pipeline"
@@ -274,8 +274,8 @@ fi
 
 # ───── JSON Processing (GET /json) ─────
 
-if has_test "json" || has_test "mixed" || has_test "mini"; then
-    JSON_DOCS="$DOCS_BASE/h1/json-processing/validation"
+if has_test "json" || has_test "mixed" || has_test "api-4" || has_test "api-16"; then
+    JSON_DOCS="$DOCS_BASE/h1/isolated/json-processing/validation"
     echo "[test] json endpoint"
     response=$(curl -s --max-time 30 "http://localhost:$PORT/json")
     json_result=$(echo "$response" | python3 -c "
@@ -311,8 +311,8 @@ fi
 
 # ───── Upload (POST /upload) ─────
 
-if has_test "upload" || has_test "mixed" || has_test "mini"; then
-    UPLOAD_DOCS="$DOCS_BASE/h1/upload/validation"
+if has_test "upload" || has_test "mixed"; then
+    UPLOAD_DOCS="$DOCS_BASE/h1/isolated/upload/validation"
     echo "[test] upload endpoint"
     # Small upload: returns byte count
     UPLOAD_BODY="Hello, HttpArena!"
@@ -331,12 +331,22 @@ if has_test "upload" || has_test "mixed" || has_test "mini"; then
     else
         fail_with_link "[POST /upload random body]: expected '$EXPECTED_RANDOM_LEN', got '$ACTUAL_LEN'" "$UPLOAD_DOCS"
     fi
+
+    # Large upload: 20 MB binary payload
+    LARGE_SIZE=20971520
+    ACTUAL_LARGE=$(dd if=/dev/urandom bs=1M count=20 2>/dev/null | curl -s --max-time 60 -X POST -H "Content-Type: application/octet-stream" --data-binary @- "http://localhost:$PORT/upload")
+    if [ "$ACTUAL_LARGE" = "$LARGE_SIZE" ]; then
+        echo "  PASS [POST /upload 20MB] (bytes: $ACTUAL_LARGE)"
+        PASS=$((PASS + 1))
+    else
+        fail_with_link "[POST /upload 20MB]: expected '$LARGE_SIZE', got '$ACTUAL_LARGE'" "$UPLOAD_DOCS"
+    fi
 fi
 
 # ───── Compression (GET /compression) ─────
 
-if has_test "compression" || has_test "mixed" || has_test "mini"; then
-    COMP_DOCS="$DOCS_BASE/h1/compression/validation"
+if has_test "compression" || has_test "mixed"; then
+    COMP_DOCS="$DOCS_BASE/h1/isolated/compression/validation"
     echo "[test] compression endpoint"
 
     # Must return Content-Encoding: gzip when Accept-Encoding: gzip is sent
@@ -393,7 +403,7 @@ fi
 # ───── Noisy / Resilience (baseline + malformed requests) ─────
 
 if has_test "noisy"; then
-    NOISY_DOCS="$DOCS_BASE/h1/noisy/validation"
+    NOISY_DOCS="$DOCS_BASE/h1/isolated/noisy/validation"
     echo "[test] noisy resilience"
 
     # Valid baseline request still works
@@ -422,8 +432,8 @@ fi
 
 # ───── DB (GET /db — SQLite, tested when framework has mixed test) ─────
 
-if has_test "mixed" || has_test "mini"; then
-    DB_DOCS="$DOCS_BASE/h1/database/validation"
+if has_test "mixed"; then
+    DB_DOCS="$DOCS_BASE/h1/isolated/database/validation"
     echo "[test] db endpoint (mixed test prerequisite)"
     response=$(curl -s --max-time 30 "http://localhost:$PORT/db?min=10&max=50")
     db_result=$(echo "$response" | python3 -c "
@@ -490,8 +500,8 @@ fi
 
 # ───── Static Files H1 (GET /static/* over HTTP/1.1) ─────
 
-if has_test "static" || has_test "mixed" || has_test "mini"; then
-    STATIC_DOCS="$DOCS_BASE/h1/static/validation"
+if has_test "static" || has_test "mixed"; then
+    STATIC_DOCS="$DOCS_BASE/h1/isolated/static/validation"
     echo "[test] static endpoint"
     check_header "GET /static/reset.css Content-Type" "Content-Type" "text/css" "$STATIC_DOCS" \
         -s "http://localhost:$PORT/static/reset.css"
@@ -556,8 +566,8 @@ fi
 
 # ───── Async Database (GET /async-db) ─────
 
-if has_test "async-db" || has_test "mixed" || has_test "mini"; then
-    ASYNCDB_DOCS="$DOCS_BASE/h1/async-database/validation"
+if has_test "async-db" || has_test "mixed" || has_test "api-4" || has_test "api-16"; then
+    ASYNCDB_DOCS="$DOCS_BASE/h1/isolated/async-database/validation"
     echo "[test] async-db endpoint"
     response=$(curl -s --max-time 30 "http://localhost:$PORT/async-db?min=10&max=50")
     pgdb_result=$(echo "$response" | python3 -c "

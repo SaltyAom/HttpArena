@@ -136,7 +136,7 @@
     "tf_body29_err": 0
   },
   {
-    "framework": "Carno.js",
+    "framework": "carno.js",
     "language": "TS",
     "rps": 86245,
     "avg_latency": "4.22ms",
@@ -238,7 +238,7 @@
     "tf_body29_err": 0
   },
   {
-    "framework": "Django",
+    "framework": "django",
     "language": "Python",
     "rps": 44575,
     "avg_latency": "4.35ms",
@@ -340,7 +340,7 @@
     "tf_body29_err": 0
   },
   {
-    "framework": "Elysia",
+    "framework": "elysia",
     "language": "TS",
     "rps": 84896,
     "avg_latency": "4.37ms",
@@ -374,7 +374,7 @@
     "tf_body29_err": 0
   },
   {
-    "framework": "Express",
+    "framework": "express",
     "language": "JS",
     "rps": 23704,
     "avg_latency": "18.43ms",
@@ -408,7 +408,7 @@
     "tf_body29_err": 0
   },
   {
-    "framework": "FastAPI",
+    "framework": "fastapi",
     "language": "Python",
     "rps": 66740,
     "avg_latency": "5.73ms",
@@ -442,7 +442,7 @@
     "tf_body29_err": 0
   },
   {
-    "framework": "Fastify",
+    "framework": "fastify",
     "language": "JS",
     "rps": 25910,
     "avg_latency": "16.95ms",
@@ -476,7 +476,7 @@
     "tf_body29_err": 0
   },
   {
-    "framework": "FastPySGI-ASGI",
+    "framework": "fastpysgi-asgi",
     "language": "Python",
     "rps": 79649,
     "avg_latency": "4.77ms",
@@ -510,7 +510,7 @@
     "tf_body29_err": 0
   },
   {
-    "framework": "FastPySGI-WSGI",
+    "framework": "fastpysgi-wsgi",
     "language": "Python",
     "rps": 87069,
     "avg_latency": "4.23ms",
@@ -612,7 +612,7 @@
     "tf_body29_err": 579
   },
   {
-    "framework": "GenHTTP",
+    "framework": "genhttp",
     "language": "C#",
     "rps": 27136,
     "avg_latency": "3.35ms",
@@ -816,7 +816,7 @@
     "tf_body29_err": 0
   },
   {
-    "framework": "Hono (Bun)",
+    "framework": "hono (bun)",
     "language": "TS",
     "rps": 84101,
     "avg_latency": "4.36ms",
@@ -952,7 +952,7 @@
     "tf_body29_err": 50
   },
   {
-    "framework": "Koa",
+    "framework": "koa",
     "language": "JS",
     "rps": 26359,
     "avg_latency": "16.41ms",
@@ -1224,7 +1224,7 @@
     "tf_body29_err": 63263
   },
   {
-    "framework": "Rails",
+    "framework": "rails",
     "language": "Ruby",
     "rps": 29260,
     "avg_latency": "11.60ms",
@@ -1292,7 +1292,7 @@
     "tf_body29_err": 0
   },
   {
-    "framework": "Roda",
+    "framework": "roda",
     "language": "Ruby",
     "rps": 37134,
     "avg_latency": "9.90ms",
@@ -1360,7 +1360,7 @@
     "tf_body29_err": 0
   },
   {
-    "framework": "Sinatra",
+    "framework": "sinatra",
     "language": "Ruby",
     "rps": 34819,
     "avg_latency": "10.41ms",
@@ -1428,7 +1428,7 @@
     "tf_body29_err": 0
   },
   {
-    "framework": "Starlette",
+    "framework": "starlette",
     "language": "Python",
     "rps": 66679,
     "avg_latency": "5.57ms",

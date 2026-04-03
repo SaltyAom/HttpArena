@@ -308,8 +308,20 @@ function startH2() {
     } catch (e) {}
 }
 
+function getCPUCount() {
+    try {
+        const max = require('fs').readFileSync('/sys/fs/cgroup/cpu.max', 'utf8').trim();
+        const [quota, period] = max.split(' ');
+        if (quota !== 'max') {
+            const cgroup = Math.floor(Number(quota) / Number(period));
+            if (cgroup >= 1) return cgroup;
+        }
+    } catch {}
+    return os.availableParallelism ? os.availableParallelism() : os.cpus().length;
+}
+
 if (cluster.isPrimary) {
-    const numCPUs = os.availableParallelism ? os.availableParallelism() : os.cpus().length;
+    const numCPUs = getCPUCount();
     for (let i = 0; i < numCPUs; i++) cluster.fork();
 } else {
     startWorker();

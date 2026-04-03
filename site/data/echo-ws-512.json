@@ -100,7 +100,7 @@
     "status_5xx": 0
   },
   {
-    "framework": "GenHTTP",
+    "framework": "genhttp",
     "language": "C#",
     "rps": 2090917,
     "avg_latency": "244us",
@@ -160,7 +160,7 @@
     "status_5xx": 0
   },
   {
-    "framework": "SimpleW",
+    "framework": "simplew",
     "language": "C#",
     "rps": 434702,
     "avg_latency": "1.09ms",

@@ -68,11 +68,11 @@ html.dark .test-card-endpoint { color: #64748b; }
 </style>
 
 <div class="tests-section">
-<h2>19 Test Profiles Across HTTP/1.1, HTTP/2, HTTP/3, gRPC and WebSocket</h2>
+<h2>20 Test Profiles Across H/1.1, H/2, H/3, gRPC and WebSocket</h2>
 <p class="tests-sub">Every framework is tested under diverse, realistic workloads — from raw throughput to compression, gRPC unary calls, and WebSocket echo.</p>
 
 <div class="tests-proto">
-<span class="tests-proto-label tests-proto-h1">HTTP/1.1</span>
+<span class="tests-proto-label tests-proto-h1">H/1.1 Isolated</span>
 <div class="tests-grid">
   <a class="test-card" href="docs/test-profiles/h1/baseline">
     <div class="test-card-title">Baseline</div>
@@ -104,16 +104,6 @@ html.dark .test-card-endpoint { color: #64748b; }
     <div class="test-card-desc">Valid requests mixed with malformed noise — bad paths, bad content-length, binary. Only 2xx count.</div>
     <div class="test-card-endpoint">GET/POST /baseline11 + noise</div>
   </a>
-  <a class="test-card" href="docs/test-profiles/h1/mixed">
-    <div class="test-card-title">Mixed Workload</div>
-    <div class="test-card-desc">Realistic mix of baseline, JSON, DB, upload, and compression requests with weighted scoring.</div>
-    <div class="test-card-endpoint">GET/POST mixed endpoints (100 req/conn)</div>
-  </a>
-  <a class="test-card" href="docs/test-profiles/h1/mini">
-    <div class="test-card-title">Mini</div>
-    <div class="test-card-desc">Same mixed workload constrained to 4 CPUs and 16 GB memory — measures efficiency under limited resources.</div>
-    <div class="test-card-endpoint">GET/POST mixed endpoints (4 CPU, 16 GB)</div>
-  </a>
   <a class="test-card" href="docs/test-profiles/h1/async-database">
     <div class="test-card-title">Async Database (Postgres)</div>
     <div class="test-card-desc">Async Postgres query over 100K rows — tests event loop scheduling, connection pooling, and async driver efficiency.</div>
@@ -138,7 +128,28 @@ html.dark .test-card-endpoint { color: #64748b; }
 </div>
 
 <div class="tests-proto">
-<span class="tests-proto-label tests-proto-h2">HTTP/2</span>
+<span class="tests-proto-label tests-proto-h1">H/1.1 Workload</span>
+<div class="tests-grid">
+  <a class="test-card" href="docs/test-profiles/h1/mixed">
+    <div class="test-card-title">Mixed Workload</div>
+    <div class="test-card-desc">Realistic mix of baseline, JSON, DB, upload, and compression requests with weighted scoring.</div>
+    <div class="test-card-endpoint">GET/POST mixed endpoints (100 req/conn)</div>
+  </a>
+  <a class="test-card" href="docs/test-profiles/h1/workload/api-4">
+    <div class="test-card-title">API-4</div>
+    <div class="test-card-desc">Lighter workload (baseline, JSON, async-db) constrained to 4 CPUs and 16 GB memory — measures efficiency under limited resources.</div>
+    <div class="test-card-endpoint">GET/POST mixed endpoints (4 CPU, 16 GB)</div>
+  </a>
+  <a class="test-card" href="docs/test-profiles/h1/workload/api-16">
+    <div class="test-card-title">API-16</div>
+    <div class="test-card-desc">Same API workload (baseline, JSON, async-db) with 16 CPUs and 32 GB memory — tests performance scaling.</div>
+    <div class="test-card-endpoint">GET/POST API endpoints (16 CPU, 32 GB)</div>
+  </a>
+</div>
+</div>
+
+<div class="tests-proto">
+<span class="tests-proto-label tests-proto-h2">H/2</span>
 <div class="tests-grid">
   <a class="test-card" href="docs/test-profiles/h2/baseline-h2">
     <div class="test-card-title">Baseline</div>
@@ -154,7 +165,7 @@ html.dark .test-card-endpoint { color: #64748b; }
 </div>
 
 <div class="tests-proto">
-<span class="tests-proto-label tests-proto-h3">HTTP/3</span>
+<span class="tests-proto-label tests-proto-h3">H/3</span>
 <div class="tests-grid">
   <a class="test-card" href="docs/test-profiles/h3/baseline-h3">
     <div class="test-card-title">Baseline</div>

@@ -1,9 +1,9 @@
 ---
 weight: 3
-title: HTTP/3
+title: H/3
 ---
 
-HTTP/3 test profiles measure framework performance over QUIC, the UDP-based transport protocol. Only frameworks with native QUIC support participate.
+H/3 test profiles measure framework performance over QUIC, the UDP-based transport protocol. Only frameworks with native QUIC support participate.
 
 {{< cards >}}
   {{< card link="baseline-h3" title="Baseline" subtitle="Raw throughput over QUIC, testing HTTP/3 transport performance on frameworks with native QUIC support." icon="globe-alt" >}}

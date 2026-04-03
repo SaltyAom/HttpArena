@@ -1,8 +1,8 @@
 {
-  "display_name": "ServiceStack",
+  "display_name": "servicestack",
   "language": "C#",
   "type": "tuned",
-  "engine": "Kestrel",
+  "engine": "kestrel",
   "description": "One framework to power them all. Write your HTTP APIs once and take advantage of end to end typed integrations for all popular Web, Mobile and Desktop platforms.",
   "repo": "https://github.com/ServiceStack/ServiceStack",
   "enabled": true,
@@ -18,6 +18,7 @@
     "tcp-frag",
     "async-db",
     "mixed",
-    "mini"
+    "api-4",
+    "api-16"
   ]
 }

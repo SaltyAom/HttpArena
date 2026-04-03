@@ -15,6 +15,8 @@
     "upload",
     "compression",
     "mixed",
+    "api-4",
+    "api-16",
     "static",
     "tcp-frag",
     "async-db"

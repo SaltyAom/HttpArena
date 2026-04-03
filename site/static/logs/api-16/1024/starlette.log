@@ -1,0 +1,67 @@
+[2026-04-03 03:43:23 +0000] [1] [INFO] Starting gunicorn 23.0.0
+[2026-04-03 03:43:23 +0000] [1] [INFO] Listening at: http://0.0.0.0:8080 (1)
+[2026-04-03 03:43:23 +0000] [1] [INFO] Using worker: uvicorn.workers.UvicornWorker
+[2026-04-03 03:43:23 +0000] [7] [INFO] Booting worker with pid: 7
+[2026-04-03 03:43:23 +0000] [8] [INFO] Booting worker with pid: 8
+[2026-04-03 03:43:23 +0000] [9] [INFO] Booting worker with pid: 9
+[2026-04-03 03:43:23 +0000] [7] [INFO] Started server process [7]
+[2026-04-03 03:43:23 +0000] [8] [INFO] Started server process [8]
+[2026-04-03 03:43:23 +0000] [8] [INFO] Waiting for application startup.
+[2026-04-03 03:43:23 +0000] [7] [INFO] Waiting for application startup.
+[2026-04-03 03:43:23 +0000] [7] [INFO] Application startup complete.
+[2026-04-03 03:43:23 +0000] [8] [INFO] Application startup complete.
+[2026-04-03 03:43:23 +0000] [21] [INFO] Booting worker with pid: 21
+[2026-04-03 03:43:23 +0000] [9] [INFO] Started server process [9]
+[2026-04-03 03:43:23 +0000] [9] [INFO] Waiting for application startup.
+[2026-04-03 03:43:23 +0000] [9] [INFO] Application startup complete.
+[2026-04-03 03:43:23 +0000] [26] [INFO] Booting worker with pid: 26
+[2026-04-03 03:43:23 +0000] [21] [INFO] Started server process [21]
+[2026-04-03 03:43:23 +0000] [21] [INFO] Waiting for application startup.
+[2026-04-03 03:43:23 +0000] [21] [INFO] Application startup complete.
+[2026-04-03 03:43:23 +0000] [32] [INFO] Booting worker with pid: 32
+[2026-04-03 03:43:23 +0000] [34] [INFO] Booting worker with pid: 34
+[2026-04-03 03:43:23 +0000] [26] [INFO] Started server process [26]
+[2026-04-03 03:43:23 +0000] [26] [INFO] Waiting for application startup.
+[2026-04-03 03:43:23 +0000] [26] [INFO] Application startup complete.
+[2026-04-03 03:43:23 +0000] [32] [INFO] Started server process [32]
+[2026-04-03 03:43:23 +0000] [32] [INFO] Waiting for application startup.
+[2026-04-03 03:43:23 +0000] [32] [INFO] Application startup complete.
+[2026-04-03 03:43:23 +0000] [44] [INFO] Booting worker with pid: 44
+[2026-04-03 03:43:23 +0000] [34] [INFO] Started server process [34]
+[2026-04-03 03:43:23 +0000] [34] [INFO] Waiting for application startup.
+[2026-04-03 03:43:23 +0000] [34] [INFO] Application startup complete.
+[2026-04-03 03:43:24 +0000] [50] [INFO] Booting worker with pid: 50
+[2026-04-03 03:43:24 +0000] [52] [INFO] Booting worker with pid: 52
+[2026-04-03 03:43:24 +0000] [44] [INFO] Started server process [44]
+[2026-04-03 03:43:24 +0000] [44] [INFO] Waiting for application startup.
+[2026-04-03 03:43:24 +0000] [44] [INFO] Application startup complete.
+[2026-04-03 03:43:24 +0000] [57] [INFO] Booting worker with pid: 57
+[2026-04-03 03:43:24 +0000] [58] [INFO] Booting worker with pid: 58
+[2026-04-03 03:43:24 +0000] [50] [INFO] Started server process [50]
+[2026-04-03 03:43:24 +0000] [50] [INFO] Waiting for application startup.
+[2026-04-03 03:43:24 +0000] [50] [INFO] Application startup complete.
+[2026-04-03 03:43:24 +0000] [52] [INFO] Started server process [52]
+[2026-04-03 03:43:24 +0000] [52] [INFO] Waiting for application startup.
+[2026-04-03 03:43:24 +0000] [52] [INFO] Application startup complete.
+[2026-04-03 03:43:24 +0000] [70] [INFO] Booting worker with pid: 70
+[2026-04-03 03:43:24 +0000] [57] [INFO] Started server process [57]
+[2026-04-03 03:43:24 +0000] [57] [INFO] Waiting for application startup.
+[2026-04-03 03:43:24 +0000] [57] [INFO] Application startup complete.
+[2026-04-03 03:43:24 +0000] [58] [INFO] Started server process [58]
+[2026-04-03 03:43:24 +0000] [58] [INFO] Waiting for application startup.
+[2026-04-03 03:43:24 +0000] [58] [INFO] Application startup complete.
+[2026-04-03 03:43:24 +0000] [70] [INFO] Started server process [70]
+[2026-04-03 03:43:24 +0000] [70] [INFO] Waiting for application startup.
+[2026-04-03 03:43:24 +0000] [70] [INFO] Application startup complete.
+[2026-04-03 03:43:24 +0000] [85] [INFO] Booting worker with pid: 85
+[2026-04-03 03:43:24 +0000] [86] [INFO] Booting worker with pid: 86
+[2026-04-03 03:43:24 +0000] [85] [INFO] Started server process [85]
+[2026-04-03 03:43:24 +0000] [85] [INFO] Waiting for application startup.
+[2026-04-03 03:43:24 +0000] [93] [INFO] Booting worker with pid: 93
+[2026-04-03 03:43:24 +0000] [86] [INFO] Started server process [86]
+[2026-04-03 03:43:24 +0000] [86] [INFO] Waiting for application startup.
+[2026-04-03 03:43:24 +0000] [85] [INFO] Application startup complete.
+[2026-04-03 03:43:24 +0000] [86] [INFO] Application startup complete.
+[2026-04-03 03:43:24 +0000] [93] [INFO] Started server process [93]
+[2026-04-03 03:43:24 +0000] [93] [INFO] Waiting for application startup.
+[2026-04-03 03:43:24 +0000] [93] [INFO] Application startup complete.

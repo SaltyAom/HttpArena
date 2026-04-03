@@ -1,0 +1,1972 @@
+[0.013s][warning][os] NUMA support disabled: Failed to initialize libnuma
+SLF4J(W): No SLF4J providers were found.
+SLF4J(W): Defaulting to no-operation (NOP) logger implementation
+SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
+Apr 03, 2026 3:07:51 AM io.helidon.common.features.HelidonFeatures features
+INFO: Helidon SE 4.4.0 features: [Config, Encoding, Media, Registry, WebServer]
+Apr 03, 2026 3:07:51 AM io.helidon.webserver.ServerListener startIt
+INFO: [0x0880a1a6] http://0.0.0.0:8080 bound for socket '@default'
+There is no Helidon logging implementation on classpath, skipping log configuration.
+Apr 03, 2026 3:07:51 AM io.helidon.webserver.LoomServer startIt
+INFO: Started all channels in 19 milliseconds. 1146 milliseconds since JVM startup. Java 25.0.2+10-LTS
+Helidon HttpArena server started on port 8080
+Apr 03, 2026 3:07:52 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x7a92346e] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:07:54 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x7e964660] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:07:55 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x603d4370] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:07:55 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x47a51560] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/async-db, query=?min=10&max=50, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Cannot set response header after response was already sent.
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Cannot set response header after response was already sent.
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:185)
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:60)
+	at io.helidon.webserver.http.ServerResponse.header(ServerResponse.java:78)
+	at com.httparena.Main.asyncDb(Main.java:252)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:07:57 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x1de6b8a5] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:07:57 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x3f437da9] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/async-db, query=?min=10&max=50, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Cannot set response header after response was already sent.
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Cannot set response header after response was already sent.
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:185)
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:60)
+	at io.helidon.webserver.http.ServerResponse.header(ServerResponse.java:78)
+	at com.httparena.Main.asyncDb(Main.java:252)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:07:58 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x5ab972de] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:07:58 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x43d3ba69] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/async-db, query=?min=10&max=50, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Cannot set response header after response was already sent.
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Cannot set response header after response was already sent.
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:185)
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:60)
+	at io.helidon.webserver.http.ServerResponse.header(ServerResponse.java:78)
+	at com.httparena.Main.asyncDb(Main.java:252)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:07:59 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x18c07eaf] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:00 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x5a52d0ed] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:00 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x2d0759a8] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:01 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x2c124450] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:02 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x1ff72982] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:03 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x05308f6a] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/async-db, query=?min=10&max=50, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Cannot set response header after response was already sent.
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Cannot set response header after response was already sent.
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:185)
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:60)
+	at io.helidon.webserver.http.ServerResponse.header(ServerResponse.java:78)
+	at com.httparena.Main.asyncDb(Main.java:252)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:03 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x73113313] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/async-db, query=?min=10&max=50, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Cannot set response header after response was already sent.
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Cannot set response header after response was already sent.
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:185)
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:60)
+	at io.helidon.webserver.http.ServerResponse.header(ServerResponse.java:78)
+	at com.httparena.Main.asyncDb(Main.java:252)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:03 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x2ae07bb8] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/async-db, query=?min=10&max=50, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Cannot set response header after response was already sent.
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Cannot set response header after response was already sent.
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:185)
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:60)
+	at io.helidon.webserver.http.ServerResponse.header(ServerResponse.java:78)
+	at com.httparena.Main.asyncDb(Main.java:252)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:05 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x77e0af9a] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:06 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x450495ba] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/async-db, query=?min=10&max=50, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Cannot set response header after response was already sent.
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Cannot set response header after response was already sent.
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:185)
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:60)
+	at io.helidon.webserver.http.ServerResponse.header(ServerResponse.java:78)
+	at com.httparena.Main.asyncDb(Main.java:252)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:06 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x495ee776] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/async-db, query=?min=10&max=50, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Cannot set response header after response was already sent.
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Cannot set response header after response was already sent.
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:185)
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:60)
+	at io.helidon.webserver.http.ServerResponse.header(ServerResponse.java:78)
+	at com.httparena.Main.asyncDb(Main.java:252)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:07 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x51441332] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/async-db, query=?min=10&max=50, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Cannot set response header after response was already sent.
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Cannot set response header after response was already sent.
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:185)
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:60)
+	at io.helidon.webserver.http.ServerResponse.header(ServerResponse.java:78)
+	at com.httparena.Main.asyncDb(Main.java:252)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:11 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x43213616] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:11 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x02de6ff2] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:12 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x07c8f323] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/async-db, query=?min=10&max=50, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Cannot set response header after response was already sent.
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Cannot set response header after response was already sent.
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:185)
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:60)
+	at io.helidon.webserver.http.ServerResponse.header(ServerResponse.java:78)
+	at com.httparena.Main.asyncDb(Main.java:252)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:12 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x403b19f5] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:13 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x7170d33f] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/async-db, query=?min=10&max=50, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Cannot set response header after response was already sent.
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Cannot set response header after response was already sent.
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:185)
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:60)
+	at io.helidon.webserver.http.ServerResponse.header(ServerResponse.java:78)
+	at com.httparena.Main.asyncDb(Main.java:252)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:13 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x2c4da6a4] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:13 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x20d0b7f7] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/async-db, query=?min=10&max=50, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Cannot set response header after response was already sent.
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Cannot set response header after response was already sent.
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:185)
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:60)
+	at io.helidon.webserver.http.ServerResponse.header(ServerResponse.java:78)
+	at com.httparena.Main.asyncDb(Main.java:252)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:14 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x72e39128] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:14 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x4207af88] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:16 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x039ba430] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:16 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x4939664a] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:18 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x67b2aa25] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/async-db, query=?min=10&max=50, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Cannot set response header after response was already sent.
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Cannot set response header after response was already sent.
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:185)
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:60)
+	at io.helidon.webserver.http.ServerResponse.header(ServerResponse.java:78)
+	at com.httparena.Main.asyncDb(Main.java:252)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:18 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x0d73dd25] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:18 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x7e8b0ef9] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:19 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x56b54112] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/async-db, query=?min=10&max=50, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Cannot set response header after response was already sent.
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Cannot set response header after response was already sent.
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:185)
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:60)
+	at io.helidon.webserver.http.ServerResponse.header(ServerResponse.java:78)
+	at com.httparena.Main.asyncDb(Main.java:252)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:20 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x61057998] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/async-db, query=?min=10&max=50, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Cannot set response header after response was already sent.
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Cannot set response header after response was already sent.
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:185)
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:60)
+	at io.helidon.webserver.http.ServerResponse.header(ServerResponse.java:78)
+	at com.httparena.Main.asyncDb(Main.java:252)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:20 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x4a355feb] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/async-db, query=?min=10&max=50, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Cannot set response header after response was already sent.
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Cannot set response header after response was already sent.
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:185)
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:60)
+	at io.helidon.webserver.http.ServerResponse.header(ServerResponse.java:78)
+	at com.httparena.Main.asyncDb(Main.java:252)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:20 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x702cbb2f] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/async-db, query=?min=10&max=50, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Cannot set response header after response was already sent.
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Cannot set response header after response was already sent.
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:185)
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:60)
+	at io.helidon.webserver.http.ServerResponse.header(ServerResponse.java:78)
+	at com.httparena.Main.asyncDb(Main.java:252)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:22 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x0445127b] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/async-db, query=?min=10&max=50, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Cannot set response header after response was already sent.
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Cannot set response header after response was already sent.
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:185)
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:60)
+	at io.helidon.webserver.http.ServerResponse.header(ServerResponse.java:78)
+	at com.httparena.Main.asyncDb(Main.java:252)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:22 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x74051c9e] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:22 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x064f6692] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:23 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x33512054] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:27 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x1b8ada36] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:27 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x2d489deb] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:28 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x5211ddb6] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:29 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x791ae7a6] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:31 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x2c452945] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:31 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x44cad42c] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:31 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x2ddac140] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:34 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x258ace99] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:34 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x6fdba524] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:34 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x29e0cf45] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:34 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x65420781] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/async-db, query=?min=10&max=50, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Cannot set response header after response was already sent.
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Cannot set response header after response was already sent.
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:185)
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:60)
+	at io.helidon.webserver.http.ServerResponse.header(ServerResponse.java:78)
+	at com.httparena.Main.asyncDb(Main.java:252)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:35 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x53206c00] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/async-db, query=?min=10&max=50, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Cannot set response header after response was already sent.
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Cannot set response header after response was already sent.
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:185)
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:60)
+	at io.helidon.webserver.http.ServerResponse.header(ServerResponse.java:78)
+	at com.httparena.Main.asyncDb(Main.java:252)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:35 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x10ead820] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/async-db, query=?min=10&max=50, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Cannot set response header after response was already sent.
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Cannot set response header after response was already sent.
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:185)
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:60)
+	at io.helidon.webserver.http.ServerResponse.header(ServerResponse.java:78)
+	at com.httparena.Main.asyncDb(Main.java:252)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:36 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x55d7b557] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:36 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x2d1dfb0f] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:36 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x77b11399] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:37 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x7fae3b1a] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/async-db, query=?min=10&max=50, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Cannot set response header after response was already sent.
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Cannot set response header after response was already sent.
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:185)
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:60)
+	at io.helidon.webserver.http.ServerResponse.header(ServerResponse.java:78)
+	at com.httparena.Main.asyncDb(Main.java:252)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:37 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x77002042] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:38 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x13e940ad] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:39 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x3f5ff09b] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/async-db, query=?min=10&max=50, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Cannot set response header after response was already sent.
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Cannot set response header after response was already sent.
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:185)
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:60)
+	at io.helidon.webserver.http.ServerResponse.header(ServerResponse.java:78)
+	at com.httparena.Main.asyncDb(Main.java:252)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:40 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x2bebc0d4] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:40 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x3e507fed] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/async-db, query=?min=10&max=50, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Cannot set response header after response was already sent.
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Cannot set response header after response was already sent.
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:185)
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:60)
+	at io.helidon.webserver.http.ServerResponse.header(ServerResponse.java:78)
+	at com.httparena.Main.asyncDb(Main.java:252)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:41 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x385b704d] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/json, query=, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Response already sent
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Response already sent
+	at io.helidon.webserver.http.ServerResponseBase.status(ServerResponseBase.java:100)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:164)
+	at io.helidon.webserver.http1.Http1ServerResponse.status(Http1ServerResponse.java:60)
+	at com.httparena.Main.json(Main.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:41 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x5a8215df] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/async-db, query=?min=10&max=50, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Cannot set response header after response was already sent.
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Cannot set response header after response was already sent.
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:185)
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:60)
+	at io.helidon.webserver.http.ServerResponse.header(ServerResponse.java:78)
+	at com.httparena.Main.asyncDb(Main.java:252)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:41 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x3f4cc010] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/async-db, query=?min=10&max=50, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Cannot set response header after response was already sent.
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Cannot set response header after response was already sent.
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:185)
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:60)
+	at io.helidon.webserver.http.ServerResponse.header(ServerResponse.java:78)
+	at com.httparena.Main.asyncDb(Main.java:252)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:41 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x70761489] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/async-db, query=?min=10&max=50, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Cannot set response header after response was already sent.
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Cannot set response header after response was already sent.
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:185)
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:60)
+	at io.helidon.webserver.http.ServerResponse.header(ServerResponse.java:78)
+	at com.httparena.Main.asyncDb(Main.java:252)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:41 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x4554b484] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/async-db, query=?min=10&max=50, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Cannot set response header after response was already sent.
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Cannot set response header after response was already sent.
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:185)
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:60)
+	at io.helidon.webserver.http.ServerResponse.header(ServerResponse.java:78)
+	at com.httparena.Main.asyncDb(Main.java:252)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+
+Apr 03, 2026 3:08:41 AM io.helidon.common.socket.SocketContext log
+WARNING: [0x0880a1a6 0x662eeb80] Request failed: HttpPrologue[protocol=HTTP, protocolVersion=1.1, method=GET, uriPath=/async-db, query=?min=10&max=50, fragment=], cannot send error response, as response already sent
+io.helidon.http.RequestException: Cannot set response header after response was already sent.
+	at io.helidon.http.RequestException$Builder.build(RequestException.java:157)
+	at io.helidon.webserver.http.ErrorHandlers.unhandledError(ErrorHandlers.java:205)
+	at io.helidon.webserver.http.ErrorHandlers.lambda$handleError$1(ErrorHandlers.java:180)
+	at java.base/java.util.Optional.ifPresentOrElse(Unknown Source)
+	at io.helidon.webserver.http.ErrorHandlers.handleError(ErrorHandlers.java:179)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:113)
+	at io.helidon.webserver.http.Filters.filter(Filters.java:83)
+	at io.helidon.webserver.http.HttpRoutingImpl.route(HttpRoutingImpl.java:74)
+	at io.helidon.webserver.http1.Http1Connection.route(Http1Connection.java:548)
+	at io.helidon.webserver.http1.Http1Connection.handle(Http1Connection.java:216)
+	at io.helidon.webserver.ConnectionHandler.run(ConnectionHandler.java:185)
+	at io.helidon.common.task.InterruptableTask.call(InterruptableTask.java:47)
+	at io.helidon.webserver.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:241)
+	at java.base/java.lang.VirtualThread.run(Unknown Source)
+Caused by: java.lang.IllegalStateException: Cannot set response header after response was already sent.
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:185)
+	at io.helidon.webserver.http1.Http1ServerResponse.header(Http1ServerResponse.java:60)
+	at io.helidon.webserver.http.ServerResponse.header(ServerResponse.java:78)
+	at com.httparena.Main.asyncDb(Main.java:252)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.doRoute(HttpRoutingImpl.java:174)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:132)
+	at io.helidon.webserver.http.HttpRoutingImpl$RoutingExecutor.call(HttpRoutingImpl.java:110)
+	at io.helidon.webserver.http.ErrorHandlers.runWithErrorHandling(ErrorHandlers.java:76)
+	... 8 more
+

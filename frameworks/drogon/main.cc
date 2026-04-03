@@ -444,6 +444,16 @@ int main()
                 if (c != std::string::npos) { host = s.substr(0, c); port = s.substr(c + 1); }
                 else host = s;
                 int nconns = std::thread::hardware_concurrency();
+                {
+                    std::ifstream cg("/sys/fs/cgroup/cpu.max");
+                    if (cg.is_open()) {
+                        std::string quota_s, period_s;
+                        if (cg >> quota_s >> period_s && quota_s != "max") {
+                            int cg_cpus = std::stoi(quota_s) / std::stoi(period_s);
+                            if (cg_cpus >= 1 && cg_cpus < nconns) nconns = cg_cpus;
+                        }
+                    }
+                }
                 if (nconns < 4) nconns = 4;
                 pgClient = drogon::orm::DbClient::newPgClient(
                     "host=" + host + " port=" + port + " dbname=" + dbname +
@@ -454,7 +464,18 @@ int main()
     }
 
     app().setLogLevel(trantor::Logger::kWarn);
-    app().setThreadNum(0);
+    {
+        int threads = std::thread::hardware_concurrency();
+        std::ifstream cg("/sys/fs/cgroup/cpu.max");
+        if (cg.is_open()) {
+            std::string quota_s, period_s;
+            if (cg >> quota_s >> period_s && quota_s != "max") {
+                int cg_cpus = std::stoi(quota_s) / std::stoi(period_s);
+                if (cg_cpus >= 1 && cg_cpus < threads) threads = cg_cpus;
+            }
+        }
+        app().setThreadNum(threads);
+    }
     app().setClientMaxBodySize(25 * 1024 * 1024);
     app().setIdleConnectionTimeout(0);
     app().setKeepaliveRequestsNumber(0);

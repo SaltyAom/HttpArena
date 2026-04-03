@@ -1,9 +1,9 @@
 ---
 weight: 2
-title: HTTP/2
+title: H/2
 ---
 
-HTTP/2 test profiles measure framework performance over encrypted TLS connections with stream multiplexing.
+H/2 test profiles measure framework performance over encrypted TLS connections with stream multiplexing.
 
 {{< cards >}}
   {{< card link="baseline-h2" title="Baseline" subtitle="Same workload as baseline over encrypted HTTP/2 connections with TLS and stream multiplexing." icon="globe-alt" >}}

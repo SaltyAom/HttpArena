@@ -17,7 +17,8 @@
     "static",
     "tcp-frag",
     "mixed",
-    "mini",
+    "api-4",
+    "api-16",
     "async-db"
   ]
 }

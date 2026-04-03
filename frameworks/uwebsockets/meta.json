@@ -1,9 +1,9 @@
 {
-  "display_name": "uWebSockets.js",
+  "display_name": "uwebsockets.js",
   "language": "JS",
   "type": "engine",
-  "engine": "uWebSockets",
-  "description": "Native C++ HTTP/WebSocket server exposed as a Node.js addon. Uses µSockets event loop with epoll, bypassing Node's HTTP stack entirely.",
+  "engine": "uwebsockets",
+  "description": "Native C++ HTTP/WebSocket server exposed as a Node.js addon. Uses \u00b5Sockets event loop with epoll, bypassing Node's HTTP stack entirely.",
   "repo": "https://github.com/uNetworking/uWebSockets.js",
   "enabled": true,
   "tests": [

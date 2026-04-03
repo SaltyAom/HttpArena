@@ -62,18 +62,19 @@
   {
     "framework": "bun",
     "language": "TS",
-    "rps": 619832,
-    "avg_latency": "43.00ms",
-    "p99_latency": "43.00ms",
-    "cpu": "5824.9%",
-    "memory": "2.3GiB",
+    "rps": 0,
+    "avg_latency": "",
+    "p99_latency": "",
+    "cpu": "0%",
+    "memory": "0MiB",
     "connections": 256,
     "threads": 64,
     "duration": "5s",
     "pipeline": 1,
-    "bandwidth": "9.45GB/s",
+    "bandwidth": "0",
+    "input_bw": "",
     "reconnects": 0,
-    "status_2xx": 6155090,
+    "status_2xx": 0,
     "status_3xx": 0,
     "status_4xx": 0,
     "status_5xx": 0
@@ -98,7 +99,7 @@
     "status_5xx": 0
   },
   {
-    "framework": "Express",
+    "framework": "express",
     "language": "JS",
     "rps": 651000,
     "avg_latency": "39.10ms",
@@ -118,7 +119,7 @@
     "status_5xx": 0
   },
   {
-    "framework": "Fastify",
+    "framework": "fastify",
     "language": "JS",
     "rps": 641880,
     "avg_latency": "39.54ms",
@@ -215,7 +216,7 @@
     "status_5xx": 0
   },
   {
-    "framework": "Koa",
+    "framework": "koa",
     "language": "JS",
     "rps": 589640,
     "avg_latency": "43.46ms",

@@ -1,5 +1,5 @@
 {
-  "display_name": "Scotty",
+  "display_name": "scotty",
   "language": "Haskell",
   "type": "tuned",
   "engine": "warp",
@@ -15,6 +15,8 @@
     "upload",
     "compression",
     "mixed",
+    "api-4",
+    "api-16",
     "async-db",
     "static"
   ]

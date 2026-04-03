@@ -1,0 +1,29 @@
+[
+  {
+    "framework": "genhttp",
+    "language": "C#",
+    "rps": 36757,
+    "avg_latency": "2.36ms",
+    "p99_latency": "43.10ms",
+    "cpu": "406.2%",
+    "memory": "248.8MiB",
+    "connections": 128,
+    "threads": 64,
+    "duration": "5s",
+    "pipeline": 1,
+    "bandwidth": "172.73MB/s",
+    "input_bw": "1.89MB/s",
+    "reconnects": 124059,
+    "status_2xx": 551358,
+    "status_3xx": 0,
+    "status_4xx": 0,
+    "status_5xx": 0,
+    "tpl_baseline": 207054,
+    "tpl_json": 165362,
+    "tpl_db": 0,
+    "tpl_upload": 0,
+    "tpl_compression": 0,
+    "tpl_static": 68745,
+    "tpl_async_db": 110197
+  }
+]

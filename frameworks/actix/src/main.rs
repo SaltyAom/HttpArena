@@ -1,3 +1,18 @@
+fn cgroup_cpus() -> usize {
+    std::fs::read_to_string("/sys/fs/cgroup/cpu.max")
+        .ok()
+        .and_then(|s| {
+            let mut parts = s.trim().split(' ');
+            let quota = parts.next()?;
+            if quota == "max" { return None; }
+            let period: usize = parts.next()?.parse().ok()?;
+            let q: usize = quota.parse().ok()?;
+            let cpus = q / period;
+            if cpus >= 1 { Some(cpus) } else { None }
+        })
+        .unwrap_or_else(num_cpus::get)
+}
+
 use actix_files::Files;
 use actix_web::http::header::{ContentType, HeaderValue, SERVER};
 use actix_web::{web, App, HttpResponse, HttpServer};
@@ -379,7 +394,7 @@ async fn main() -> io::Result<()> {
     };
 
     let tls_config = load_tls_config();
-    let workers = num_cpus::get();
+    let workers = cgroup_cpus();
 
     let mut server = HttpServer::new({
         let state = state.clone();

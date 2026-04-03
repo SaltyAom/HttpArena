@@ -1,3 +1,18 @@
+fn cgroup_cpus() -> usize {
+    std::fs::read_to_string("/sys/fs/cgroup/cpu.max")
+        .ok()
+        .and_then(|s| {
+            let mut parts = s.trim().split(' ');
+            let quota = parts.next()?;
+            if quota == "max" { return None; }
+            let period: usize = parts.next()?.parse().ok()?;
+            let q: usize = quota.parse().ok()?;
+            let cpus = q / period;
+            if cpus >= 1 { Some(cpus) } else { None }
+        })
+        .unwrap_or_else(num_cpus::get)
+}
+
 use deadpool_postgres::{Manager, ManagerConfig, Pool, RecyclingMethod};
 use salvo::conn::rustls::{Keycert, RustlsConfig};
 use salvo::compression::Compression;
@@ -429,7 +444,7 @@ async fn main() {
         let pg_config: tokio_postgres::Config = url.parse().ok()?;
         let mgr = Manager::from_config(pg_config, deadpool_postgres::tokio_postgres::NoTls,
             ManagerConfig { recycling_method: RecyclingMethod::Fast });
-        let pool_size = (num_cpus::get() * 4).max(64);
+        let pool_size = (cgroup_cpus() * 4).max(64);
         Pool::builder(mgr).max_size(pool_size).build().ok()
     });
     PG_POOL.set(pg_pool).ok();

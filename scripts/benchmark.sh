@@ -35,7 +35,8 @@ declare -A PROFILES=(
     [compression]="1|0||4096,16384|compression"
     [noisy]="1|0||512,4096,16384|noisy"
     [mixed]="1|5||4096|mixed"
-    [mini]="1|5|4|128|mini"
+    [api-4]="1|5|4|256|api-4"
+    [api-16]="1|5|16|1024|api-16"
     [static]="1|10||4096,16384|static"
     [tcp-frag]="1|2||512,4096,16384|tcp-frag"
     [baseline-h2]="1|0||256,1024|h2"
@@ -47,7 +48,7 @@ declare -A PROFILES=(
     [echo-ws]="1|0||512,4096,16384|ws-echo"
     [async-db]="1|0||1024|async-db"
 )
-PROFILE_ORDER=(baseline pipelined limited-conn json upload compression noisy mixed mini static async-db baseline-h2 static-h2 baseline-h3 static-h3 unary-grpc unary-grpc-tls echo-ws)
+PROFILE_ORDER=(baseline pipelined limited-conn json upload compression noisy mixed api-4 api-16 static async-db baseline-h2 static-h2 baseline-h3 static-h3 unary-grpc unary-grpc-tls echo-ws)
 
 # Parse flags
 SAVE_RESULTS=false
@@ -363,7 +364,7 @@ fi
 
 # Start Postgres sidecar if async-db is needed
 if echo ",$FRAMEWORK_TESTS," | grep -qF ",async-db,"; then
-    if [ -z "$PROFILE_FILTER" ] || [ "$PROFILE_FILTER" = "async-db" ] || [ "$PROFILE_FILTER" = "mixed" ] || [ "$PROFILE_FILTER" = "mini" ]; then
+    if [ -z "$PROFILE_FILTER" ] || [ "$PROFILE_FILTER" = "async-db" ] || [ "$PROFILE_FILTER" = "mixed" ] || [ "$PROFILE_FILTER" = "api-4" ] || [ "$PROFILE_FILTER" = "api-16" ]; then
         echo "[postgres] Starting Postgres sidecar..."
         docker rm -f "$PG_CONTAINER" 2>/dev/null || true
         docker run -d --name "$PG_CONTAINER" --network host \
@@ -427,12 +428,15 @@ for profile in "${profiles_to_run[@]}"; do
         -v "$ROOT_DIR/data/benchmark.db:/data/benchmark.db:ro"
         -v "$ROOT_DIR/data/static:/data/static:ro"
         -v "$CERTS_DIR:/certs:ro")
-    if [ "$endpoint" = "async-db" ] || [ "$endpoint" = "mixed" ] || [ "$endpoint" = "mini" ]; then
+    if [ "$endpoint" = "async-db" ] || [ "$endpoint" = "mixed" ] || [ "$endpoint" = "api-4" ] || [ "$endpoint" = "api-16" ]; then
         docker_args+=(-e "DATABASE_URL=postgres://bench:bench@localhost:5432/benchmark")
         docker_args+=(-e "DATABASE_MAX_CONN=256")
     fi
-    if [ "$endpoint" = "mini" ]; then
+    if [ "$endpoint" = "api-4" ]; then
         docker_args+=(--memory=16g --memory-swap=16g)
+    fi
+    if [ "$endpoint" = "api-16" ]; then
+        docker_args+=(--memory=32g --memory-swap=32g)
     fi
     if [ -n "$cpu_limit" ]; then
         if [[ "$cpu_limit" == *-* ]]; then
@@ -571,10 +575,10 @@ for profile in "${profiles_to_run[@]}"; do
         gc_args=("http://localhost:$PORT"
             --raw "$REQUESTS_DIR/get.raw,$REQUESTS_DIR/get.raw,$REQUESTS_DIR/get.raw,$REQUESTS_DIR/post_cl.raw,$REQUESTS_DIR/post_cl.raw,$REQUESTS_DIR/json-get.raw,$REQUESTS_DIR/db-get.raw,$REQUESTS_DIR/upload-small.raw,$REQUESTS_DIR/json-gzip.raw,$REQUESTS_DIR/json-gzip.raw,$REQUESTS_DIR/static-reset.css.raw,$REQUESTS_DIR/static-app.js.raw,$REQUESTS_DIR/async-db-get.raw,$REQUESTS_DIR/async-db-get.raw"
             -c "$CONNS" -t "$THREADS" -d 15s -p "$pipeline")
-    elif [ "$endpoint" = "mini" ]; then
+    elif [ "$endpoint" = "api-4" ] || [ "$endpoint" = "api-16" ]; then
         gc_args=("http://localhost:$PORT"
-            --raw "$REQUESTS_DIR/get.raw,$REQUESTS_DIR/get.raw,$REQUESTS_DIR/get.raw,$REQUESTS_DIR/post_cl.raw,$REQUESTS_DIR/post_cl.raw,$REQUESTS_DIR/json-get.raw,$REQUESTS_DIR/db-get.raw,$REQUESTS_DIR/upload-small.raw,$REQUESTS_DIR/json-gzip.raw,$REQUESTS_DIR/json-gzip.raw,$REQUESTS_DIR/static-reset.css.raw,$REQUESTS_DIR/static-app.js.raw,$REQUESTS_DIR/async-db-get.raw,$REQUESTS_DIR/async-db-get.raw"
-            -c "$CONNS" -t 4 -d 15s -p "$pipeline")
+            --raw "$REQUESTS_DIR/get.raw,$REQUESTS_DIR/get.raw,$REQUESTS_DIR/get.raw,$REQUESTS_DIR/json-get.raw,$REQUESTS_DIR/json-get.raw,$REQUESTS_DIR/json-get.raw,$REQUESTS_DIR/async-db-get.raw,$REQUESTS_DIR/async-db-get.raw"
+            -c "$CONNS" -t 64 -d 15s -p "$pipeline")
     elif [ "$endpoint" = "async-db" ]; then
         gc_args=("http://localhost:$PORT/async-db?min=10&max=50"
             -c "$CONNS" -t "$THREADS" -d 10s -p "$pipeline")
@@ -743,7 +747,7 @@ else: print(f'{bps}B/s')
     tpl_json=""
     if [ "$USE_H2LOAD" = "false" ] && [ "$USE_OHA" = "false" ]; then
         tpl_line=$(echo "$best_output" | grep -oP 'Per-template-ok: \K.*' || echo "")
-        if [ -n "$tpl_line" ] && ([ "$endpoint" = "mixed" ] || [ "$endpoint" = "mini" ]); then
+        if [ -n "$tpl_line" ] && [ "$endpoint" = "mixed" ]; then
             # Mixed templates: get×3, post_cl×2, json-get×1, db-get×1, upload-small×1, json-gzip×2, static×2, async-db×2
             IFS=',' read -ra tpl_counts <<< "$tpl_line"
             t_baseline=$(( ${tpl_counts[0]:-0} + ${tpl_counts[1]:-0} + ${tpl_counts[2]:-0} + ${tpl_counts[3]:-0} + ${tpl_counts[4]:-0} ))
@@ -760,6 +764,21 @@ else: print(f'{bps}B/s')
   \"tpl_upload\": $t_upload,
   \"tpl_compression\": $t_compression,
   \"tpl_static\": $t_static,
+  \"tpl_async_db\": $t_async_db"
+        fi
+        if [ -n "$tpl_line" ] && ([ "$endpoint" = "api-4" ] || [ "$endpoint" = "api-16" ]); then
+            # API-4 templates: get×3, json-get×3, async-db×2
+            IFS=',' read -ra tpl_counts <<< "$tpl_line"
+            t_baseline=$(( ${tpl_counts[0]:-0} + ${tpl_counts[1]:-0} + ${tpl_counts[2]:-0} ))
+            t_json=$(( ${tpl_counts[3]:-0} + ${tpl_counts[4]:-0} + ${tpl_counts[5]:-0} ))
+            t_async_db=$(( ${tpl_counts[6]:-0} + ${tpl_counts[7]:-0} ))
+            tpl_json=",
+  \"tpl_baseline\": $t_baseline,
+  \"tpl_json\": $t_json,
+  \"tpl_db\": 0,
+  \"tpl_upload\": 0,
+  \"tpl_compression\": 0,
+  \"tpl_static\": 0,
   \"tpl_async_db\": $t_async_db"
         fi
         if [ -n "$tpl_line" ] && [ "$endpoint" = "tcp-frag" ]; then

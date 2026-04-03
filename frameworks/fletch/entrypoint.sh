@@ -1,5 +1,11 @@
 #!/bin/sh
-# nproc on Linux reads the cgroup CPU quota, so it returns the value set by
-# --cpus=N rather than the host's total CPU count.  This ensures the Dart
-# server spawns exactly as many isolates as the container is allowed to use.
-exec /server/bin/server "$(nproc)"
+CPUS=$(nproc)
+if [ -f /sys/fs/cgroup/cpu.max ]; then
+  read -r quota period < /sys/fs/cgroup/cpu.max
+  if [ "$quota" != "max" ]; then
+    CGROUP_CPUS=$((quota / period))
+    [ "$CGROUP_CPUS" -lt 1 ] && CGROUP_CPUS=1
+    [ "$CGROUP_CPUS" -lt "$CPUS" ] && CPUS=$CGROUP_CPUS
+  fi
+fi
+exec /server/bin/server "$CPUS"

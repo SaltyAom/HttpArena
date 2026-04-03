@@ -100,7 +100,7 @@
     "status_5xx": 0
   },
   {
-    "framework": "Django",
+    "framework": "django",
     "language": "Python",
     "rps": 88697,
     "avg_latency": "5.58ms",
@@ -160,7 +160,7 @@
     "status_5xx": 0
   },
   {
-    "framework": "Elysia",
+    "framework": "elysia",
     "language": "TS",
     "rps": 227135,
     "avg_latency": "434us",
@@ -180,7 +180,7 @@
     "status_5xx": 0
   },
   {
-    "framework": "Express",
+    "framework": "express",
     "language": "JS",
     "rps": 230556,
     "avg_latency": "953us",
@@ -200,7 +200,7 @@
     "status_5xx": 0
   },
   {
-    "framework": "FastAPI",
+    "framework": "fastapi",
     "language": "Python",
     "rps": 226009,
     "avg_latency": "842us",
@@ -220,7 +220,7 @@
     "status_5xx": 0
   },
   {
-    "framework": "Fastify",
+    "framework": "fastify",
     "language": "JS",
     "rps": 224964,
     "avg_latency": "500us",
@@ -280,7 +280,7 @@
     "status_5xx": 0
   },
   {
-    "framework": "GenHTTP",
+    "framework": "genhttp",
     "language": "C#",
     "rps": 206080,
     "avg_latency": "489us",

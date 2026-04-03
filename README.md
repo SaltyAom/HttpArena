@@ -4,7 +4,7 @@
 
 HTTP framework benchmark platform.
 
-19 test profiles. 64-core dedicated hardware. Same conditions for every framework.
+20 test profiles. 64-core dedicated hardware. Same conditions for every framework.
 
 [View Leaderboard](https://www.http-arena.com/) | [Documentation](https://www.http-arena.com/docs/) | [Add a Framework](https://www.http-arena.com/docs/add-framework/)
 
@@ -32,7 +32,7 @@ Always specify `-f <framework>`. Results are automatically compared against the 
 |----------|----------|-------------|
 | Connection | Baseline (512-16K), Pipelined, Limited | Performance scaling with connection count |
 | Workload | JSON, Compression, Upload, Database, Async DB | Serialization, gzip, streaming I/O, SQLite queries, async Postgres |
-| Resilience | Noisy, Mixed, Mini | Malformed requests, concurrent endpoints, resource-constrained (4 CPU, 16 GB) |
+| Resilience | Noisy, Mixed, API-4 | Malformed requests, concurrent endpoints, resource-constrained (4 CPU, 16 GB) |
 | Protocol | HTTP/2, HTTP/3, gRPC, WebSocket | Multi-protocol support |
 
 ## Run Locally

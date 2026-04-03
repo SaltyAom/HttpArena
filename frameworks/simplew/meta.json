@@ -1,8 +1,8 @@
 {
-  "display_name": "SimpleW",
+  "display_name": "simplew",
   "language": "C#",
   "type": "tuned",
-  "engine": "SimpleW",
+  "engine": "simplew",
   "description": "SimpleW is Web server Library in .NET Core. Powerfully Simple and Blazingly Fast.",
   "repo": "https://github.com/stratdev3/SimpleW",
   "enabled": true,
@@ -18,7 +18,8 @@
     "tcp-frag",
     "async-db",
     "mixed",
-    "mini",
+    "api-4",
+    "api-16",
     "echo-ws"
   ]
 }

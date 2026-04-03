@@ -1,3 +1,18 @@
+fn cgroup_cpus() -> usize {
+    std::fs::read_to_string("/sys/fs/cgroup/cpu.max")
+        .ok()
+        .and_then(|s| {
+            let mut parts = s.trim().split(' ');
+            let quota = parts.next()?;
+            if quota == "max" { return None; }
+            let period: usize = parts.next()?.parse().ok()?;
+            let q: usize = quota.parse().ok()?;
+            let cpus = q / period;
+            if cpus >= 1 { Some(cpus) } else { None }
+        })
+        .unwrap_or_else(cgroup_cpus)
+}
+
 use deadpool_postgres::{Manager, ManagerConfig, Pool, RecyclingMethod};
 use flate2::write::GzEncoder;
 use flate2::Compression;
@@ -502,7 +517,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let workers = std::env::var("ROCKET_WORKERS")
         .ok()
         .and_then(|v| v.parse().ok())
-        .unwrap_or_else(num_cpus::get);
+        .unwrap_or_else(cgroup_cpus);
 
     let rt = tokio::runtime::Builder::new_multi_thread()
         .worker_threads(workers)
@@ -524,7 +539,7 @@ async fn async_main() -> Result<(), Box<dyn std::error::Error>> {
     let workers = std::env::var("ROCKET_WORKERS")
         .ok()
         .and_then(|v| v.parse().ok())
-        .unwrap_or_else(num_cpus::get);
+        .unwrap_or_else(cgroup_cpus);
     let state = Arc::new(AppState {
         dataset,
         json_large_cache,
@@ -537,7 +552,7 @@ async fn async_main() -> Result<(), Box<dyn std::error::Error>> {
         let pg_config: tokio_postgres::Config = url.parse().ok()?;
         let mgr = Manager::from_config(pg_config, deadpool_postgres::tokio_postgres::NoTls,
             ManagerConfig { recycling_method: RecyclingMethod::Fast });
-        let pool_size = (num_cpus::get() * 4).max(64);
+        let pool_size = (cgroup_cpus() * 4).max(64);
         Pool::builder(mgr).max_size(pool_size).build().ok()
     });
 

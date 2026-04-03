@@ -16,6 +16,8 @@
     "async-db",
     "noisy",
     "mixed",
+    "api-4",
+    "api-16",
     "static",
     "tcp-frag",
     "baseline-h2",

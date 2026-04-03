@@ -1,8 +1,8 @@
 {
-  "display_name": "Carno.js",
+  "display_name": "carno.js",
   "language": "TS",
   "type": "production",
-  "engine": "Bun",
+  "engine": "bun",
   "description": "Ultra-fast, performance-first framework for Bun with JIT-compiled routes, decorator-based API, and built-in DI.",
   "repo": "https://github.com/carnojs/carno.js",
   "enabled": true,
@@ -14,6 +14,8 @@
     "upload",
     "compression",
     "mixed",
+    "api-4",
+    "api-16",
     "async-db",
     "static",
     "tcp-frag"

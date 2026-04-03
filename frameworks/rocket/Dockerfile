@@ -7,6 +7,6 @@ RUN RUSTFLAGS="-C target-cpu=native" cargo build --release
 
 FROM debian:bookworm-slim
 COPY --from=build /app/target/release/httparena-rocket /server
-ENV ROCKET_WORKERS=64
+## ROCKET_WORKERS is not set — server reads cgroup cpu.max at runtime
 EXPOSE 8080
 CMD ["/server"]

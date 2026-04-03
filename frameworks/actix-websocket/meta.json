@@ -2,7 +2,7 @@
   "display_name": "actix-websocket",
   "language": "Rust",
   "type": "tuned",
-  "engine": "Actix",
+  "engine": "actix",
   "description": "Actix-web WebSocket echo server",
   "repo": "https://github.com/actix/actix-web",
   "enabled": true,

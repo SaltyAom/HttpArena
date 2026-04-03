@@ -2,7 +2,7 @@
   "display_name": "deno-websocket",
   "language": "TS",
   "type": "tuned",
-  "engine": "Deno",
+  "engine": "deno",
   "description": "Deno WebSocket echo server",
   "repo": "https://github.com/denoland/deno",
   "enabled": true,

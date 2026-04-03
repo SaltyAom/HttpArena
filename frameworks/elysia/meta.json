@@ -1,8 +1,8 @@
 {
-  "display_name": "Elysia",
+  "display_name": "elysia",
   "language": "TS",
   "type": "production",
-  "engine": "Bun",
+  "engine": "bun",
   "description": "Ergonomic TypeScript framework built for Bun with end-to-end type safety and excellent DX.",
   "repo": "https://github.com/elysiajs/elysia",
   "enabled": true,
@@ -14,6 +14,8 @@
     "upload",
     "compression",
     "mixed",
+    "api-4",
+    "api-16",
     "async-db",
     "static",
     "tcp-frag"

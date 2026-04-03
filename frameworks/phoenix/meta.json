@@ -2,7 +2,7 @@
   "display_name": "phoenix",
   "language": "Elixir",
   "type": "tuned",
-  "engine": "BEAM",
+  "engine": "beam",
   "description": "Phoenix 1.7 on Cowboy \u2014 the most popular Elixir web framework. First Elixir entry in HttpArena.",
   "repo": "https://github.com/phoenixframework/phoenix",
   "enabled": true,
@@ -16,6 +16,8 @@
     "compression",
     "async-db",
     "mixed",
+    "api-4",
+    "api-16",
     "static",
     "tcp-frag"
   ]
