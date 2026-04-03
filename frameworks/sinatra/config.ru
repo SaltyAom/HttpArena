@@ -30,7 +30,7 @@ class UploadHandler
       input = env['rack.input']
       input.rewind
       bytes = 0
-      while (chunk = input.read(65536))
+      while (chunk = input.read(4096))
         bytes += chunk.bytesize
       end
       [200, { 'content-type' => 'text/plain', 'server' => 'sinatra' }, [bytes.to_s]]
