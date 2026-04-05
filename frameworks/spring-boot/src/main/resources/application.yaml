@@ -6,7 +6,12 @@ spring:
   web:
     resources:
       static-locations: file:/data/static/
+  threads:
+    virtual:
+      enabled: true
 server:
   compression:
     enabled: true
     min-response-size: 500KB
+
+httparena.postgres-url: ${DATABASE_URL}
