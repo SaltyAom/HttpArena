@@ -11,8 +11,7 @@ spring:
       enabled: true
 server:
   compression:
-    enabled: false
-    min-response-size: 500KB
+    enabled: true
   http2:
     enabled: true
   ssl:
