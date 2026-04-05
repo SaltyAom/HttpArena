@@ -13,7 +13,7 @@
 			file /app/worker.php
 			num {$WORKERS:0}
 			async
-			buffer_size 10
+			buffer_size 1
 			match /*
 		}
 	}
@@ -29,7 +29,7 @@
 			file /app/worker.php
 			num {$WORKERS:0}
 			async
-			buffer_size 10
+			buffer_size 1
 			match /*
 		}
 	}
