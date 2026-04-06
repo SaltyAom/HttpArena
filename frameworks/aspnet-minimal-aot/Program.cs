@@ -1,0 +1,90 @@
+using System.IO.Compression;
+using System.Security.Cryptography.X509Certificates;
+
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.Extensions.FileProviders;
+
+var builder = WebApplication.CreateSlimBuilder(args);
+
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+  options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonContext.Default);
+});
+builder.Logging.ClearProviders();
+
+var certPath = Environment.GetEnvironmentVariable("TLS_CERT") ?? "/certs/server.crt";
+var keyPath = Environment.GetEnvironmentVariable("TLS_KEY") ?? "/certs/server.key";
+var hasCert = File.Exists(certPath) && File.Exists(keyPath);
+
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.AddServerHeader = false;
+    options.Limits.Http2.MaxStreamsPerConnection = 256;
+    options.Limits.Http2.InitialConnectionWindowSize = 2 * 1024 * 1024;
+    options.Limits.Http2.InitialStreamWindowSize = 1024 * 1024;
+
+    options.ListenAnyIP(8080, lo =>
+    {
+        lo.Protocols = HttpProtocols.Http1;
+    });
+
+    if (hasCert)
+    {
+        options.ListenAnyIP(8443, lo =>
+        {
+            lo.Protocols = HttpProtocols.Http1AndHttp2AndHttp3;
+            lo.UseHttps(X509Certificate2.CreateFromPemFile(certPath, keyPath));
+        });
+    }
+});
+
+builder.Services.AddResponseCompression(options =>
+{
+    options.EnableForHttps = true;
+});
+builder.Services.Configure<GzipCompressionProviderOptions>(options =>
+{
+    options.Level = CompressionLevel.Fastest;
+});
+
+var app = builder.Build();
+
+app.UseResponseCompression();
+
+app.Use((ctx, next) =>
+{
+    ctx.Response.Headers["Server"] = "aspnet-minimal-aot";
+    return next();
+});
+
+AppData.Load();
+
+app.MapGet("/pipeline", Handlers.Text);
+
+app.MapGet("/baseline11", Handlers.Sum);
+app.MapPost("/baseline11", Handlers.SumBody);
+app.MapGet("/baseline2", Handlers.Sum);
+
+app.MapPost("/upload", Handlers.Upload);
+app.MapGet("/json", Handlers.Json);
+app.MapGet("/compression", Handlers.Compression);
+app.MapGet("/db", Handlers.Database);
+app.MapGet("/async-db", Handlers.AsyncDatabase);
+
+if (Directory.Exists("/data/static"))
+{
+    var typeProvider = new FileExtensionContentTypeProvider();
+    
+    typeProvider.Mappings[".js"] = "application/javascript";
+    
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider("/data/static"),
+        ContentTypeProvider = typeProvider,
+        RequestPath = "/static"
+    });
+}
+
+app.Run();
