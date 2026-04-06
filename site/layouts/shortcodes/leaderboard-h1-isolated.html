@@ -730,6 +730,7 @@ lbH1IsoRoot.querySelectorAll('.lb-tab').forEach(function(tab) {
     lbH1IsoRoot.querySelectorAll('.lb-panel').forEach(function(p) { p.classList.remove('active'); });
     lbH1IsoRoot.querySelector('[data-panel="' + tab.dataset.tab + '"]').classList.add('active');
     applyH1IsoFilters();
+    if (window.dlScheduleUpdate) window.dlScheduleUpdate();
   });
 });
 
@@ -742,6 +743,7 @@ lbH1IsoRoot.querySelectorAll('.lb-conn-tab').forEach(function(btn) {
     panel.querySelectorAll('.lb-conn-panel').forEach(function(cp) { cp.classList.remove('active'); });
     panel.querySelector('.lb-conn-panel[data-conns="' + btn.dataset.conns + '"]').classList.add('active');
     applyH1IsoFilters();
+    if (window.dlScheduleUpdate) window.dlScheduleUpdate();
   });
 });
 
@@ -908,6 +910,7 @@ lbH1IsoRoot.addEventListener('click', function(ev) {
     }
     lbH1IsoUpdateAllDropdowns(filterKey, filterKey === 'engine' ? lbH1IsoEngineLabels : null);
     applyH1IsoFilters();
+    if (window.dlScheduleUpdate) window.dlScheduleUpdate();
     return;
   }
   var ddBtn = ev.target.closest('.lb-dropdown-btn');
@@ -932,11 +935,13 @@ lbH1IsoRoot.querySelectorAll('.lb-search-input').forEach(function(input) {
     lbH1IsoRoot.querySelectorAll('.lb-search-input').forEach(function(other) { if (other !== input) other.value = val; });
     document.querySelectorAll('.lb-search-clear').forEach(function(btn) { btn.style.display = val ? '' : 'none'; });
     applyH1IsoFilters();
+    if (window.dlScheduleUpdate) window.dlScheduleUpdate();
   });
   clearBtn.addEventListener('click', function() {
     lbH1IsoRoot.querySelectorAll('.lb-search-input').forEach(function(inp) { inp.value = ''; });
     document.querySelectorAll('.lb-search-clear').forEach(function(btn) { btn.style.display = 'none'; });
     applyH1IsoFilters();
+    if (window.dlScheduleUpdate) window.dlScheduleUpdate();
   });
 });
 
@@ -967,6 +972,7 @@ lbH1IsoRoot.querySelectorAll('.lb-type-filter').forEach(function(btn) {
       }
     }
     applyH1IsoFilters();
+    if (window.dlScheduleUpdate) window.dlScheduleUpdate();
   });
 });
 

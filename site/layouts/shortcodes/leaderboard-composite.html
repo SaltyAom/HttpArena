@@ -16,6 +16,8 @@
   (dict "id" "static-h2" "label" "Static" "sublabel" "H/2" "proto" "h2" "conns" (slice 256 1024) "scored" true "engineScored" true)
   (dict "id" "unary-grpc" "label" "Unary" "sublabel" "gRPC" "proto" "grpc" "conns" (slice 256 1024) "scored" true "engineScored" true)
   (dict "id" "unary-grpc-tls" "label" "Unary TLS" "sublabel" "gRPC" "proto" "grpc" "conns" (slice 256 1024) "scored" true "engineScored" true)
+  (dict "id" "baseline-h3" "label" "Baseline" "sublabel" "H/3" "proto" "h3" "conns" (slice 256 512) "scored" true "engineScored" true)
+  (dict "id" "static-h3" "label" "Static" "sublabel" "H/3" "proto" "h3" "conns" (slice 256 512) "scored" true "engineScored" true)
   (dict "id" "echo-ws" "label" "Echo" "sublabel" "WebSocket" "proto" "ws" "conns" (slice 512 4096 16384) "scored" true "engineScored" true)
 }}
 
@@ -391,6 +393,7 @@ function initDropdown(filterKey, extractValues, extractLabels) {
     }
     updateCount();
     renderComposite();
+    if (window.dlScheduleUpdate) window.dlScheduleUpdate();
   });
 
   btn.addEventListener('click', function(ev) {
@@ -440,11 +443,13 @@ var clearBtn = document.querySelector('.composite-search-clear');
 searchInput.addEventListener('input', function() {
   clearBtn.style.display = searchInput.value ? '' : 'none';
   renderComposite();
+  if (window.dlScheduleUpdate) window.dlScheduleUpdate();
 });
 clearBtn.addEventListener('click', function() {
   searchInput.value = '';
   clearBtn.style.display = 'none';
   renderComposite();
+  if (window.dlScheduleUpdate) window.dlScheduleUpdate();
 });
 
 // Round change handler
@@ -716,6 +721,7 @@ function renderComposite() {
     col.addEventListener('click', function() {
       compositeSortCol = col.dataset.sort;
       renderComposite();
+      if (window.dlScheduleUpdate) window.dlScheduleUpdate();
     });
   });
 
@@ -867,6 +873,7 @@ document.querySelectorAll('.composite-proto-select').forEach(function(btn) {
     compositeSortCol = 'composite';
     syncTestFilters();
     renderComposite();
+    if (window.dlScheduleUpdate) window.dlScheduleUpdate();
   });
 });
 
@@ -892,6 +899,7 @@ document.querySelectorAll('.composite-profile-filter').forEach(function(btn) {
       }
     }
     renderComposite();
+    if (window.dlScheduleUpdate) window.dlScheduleUpdate();
   });
 });
 
@@ -900,6 +908,7 @@ document.querySelectorAll('.composite-resource-toggle').forEach(function(btn) {
   btn.addEventListener('click', function() {
     btn.classList.toggle('active');
     renderComposite();
+    if (window.dlScheduleUpdate) window.dlScheduleUpdate();
   });
 });
 
@@ -920,6 +929,7 @@ document.querySelectorAll('.composite-type-filter').forEach(function(btn) {
     }
     updateCompositeNote();
     renderComposite();
+    if (window.dlScheduleUpdate) window.dlScheduleUpdate();
   });
 });
 
@@ -958,5 +968,10 @@ floaterComp.addEventListener('click', function(e) {
 new MutationObserver(function() { lastHeaderComp = null; updateFloatingHeaderComp(); })
   .observe(document.getElementById('composite-table'), { childList: true });
 
+/* Expose for deep linking */
+window.compositeDropdownState = dropdownState;
+window.compositeSyncTestFilters = syncTestFilters;
+window.compositeLangDd = langDd;
+window.compositeEngineDd = engineDd;
 })();
 </script>

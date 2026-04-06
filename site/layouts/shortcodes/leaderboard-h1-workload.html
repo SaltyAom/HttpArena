@@ -721,6 +721,7 @@ lbH1WkRoot.querySelectorAll('.lb-tab').forEach(function(tab) {
     lbH1WkRoot.querySelectorAll('.lb-panel').forEach(function(p) { p.classList.remove('active'); });
     lbH1WkRoot.querySelector('[data-panel="' + tab.dataset.tab + '"]').classList.add('active');
     applyH1WkFilters();
+    if (window.dlScheduleUpdate) window.dlScheduleUpdate();
   });
 });
 
@@ -733,6 +734,7 @@ lbH1WkRoot.querySelectorAll('.lb-conn-tab').forEach(function(btn) {
     panel.querySelectorAll('.lb-conn-panel').forEach(function(cp) { cp.classList.remove('active'); });
     panel.querySelector('.lb-conn-panel[data-conns="' + btn.dataset.conns + '"]').classList.add('active');
     applyH1WkFilters();
+    if (window.dlScheduleUpdate) window.dlScheduleUpdate();
   });
 });
 
@@ -899,6 +901,7 @@ lbH1WkRoot.addEventListener('click', function(ev) {
     }
     lbH1WkUpdateAllDropdowns(filterKey, filterKey === 'engine' ? lbH1WkEngineLabels : null);
     applyH1WkFilters();
+    if (window.dlScheduleUpdate) window.dlScheduleUpdate();
     return;
   }
   var ddBtn = ev.target.closest('.lb-dropdown-btn');
@@ -923,11 +926,13 @@ lbH1WkRoot.querySelectorAll('.lb-search-input').forEach(function(input) {
     lbH1WkRoot.querySelectorAll('.lb-search-input').forEach(function(other) { if (other !== input) other.value = val; });
     document.querySelectorAll('.lb-search-clear').forEach(function(btn) { btn.style.display = val ? '' : 'none'; });
     applyH1WkFilters();
+    if (window.dlScheduleUpdate) window.dlScheduleUpdate();
   });
   clearBtn.addEventListener('click', function() {
     lbH1WkRoot.querySelectorAll('.lb-search-input').forEach(function(inp) { inp.value = ''; });
     document.querySelectorAll('.lb-search-clear').forEach(function(btn) { btn.style.display = 'none'; });
     applyH1WkFilters();
+    if (window.dlScheduleUpdate) window.dlScheduleUpdate();
   });
 });
 
@@ -958,6 +963,7 @@ lbH1WkRoot.querySelectorAll('.lb-type-filter').forEach(function(btn) {
       }
     }
     applyH1WkFilters();
+    if (window.dlScheduleUpdate) window.dlScheduleUpdate();
   });
 });
 
