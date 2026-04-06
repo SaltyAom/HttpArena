@@ -380,26 +380,6 @@
     "status_5xx": 0
   },
   {
-    "framework": "frankenphp-trueasync",
-    "language": "PHP",
-    "rps": 7188,
-    "avg_latency": "70.38ms",
-    "p99_latency": "323.30ms",
-    "cpu": "6709.1%",
-    "memory": "7.9GiB",
-    "connections": 512,
-    "threads": 64,
-    "duration": "5s",
-    "pipeline": 1,
-    "bandwidth": "1.20GB/s",
-    "input_bw": "519.45KB/s",
-    "reconnects": 0,
-    "status_2xx": 35944,
-    "status_3xx": 0,
-    "status_4xx": 0,
-    "status_5xx": 0
-  },
-  {
     "framework": "genhttp",
     "language": "C#",
     "rps": 3812,
