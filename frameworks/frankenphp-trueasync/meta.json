@@ -15,7 +15,7 @@
     "compression",
     "noisy",
     "static",
-    "mixed",
+    "sync-db",
     "async-db",
     "api-4",
     "api-16",

@@ -1,0 +1,640 @@
+{"level":"info","ts":1775498826.5572045,"msg":"maxprocs: Leaving GOMAXPROCS=64: CPU quota undefined"}
+{"level":"info","ts":1775498826.5572298,"msg":"GOMEMLIMIT is updated","GOMEMLIMIT":243039504384,"previous":9223372036854775807}
+{"level":"info","ts":1775498826.5572326,"msg":"using config from file","file":"/etc/caddy/Caddyfile"}
+{"level":"info","ts":1775498826.5572345,"msg":"adapted config to JSON","adapter":"caddyfile"}
+{"level":"warn","ts":1775498826.5572367,"logger":"admin","msg":"admin endpoint disabled"}
+{"level":"info","ts":1775498826.5574555,"logger":"tls.cache.maintenance","msg":"started background certificate maintenance","cache":"0xbe0cbcbd880"}
+{"level":"info","ts":1775498826.5577006,"logger":"http.auto_https","msg":"automatic HTTPS is completely disabled for server","server_name":"srv0"}
+{"level":"info","ts":1775498826.5577142,"logger":"http.auto_https","msg":"automatic HTTPS is completely disabled for server","server_name":"srv1"}
+{"level":"warn","ts":1775498826.558019,"logger":"http","msg":"HTTP/2 skipped because it requires TLS","network":"tcp","addr":":8080"}
+{"level":"warn","ts":1775498826.5580232,"logger":"http","msg":"HTTP/3 skipped because it requires TLS","network":"tcp","addr":":8080"}
+{"level":"info","ts":1775498826.5580254,"logger":"http.log","msg":"server running","name":"srv0","protocols":["h1","h2","h3"]}
+{"level":"info","ts":1775498826.5580523,"logger":"http","msg":"enabling HTTP/3 listener","addr":":8443"}
+{"level":"info","ts":1775498826.5581546,"logger":"http.log","msg":"server running","name":"srv1","protocols":["h1","h2","h3"]}
+{"level":"info","ts":1775498826.5654187,"logger":"tls","msg":"cleaning storage unit","storage":"FileStorage:/root/.local/share/caddy"}
+{"level":"info","ts":1775498826.5684695,"logger":"tls","msg":"finished cleaning storage units"}
+{"level":"info","ts":1775498826.937733,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":1}
+{"level":"info","ts":1775498826.9377997,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":3}
+{"level":"info","ts":1775498826.937739,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":2}
+{"level":"info","ts":1775498826.9378219,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":5}
+{"level":"info","ts":1775498826.937882,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":6}
+{"level":"info","ts":1775498826.9378974,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":7}
+{"level":"info","ts":1775498826.9378033,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":4}
+{"level":"info","ts":1775498826.9379697,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":9}
+{"level":"info","ts":1775498826.9379637,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":8}
+{"level":"info","ts":1775498826.9380653,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":11}
+{"level":"info","ts":1775498826.9380627,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":10}
+{"level":"info","ts":1775498826.9380763,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":12}
+{"level":"info","ts":1775498826.9381547,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":13}
+{"level":"info","ts":1775498826.9382064,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":14}
+{"level":"info","ts":1775498826.9382205,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":15}
+{"level":"info","ts":1775498826.9383078,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":16}
+{"level":"info","ts":1775498826.9383264,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":17}
+{"level":"info","ts":1775498826.9383736,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":18}
+{"level":"info","ts":1775498826.9384217,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":19}
+{"level":"info","ts":1775498826.9384475,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":20}
+{"level":"info","ts":1775498826.9385388,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":21}
+{"level":"info","ts":1775498826.938567,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":22}
+{"level":"info","ts":1775498826.9387023,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":24}
+{"level":"info","ts":1775498826.9387233,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":25}
+{"level":"info","ts":1775498826.938771,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":26}
+{"level":"info","ts":1775498826.938795,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":27}
+{"level":"info","ts":1775498826.9388456,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":28}
+{"level":"info","ts":1775498826.9389424,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":29}
+{"level":"info","ts":1775498826.9390707,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":23}
+{"level":"info","ts":1775498826.9390643,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":31}
+{"level":"info","ts":1775498826.939087,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":32}
+{"level":"info","ts":1775498826.9389954,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":30}
+{"level":"info","ts":1775498826.9391272,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":34}
+{"level":"info","ts":1775498826.9390457,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":33}
+{"level":"info","ts":1775498826.9536622,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":35}
+{"level":"info","ts":1775498826.9636147,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":36}
+{"level":"info","ts":1775498826.963666,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":37}
+{"level":"info","ts":1775498826.9637175,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":38}
+{"level":"info","ts":1775498826.9637887,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":39}
+{"level":"info","ts":1775498826.9638479,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":40}
+{"level":"info","ts":1775498826.963926,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":41}
+{"level":"info","ts":1775498826.9640014,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":42}
+{"level":"info","ts":1775498826.9640107,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":43}
+{"level":"info","ts":1775498826.964039,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":44}
+{"level":"info","ts":1775498826.9640868,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":45}
+{"level":"info","ts":1775498826.9641113,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":46}
+{"level":"info","ts":1775498826.9641898,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":47}
+{"level":"info","ts":1775498826.9642773,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":48}
+{"level":"info","ts":1775498826.9642804,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":49}
+{"level":"info","ts":1775498826.9643524,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":50}
+{"level":"info","ts":1775498826.964406,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":51}
+{"level":"info","ts":1775498826.9644248,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":52}
+{"level":"info","ts":1775498826.9645195,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":54}
+{"level":"info","ts":1775498826.9645162,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":53}
+{"level":"info","ts":1775498826.9822614,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":55}
+{"level":"info","ts":1775498826.9823527,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":56}
+{"level":"info","ts":1775498826.9824882,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":57}
+{"level":"info","ts":1775498826.9825368,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":58}
+{"level":"info","ts":1775498826.9825776,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":60}
+{"level":"info","ts":1775498826.9826896,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":61}
+{"level":"info","ts":1775498826.98254,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":59}
+{"level":"info","ts":1775498826.9827547,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":62}
+{"level":"info","ts":1775498826.9827926,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":63}
+{"level":"info","ts":1775498826.9828808,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":65}
+{"level":"info","ts":1775498826.982849,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":64}
+{"level":"info","ts":1775498826.9829407,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":66}
+{"level":"info","ts":1775498826.9830284,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":67}
+{"level":"info","ts":1775498826.9831874,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":68}
+{"level":"info","ts":1775498826.9832056,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":69}
+{"level":"info","ts":1775498826.9833484,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":71}
+{"level":"info","ts":1775498826.9834232,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":73}
+{"level":"info","ts":1775498826.9835055,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":75}
+{"level":"info","ts":1775498826.9835591,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":76}
+{"level":"info","ts":1775498826.9836178,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":77}
+{"level":"info","ts":1775498826.983301,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":70}
+{"level":"info","ts":1775498826.9837039,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":78}
+{"level":"info","ts":1775498826.9833791,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":72}
+{"level":"info","ts":1775498826.98377,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":79}
+{"level":"info","ts":1775498826.9838464,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":80}
+{"level":"info","ts":1775498826.9838684,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":81}
+{"level":"info","ts":1775498826.9838765,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":74}
+{"level":"info","ts":1775498826.9839332,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":82}
+{"level":"info","ts":1775498826.9839911,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":83}
+{"level":"info","ts":1775498826.9840994,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":84}
+{"level":"info","ts":1775498827.0048082,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":85}
+{"level":"info","ts":1775498827.0048745,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":86}
+{"level":"info","ts":1775498827.0049639,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":87}
+{"level":"info","ts":1775498827.0050812,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":88}
+{"level":"info","ts":1775498827.005097,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":89}
+{"level":"info","ts":1775498827.0051498,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":90}
+{"level":"info","ts":1775498827.0053349,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":92}
+{"level":"info","ts":1775498827.0053518,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":93}
+{"level":"info","ts":1775498827.0053601,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":94}
+{"level":"info","ts":1775498827.0053513,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":91}
+{"level":"info","ts":1775498827.005494,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":96}
+{"level":"info","ts":1775498827.0055413,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":97}
+{"level":"info","ts":1775498827.005603,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":98}
+{"level":"info","ts":1775498827.0056462,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":99}
+{"level":"info","ts":1775498827.0056584,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":95}
+{"level":"info","ts":1775498827.0058465,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":100}
+{"level":"info","ts":1775498827.0059218,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":102}
+{"level":"info","ts":1775498827.005987,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":103}
+{"level":"info","ts":1775498827.0059786,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":101}
+{"level":"info","ts":1775498827.006078,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":104}
+{"level":"info","ts":1775498827.006164,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":105}
+{"level":"info","ts":1775498827.0061994,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":106}
+{"level":"info","ts":1775498827.0062757,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":107}
+{"level":"info","ts":1775498827.0064116,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":109}
+{"level":"info","ts":1775498827.0064313,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":110}
+{"level":"info","ts":1775498827.0063317,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":108}
+{"level":"info","ts":1775498827.0065625,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":111}
+{"level":"info","ts":1775498827.0066135,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":112}
+{"level":"info","ts":1775498827.0066483,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":113}
+{"level":"info","ts":1775498827.0067084,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":114}
+{"level":"info","ts":1775498827.0067484,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":115}
+{"level":"info","ts":1775498827.0068722,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":116}
+{"level":"info","ts":1775498827.0069773,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":117}
+{"level":"info","ts":1775498827.007021,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":118}
+{"level":"info","ts":1775498827.007199,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":119}
+{"level":"info","ts":1775498827.007206,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":121}
+{"level":"info","ts":1775498827.0071557,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":120}
+{"level":"info","ts":1775498827.0072694,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":122}
+{"level":"info","ts":1775498827.0073621,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":123}
+{"level":"info","ts":1775498827.0074964,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":125}
+{"level":"info","ts":1775498827.0074358,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":124}
+{"level":"info","ts":1775498827.0075321,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":126}
+{"level":"info","ts":1775498827.0076654,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":127}
+{"level":"info","ts":1775498827.013169,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php","thread":128}
+{"level":"info","ts":1775498827.0132556,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":129}
+{"level":"info","ts":1775498827.0133662,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":130}
+{"level":"info","ts":1775498827.0134022,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":131}
+{"level":"info","ts":1775498827.0136628,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":132}
+{"level":"info","ts":1775498827.013858,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":133}
+{"level":"info","ts":1775498827.0140066,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":135}
+{"level":"info","ts":1775498827.014029,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":134}
+{"level":"info","ts":1775498827.0170484,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":139}
+{"level":"info","ts":1775498827.0140438,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":136}
+{"level":"info","ts":1775498827.014125,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":137}
+{"level":"info","ts":1775498827.0141675,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":138}
+{"level":"info","ts":1775498827.0194256,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":140}
+{"level":"info","ts":1775498827.0196118,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":141}
+{"level":"info","ts":1775498827.0199368,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":142}
+{"level":"info","ts":1775498827.0214477,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":143}
+{"level":"info","ts":1775498827.0215511,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":145}
+{"level":"info","ts":1775498827.0215514,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":144}
+{"level":"info","ts":1775498827.0216625,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":146}
+{"level":"info","ts":1775498827.021775,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":147}
+{"level":"info","ts":1775498827.0219831,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":148}
+{"level":"info","ts":1775498827.0220385,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":149}
+{"level":"info","ts":1775498827.022104,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":150}
+{"level":"info","ts":1775498827.0221708,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":151}
+{"level":"info","ts":1775498827.022184,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":152}
+{"level":"info","ts":1775498827.0222023,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":153}
+{"level":"info","ts":1775498827.0222793,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":154}
+{"level":"info","ts":1775498827.0223753,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":155}
+{"level":"info","ts":1775498827.0225608,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":156}
+{"level":"info","ts":1775498827.0225668,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":157}
+{"level":"info","ts":1775498827.0436823,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":158}
+{"level":"info","ts":1775498827.0438142,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":159}
+{"level":"info","ts":1775498827.0441203,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":160}
+{"level":"info","ts":1775498827.0441368,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":161}
+{"level":"info","ts":1775498827.0441947,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":162}
+{"level":"info","ts":1775498827.044278,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":163}
+{"level":"info","ts":1775498827.0443945,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":164}
+{"level":"info","ts":1775498827.044488,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":166}
+{"level":"info","ts":1775498827.044501,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":165}
+{"level":"info","ts":1775498827.0448883,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":167}
+{"level":"info","ts":1775498827.0449839,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":169}
+{"level":"info","ts":1775498827.0449748,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":168}
+{"level":"info","ts":1775498827.0450513,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":170}
+{"level":"info","ts":1775498827.04508,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":171}
+{"level":"info","ts":1775498827.0452185,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":172}
+{"level":"info","ts":1775498827.045305,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":173}
+{"level":"info","ts":1775498827.045565,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":174}
+{"level":"info","ts":1775498827.045685,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":177}
+{"level":"info","ts":1775498827.0456905,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":178}
+{"level":"info","ts":1775498827.0455992,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":176}
+{"level":"info","ts":1775498827.0457768,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":179}
+{"level":"info","ts":1775498827.0457966,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":180}
+{"level":"info","ts":1775498827.0458765,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":181}
+{"level":"info","ts":1775498827.045963,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":182}
+{"level":"info","ts":1775498827.046019,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":175}
+{"level":"info","ts":1775498827.046043,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":184}
+{"level":"info","ts":1775498827.0460515,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":183}
+{"level":"info","ts":1775498827.0462143,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":186}
+{"level":"info","ts":1775498827.0461469,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":185}
+{"level":"info","ts":1775498827.0463877,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":187}
+{"level":"info","ts":1775498827.0464046,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":188}
+{"level":"info","ts":1775498827.046435,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":189}
+{"level":"info","ts":1775498827.0465887,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":190}
+{"level":"info","ts":1775498827.0465949,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":191}
+{"level":"info","ts":1775498827.046692,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":192}
+{"level":"info","ts":1775498827.0467303,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":193}
+{"level":"info","ts":1775498827.0467381,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":194}
+{"level":"info","ts":1775498827.0473588,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":195}
+{"level":"info","ts":1775498827.0473785,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":201}
+{"level":"info","ts":1775498827.0473683,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":203}
+{"level":"info","ts":1775498827.047421,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":202}
+{"level":"info","ts":1775498827.047457,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":196}
+{"level":"info","ts":1775498827.047458,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":207}
+{"level":"info","ts":1775498827.0474763,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":204}
+{"level":"info","ts":1775498827.047554,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":208}
+{"level":"info","ts":1775498827.0475085,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":198}
+{"level":"info","ts":1775498827.0474286,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":197}
+{"level":"info","ts":1775498827.0474586,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":206}
+{"level":"info","ts":1775498827.0474951,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":199}
+{"level":"info","ts":1775498827.0475888,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":200}
+{"level":"info","ts":1775498827.0474575,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":205}
+{"level":"info","ts":1775498827.0476682,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":210}
+{"level":"info","ts":1775498827.0476828,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":211}
+{"level":"info","ts":1775498827.0477197,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":212}
+{"level":"info","ts":1775498827.0477295,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":209}
+{"level":"info","ts":1775498827.047764,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":213}
+{"level":"info","ts":1775498827.0477893,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":214}
+{"level":"info","ts":1775498827.0478427,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":215}
+{"level":"info","ts":1775498827.047909,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":216}
+{"level":"info","ts":1775498827.0479784,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":217}
+{"level":"info","ts":1775498827.0480494,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":218}
+{"level":"info","ts":1775498827.0481308,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":219}
+{"level":"info","ts":1775498827.0482373,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":222}
+{"level":"info","ts":1775498827.0482078,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":221}
+{"level":"info","ts":1775498827.0482984,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":223}
+{"level":"info","ts":1775498827.0483127,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":224}
+{"level":"info","ts":1775498827.04821,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":220}
+{"level":"info","ts":1775498827.048357,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":225}
+{"level":"info","ts":1775498827.0484312,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":226}
+{"level":"info","ts":1775498827.0485182,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":227}
+{"level":"info","ts":1775498827.0485902,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":228}
+{"level":"info","ts":1775498827.0486853,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":229}
+{"level":"info","ts":1775498827.0487652,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":232}
+{"level":"info","ts":1775498827.0488076,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":231}
+{"level":"info","ts":1775498827.0488584,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":234}
+{"level":"info","ts":1775498827.048766,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":230}
+{"level":"info","ts":1775498827.0489259,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":235}
+{"level":"info","ts":1775498827.0489318,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":236}
+{"level":"info","ts":1775498827.049004,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":233}
+{"level":"info","ts":1775498827.0490086,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":237}
+{"level":"info","ts":1775498827.0490427,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":239}
+{"level":"info","ts":1775498827.04909,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":240}
+{"level":"info","ts":1775498827.0491912,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":241}
+{"level":"info","ts":1775498827.049205,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":242}
+{"level":"info","ts":1775498827.049009,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":238}
+{"level":"info","ts":1775498827.0492566,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":243}
+{"level":"info","ts":1775498827.0492635,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":244}
+{"level":"info","ts":1775498827.0493507,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":245}
+{"level":"info","ts":1775498827.049389,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":247}
+{"level":"info","ts":1775498827.0494301,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":248}
+{"level":"info","ts":1775498827.0494342,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":249}
+{"level":"info","ts":1775498827.0493503,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":246}
+{"level":"info","ts":1775498827.049595,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":250}
+{"level":"info","ts":1775498827.0496058,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":251}
+{"level":"info","ts":1775498827.0496905,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":252}
+{"level":"info","ts":1775498827.0497656,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":253}
+{"level":"info","ts":1775498827.0497706,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":255}
+{"level":"info","ts":1775498827.0498524,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":254}
+{"level":"info","ts":1775498827.0498545,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":257}
+{"level":"info","ts":1775498827.049955,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_0","thread":256}
+{"level":"info","ts":1775498827.0499706,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":259}
+{"level":"info","ts":1775498827.0499723,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":260}
+{"level":"info","ts":1775498827.049998,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":261}
+{"level":"info","ts":1775498827.0500464,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":262}
+{"level":"info","ts":1775498827.050083,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":263}
+{"level":"info","ts":1775498827.0499604,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":258}
+{"level":"info","ts":1775498827.0501373,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":264}
+{"level":"info","ts":1775498827.0501518,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":265}
+{"level":"info","ts":1775498827.0502307,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":266}
+{"level":"info","ts":1775498827.0503066,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":268}
+{"level":"info","ts":1775498827.0503056,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":267}
+{"level":"info","ts":1775498827.0503523,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":269}
+{"level":"info","ts":1775498827.0505137,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":271}
+{"level":"info","ts":1775498827.0505297,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":270}
+{"level":"info","ts":1775498827.050532,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":272}
+{"level":"info","ts":1775498827.050536,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":273}
+{"level":"info","ts":1775498827.0506246,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":274}
+{"level":"info","ts":1775498827.0506794,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":276}
+{"level":"info","ts":1775498827.0506337,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":275}
+{"level":"info","ts":1775498827.0507193,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":277}
+{"level":"info","ts":1775498827.050731,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":278}
+{"level":"info","ts":1775498827.0508134,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":279}
+{"level":"info","ts":1775498827.050933,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":281}
+{"level":"info","ts":1775498827.0509603,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":280}
+{"level":"info","ts":1775498827.0510397,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":283}
+{"level":"info","ts":1775498827.0511281,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":282}
+{"level":"info","ts":1775498827.0511284,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":284}
+{"level":"info","ts":1775498827.0511384,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":286}
+{"level":"info","ts":1775498827.051215,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":288}
+{"level":"info","ts":1775498827.0512557,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":285}
+{"level":"info","ts":1775498827.0512996,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":290}
+{"level":"info","ts":1775498827.05122,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":287}
+{"level":"info","ts":1775498827.0513017,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":291}
+{"level":"info","ts":1775498827.0513124,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":289}
+{"level":"info","ts":1775498827.0513828,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":293}
+{"level":"info","ts":1775498827.05134,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":292}
+{"level":"info","ts":1775498827.0514252,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":294}
+{"level":"info","ts":1775498827.0514815,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":295}
+{"level":"info","ts":1775498827.0515556,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":296}
+{"level":"info","ts":1775498827.051567,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":297}
+{"level":"info","ts":1775498827.0516076,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":298}
+{"level":"info","ts":1775498827.051656,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":299}
+{"level":"info","ts":1775498827.0517933,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":300}
+{"level":"info","ts":1775498827.0518274,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":301}
+{"level":"info","ts":1775498827.0519912,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":302}
+{"level":"info","ts":1775498827.0520103,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":303}
+{"level":"info","ts":1775498827.0521727,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":304}
+{"level":"info","ts":1775498827.0521772,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":307}
+{"level":"info","ts":1775498827.0522618,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":305}
+{"level":"info","ts":1775498827.052384,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":312}
+{"level":"info","ts":1775498827.0523884,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":308}
+{"level":"info","ts":1775498827.0524704,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":309}
+{"level":"info","ts":1775498827.0524778,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":311}
+{"level":"info","ts":1775498827.0525358,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":306}
+{"level":"info","ts":1775498827.05255,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":310}
+{"level":"info","ts":1775498827.0526035,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":318}
+{"level":"info","ts":1775498827.0526366,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":314}
+{"level":"info","ts":1775498827.0526254,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":313}
+{"level":"info","ts":1775498827.05264,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":317}
+{"level":"info","ts":1775498827.0526524,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":320}
+{"level":"info","ts":1775498827.0526526,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":319}
+{"level":"info","ts":1775498827.0525506,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":315}
+{"level":"info","ts":1775498827.0527463,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":322}
+{"level":"info","ts":1775498827.052748,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":321}
+{"level":"info","ts":1775498827.0525663,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":316}
+{"level":"info","ts":1775498827.0528433,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":324}
+{"level":"info","ts":1775498827.052875,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":325}
+{"level":"info","ts":1775498827.0528362,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":323}
+{"level":"info","ts":1775498827.0680733,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":326}
+{"level":"info","ts":1775498827.068109,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":327}
+{"level":"info","ts":1775498827.068136,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":328}
+{"level":"info","ts":1775498827.0684092,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":329}
+{"level":"info","ts":1775498827.0685537,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":330}
+{"level":"info","ts":1775498827.0688608,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":331}
+{"level":"info","ts":1775498827.0689468,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":332}
+{"level":"info","ts":1775498827.0690231,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":333}
+{"level":"info","ts":1775498827.0691059,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":334}
+{"level":"info","ts":1775498827.0691357,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":335}
+{"level":"info","ts":1775498827.0692093,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":336}
+{"level":"info","ts":1775498827.0692444,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":337}
+{"level":"info","ts":1775498827.0692847,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":338}
+{"level":"info","ts":1775498827.0693538,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":339}
+{"level":"info","ts":1775498827.0694087,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":340}
+{"level":"info","ts":1775498827.069488,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":341}
+{"level":"info","ts":1775498827.069543,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":342}
+{"level":"info","ts":1775498827.069615,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":344}
+{"level":"info","ts":1775498827.0696118,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":343}
+{"level":"info","ts":1775498827.0699186,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":345}
+{"level":"info","ts":1775498827.0700343,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":346}
+{"level":"info","ts":1775498827.0701125,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":348}
+{"level":"info","ts":1775498827.0701234,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":349}
+{"level":"info","ts":1775498827.0701163,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":347}
+{"level":"info","ts":1775498827.070209,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":351}
+{"level":"info","ts":1775498827.0702066,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":350}
+{"level":"info","ts":1775498827.070305,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":352}
+{"level":"info","ts":1775498827.0703835,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":353}
+{"level":"info","ts":1775498827.0704405,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":354}
+{"level":"info","ts":1775498827.0705376,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":355}
+{"level":"info","ts":1775498827.0705483,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":356}
+{"level":"info","ts":1775498827.0706477,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":357}
+{"level":"info","ts":1775498827.0706632,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":359}
+{"level":"info","ts":1775498827.0706625,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":358}
+{"level":"info","ts":1775498827.0708413,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":360}
+{"level":"info","ts":1775498827.0708475,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":361}
+{"level":"info","ts":1775498827.0709298,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":362}
+{"level":"info","ts":1775498827.0709414,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":364}
+{"level":"info","ts":1775498827.070935,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":363}
+{"level":"info","ts":1775498827.0710187,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":365}
+{"level":"info","ts":1775498827.0710566,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":366}
+{"level":"info","ts":1775498827.0711336,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":367}
+{"level":"info","ts":1775498827.0711453,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":368}
+{"level":"info","ts":1775498827.0712361,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":370}
+{"level":"info","ts":1775498827.0712743,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":371}
+{"level":"info","ts":1775498827.071229,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":369}
+{"level":"info","ts":1775498827.0713227,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":372}
+{"level":"info","ts":1775498827.0713778,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":373}
+{"level":"info","ts":1775498827.0714898,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":375}
+{"level":"info","ts":1775498827.0714788,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":374}
+{"level":"info","ts":1775498827.0715733,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":376}
+{"level":"info","ts":1775498827.0716224,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":377}
+{"level":"info","ts":1775498827.071736,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":379}
+{"level":"info","ts":1775498827.0717564,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":380}
+{"level":"info","ts":1775498827.071734,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":378}
+{"level":"info","ts":1775498827.0718331,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":381}
+{"level":"info","ts":1775498827.0718317,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":382}
+{"level":"info","ts":1775498827.071863,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":383}
+{"level":"info","ts":1775498827.0719461,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_1","thread":384}
+{"level":"info","ts":1775498827.0719526,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":385}
+{"level":"info","ts":1775498827.0719764,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":386}
+{"level":"info","ts":1775498827.0720491,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":387}
+{"level":"info","ts":1775498827.0720642,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":388}
+{"level":"info","ts":1775498827.0721073,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":389}
+{"level":"info","ts":1775498827.0723774,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":390}
+{"level":"info","ts":1775498827.0724616,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":391}
+{"level":"info","ts":1775498827.0725145,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":392}
+{"level":"info","ts":1775498827.0725968,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":393}
+{"level":"info","ts":1775498827.072625,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":394}
+{"level":"info","ts":1775498827.0727162,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":395}
+{"level":"info","ts":1775498827.0727801,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":396}
+{"level":"info","ts":1775498827.0729313,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":397}
+{"level":"info","ts":1775498827.0730355,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":398}
+{"level":"info","ts":1775498827.0735526,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":400}
+{"level":"info","ts":1775498827.0735452,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":399}
+{"level":"info","ts":1775498827.0735612,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":401}
+{"level":"info","ts":1775498827.073571,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":409}
+{"level":"info","ts":1775498827.0735834,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":410}
+{"level":"info","ts":1775498827.0736647,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":402}
+{"level":"info","ts":1775498827.0736804,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":404}
+{"level":"info","ts":1775498827.0736847,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":405}
+{"level":"info","ts":1775498827.0737193,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":415}
+{"level":"info","ts":1775498827.0737476,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":414}
+{"level":"info","ts":1775498827.0737734,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":407}
+{"level":"info","ts":1775498827.0737789,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":403}
+{"level":"info","ts":1775498827.0737917,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":412}
+{"level":"info","ts":1775498827.0737891,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":408}
+{"level":"info","ts":1775498827.0738022,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":421}
+{"level":"info","ts":1775498827.0737987,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":411}
+{"level":"info","ts":1775498827.0738022,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":420}
+{"level":"info","ts":1775498827.073803,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":416}
+{"level":"info","ts":1775498827.0736752,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":406}
+{"level":"info","ts":1775498827.0738862,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":422}
+{"level":"info","ts":1775498827.073914,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":417}
+{"level":"info","ts":1775498827.0739489,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":419}
+{"level":"info","ts":1775498827.0739498,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":423}
+{"level":"info","ts":1775498827.0739925,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":413}
+{"level":"info","ts":1775498827.0739193,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":418}
+{"level":"info","ts":1775498827.074009,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":424}
+{"level":"info","ts":1775498827.0740778,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":425}
+{"level":"info","ts":1775498827.0742788,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":426}
+{"level":"info","ts":1775498827.0742912,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":427}
+{"level":"info","ts":1775498827.074372,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":428}
+{"level":"info","ts":1775498827.0743792,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":429}
+{"level":"info","ts":1775498827.074405,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":430}
+{"level":"info","ts":1775498827.0744894,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":431}
+{"level":"info","ts":1775498827.0745518,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":432}
+{"level":"info","ts":1775498827.074569,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":433}
+{"level":"info","ts":1775498827.0746152,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":434}
+{"level":"info","ts":1775498827.0747488,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":436}
+{"level":"info","ts":1775498827.0747511,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":435}
+{"level":"info","ts":1775498827.0748684,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":438}
+{"level":"info","ts":1775498827.0749712,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":437}
+{"level":"info","ts":1775498827.0750887,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":439}
+{"level":"info","ts":1775498827.0751107,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":440}
+{"level":"info","ts":1775498827.0751984,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":441}
+{"level":"info","ts":1775498827.0752778,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":443}
+{"level":"info","ts":1775498827.0753524,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":444}
+{"level":"info","ts":1775498827.0754316,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":442}
+{"level":"info","ts":1775498827.0754554,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":445}
+{"level":"info","ts":1775498827.0755486,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":446}
+{"level":"info","ts":1775498827.0755703,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":448}
+{"level":"info","ts":1775498827.0756407,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":449}
+{"level":"info","ts":1775498827.075722,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":451}
+{"level":"info","ts":1775498827.0757337,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":452}
+{"level":"info","ts":1775498827.0757296,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":447}
+{"level":"info","ts":1775498827.0758257,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":453}
+{"level":"info","ts":1775498827.0758195,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":450}
+{"level":"info","ts":1775498827.0758991,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":455}
+{"level":"info","ts":1775498827.0759094,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":454}
+{"level":"info","ts":1775498827.075916,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":456}
+{"level":"info","ts":1775498827.0760086,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":457}
+{"level":"info","ts":1775498827.076092,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":459}
+{"level":"info","ts":1775498827.0761418,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":461}
+{"level":"info","ts":1775498827.0760844,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":458}
+{"level":"info","ts":1775498827.0763092,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":462}
+{"level":"info","ts":1775498827.0764205,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":463}
+{"level":"info","ts":1775498827.076432,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":464}
+{"level":"info","ts":1775498827.0766835,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":465}
+{"level":"info","ts":1775498827.0760913,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":460}
+{"level":"info","ts":1775498827.0793796,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":466}
+{"level":"info","ts":1775498827.0794601,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":467}
+{"level":"info","ts":1775498827.0794709,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":468}
+{"level":"info","ts":1775498827.0794837,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":469}
+{"level":"info","ts":1775498827.0795891,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":470}
+{"level":"info","ts":1775498827.0797243,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":472}
+{"level":"info","ts":1775498827.0798466,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":471}
+{"level":"info","ts":1775498827.079937,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":473}
+{"level":"info","ts":1775498827.07996,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":475}
+{"level":"info","ts":1775498827.0799427,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":474}
+{"level":"info","ts":1775498827.0801802,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":476}
+{"level":"info","ts":1775498827.0803452,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":480}
+{"level":"info","ts":1775498827.0803714,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":481}
+{"level":"info","ts":1775498827.0803795,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":478}
+{"level":"info","ts":1775498827.0803506,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":477}
+{"level":"info","ts":1775498827.0804226,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":479}
+{"level":"info","ts":1775498827.0804732,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":482}
+{"level":"info","ts":1775498827.080489,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":483}
+{"level":"info","ts":1775498827.0805066,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":485}
+{"level":"info","ts":1775498827.0804958,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":484}
+{"level":"info","ts":1775498827.0805905,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":486}
+{"level":"info","ts":1775498827.0807219,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":488}
+{"level":"info","ts":1775498827.0809045,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":489}
+{"level":"info","ts":1775498827.0809312,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":493}
+{"level":"info","ts":1775498827.0809777,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":494}
+{"level":"info","ts":1775498827.0810082,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":491}
+{"level":"info","ts":1775498827.0810454,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":492}
+{"level":"info","ts":1775498827.0810854,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":496}
+{"level":"info","ts":1775498827.0809493,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":490}
+{"level":"info","ts":1775498827.0811162,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":498}
+{"level":"info","ts":1775498827.0811555,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":497}
+{"level":"info","ts":1775498827.0811875,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":495}
+{"level":"info","ts":1775498827.0812745,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":499}
+{"level":"info","ts":1775498827.0814292,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":500}
+{"level":"info","ts":1775498827.0814502,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":501}
+{"level":"info","ts":1775498827.0815308,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":502}
+{"level":"info","ts":1775498827.0815506,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":503}
+{"level":"info","ts":1775498827.0816603,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":504}
+{"level":"info","ts":1775498827.0816977,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":505}
+{"level":"info","ts":1775498827.0817392,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":506}
+{"level":"info","ts":1775498827.0818071,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":487}
+{"level":"info","ts":1775498827.0818305,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":508}
+{"level":"info","ts":1775498827.081908,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":507}
+{"level":"info","ts":1775498827.081993,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":509}
+{"level":"info","ts":1775498827.0820055,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":510}
+{"level":"info","ts":1775498827.0820596,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":511}
+{"level":"info","ts":1775498827.0820763,"logger":"frankenphp","msg":"async worker thread started","worker":"m#/app/worker.php_2","thread":512}
+{"level":"info","ts":1775498827.0821404,"logger":"frankenphp","msg":"FrankenPHP started 🐘","php_version":"8.6.0-dev","num_threads":513,"max_threads":513}
+{"level":"info","ts":1775498827.0890353,"msg":"autosaved config (load with --resume flag)","file":"/root/.config/caddy/autosave.json"}
+{"level":"info","ts":1775498827.08906,"msg":"serving initial configuration"}
+{"level":"error","ts":1775498832.7550325,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"48966","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/thumb2.webp","headers":{}},"duration":0.000052328,"status":500,"err_id":"bdce6cy8s","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7555509,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"49326","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/analytics.js","headers":{}},"duration":0.000041738,"status":500,"err_id":"ct18if7vq","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7556956,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"49472","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/reset.css","headers":{}},"duration":0.000023163,"status":500,"err_id":"gffwxivdt","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.756579,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"50070","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/thumb1.webp","headers":{}},"duration":0.000026139,"status":500,"err_id":"vicyw3rvj","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7571461,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"50420","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/regular.woff2","headers":{}},"duration":0.000033282,"status":500,"err_id":"hw70qr117","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7585707,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"51352","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/theme.css","headers":{}},"duration":0.000030838,"status":500,"err_id":"gt8fquax9","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7586467,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"51396","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/components.css","headers":{}},"duration":0.000034144,"status":500,"err_id":"h5m4di1dz","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.758944,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"51604","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/bold.woff2","headers":{}},"duration":0.000028093,"status":500,"err_id":"asdcbj6dk","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7593758,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"51882","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/logo.svg","headers":{}},"duration":0.00002708,"status":500,"err_id":"hc5ipdrf5","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7595654,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"51998","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/icon-sprite.svg","headers":{}},"duration":0.000027141,"status":500,"err_id":"3e0rj4nvj","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.759624,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"52008","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/theme.css","headers":{}},"duration":0.000039023,"status":500,"err_id":"tmryrdy3g","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.760054,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"52372","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/helpers.js","headers":{}},"duration":0.000024396,"status":500,"err_id":"adc9dapz3","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.760433,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"52644","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/layout.css","headers":{}},"duration":0.000023393,"status":500,"err_id":"cifykct3m","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7604375,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"52638","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/manifest.json","headers":{}},"duration":0.000028263,"status":500,"err_id":"4ms16tr5w","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7604527,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"52648","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/reset.css","headers":{}},"duration":0.000040065,"status":500,"err_id":"5bcdpymr8","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7605193,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"52692","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/analytics.js","headers":{}},"duration":0.000021771,"status":500,"err_id":"4hp1jsc98","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7606733,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"52776","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/app.js","headers":{}},"duration":0.000026269,"status":500,"err_id":"jkzhsrfh3","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7606897,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"52808","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/components.css","headers":{}},"duration":0.00002148,"status":500,"err_id":"jw5ah1a0i","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7608883,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"52908","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/header.html","headers":{}},"duration":0.000026159,"status":500,"err_id":"3cqfmt5tf","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7610745,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"53004","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/utilities.css","headers":{}},"duration":0.000024506,"status":500,"err_id":"wunh4sbre","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.761178,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"53074","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/reset.css","headers":{}},"duration":0.000022993,"status":500,"err_id":"73ryqjhqt","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7612143,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"53084","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/hero.webp","headers":{}},"duration":0.000026519,"status":500,"err_id":"m73gru4rz","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7614026,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"53198","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/logo.svg","headers":{}},"duration":0.000029505,"status":500,"err_id":"it3spjvr4","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7615428,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"53278","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/footer.html","headers":{}},"duration":0.000025117,"status":500,"err_id":"msbtzed7n","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7616043,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"53334","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/utilities.css","headers":{}},"duration":0.000023033,"status":500,"err_id":"8sfj159mw","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7616732,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"53368","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/manifest.json","headers":{}},"duration":0.000038371,"status":500,"err_id":"p2grqjn4r","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7619238,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"53542","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/helpers.js","headers":{}},"duration":0.000033332,"status":500,"err_id":"3dnjqarqj","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.762136,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"53648","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/header.html","headers":{}},"duration":0.000042429,"status":500,"err_id":"iteav0d1g","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7623248,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"53772","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/regular.woff2","headers":{}},"duration":0.000025137,"status":500,"err_id":"e5w9m368p","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7626529,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"53936","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/vendor.js","headers":{}},"duration":0.000024246,"status":500,"err_id":"3ewmrk13f","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7628002,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"54014","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/theme.css","headers":{}},"duration":0.000025037,"status":500,"err_id":"w293xu2e5","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7629669,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"54138","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/theme.css","headers":{}},"duration":0.000043872,"status":500,"err_id":"ajxadhck7","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7629828,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"54180","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/analytics.js","headers":{}},"duration":0.000028613,"status":500,"err_id":"y0nj2yvx3","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7631834,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"54268","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/router.js","headers":{}},"duration":0.000041558,"status":500,"err_id":"s4cvbfsv1","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7631936,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"54278","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/theme.css","headers":{}},"duration":0.000021661,"status":500,"err_id":"d87nz2h8d","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7632117,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"54272","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/vendor.js","headers":{}},"duration":0.000032862,"status":500,"err_id":"qwwbwnsg5","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.763475,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"54410","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/theme.css","headers":{}},"duration":0.000049062,"status":500,"err_id":"ngrjbn4ck","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7635436,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"54456","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/layout.css","headers":{}},"duration":0.000041197,"status":500,"err_id":"bybbe5ein","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7639623,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"54686","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/regular.woff2","headers":{}},"duration":0.00003194,"status":500,"err_id":"0jx8b25aq","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.764062,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"54762","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/reset.css","headers":{}},"duration":0.00002128,"status":500,"err_id":"fmgy2zysu","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7642226,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"54856","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/thumb2.webp","headers":{}},"duration":0.000023854,"status":500,"err_id":"entt68e7a","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7643435,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"54908","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/thumb2.webp","headers":{}},"duration":0.000040686,"status":500,"err_id":"6k3wfuc5d","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7645872,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"55018","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/footer.html","headers":{}},"duration":0.000026049,"status":500,"err_id":"dukebff60","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7647016,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"55076","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/helpers.js","headers":{}},"duration":0.000028172,"status":500,"err_id":"f2g994aci","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7658575,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"55148","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/header.html","headers":{}},"duration":0.000885197,"status":500,"err_id":"8aq5i58fa","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7671754,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"55260","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/footer.html","headers":{}},"duration":0.00042763,"status":500,"err_id":"9v00m0zu5","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.767309,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"55170","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/helpers.js","headers":{}},"duration":0.001758872,"status":500,"err_id":"7gdn5wmmv","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7677062,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"55972","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/icon-sprite.svg","headers":{}},"duration":0.00006944,"status":500,"err_id":"brkeq0sea","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.768326,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"55282","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/icon-sprite.svg","headers":{}},"duration":0.002336362,"status":500,"err_id":"8dkz8nwq5","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7688916,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"55812","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/thumb2.webp","headers":{}},"duration":0.000565649,"status":500,"err_id":"3s9nra8r8","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.768972,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"55938","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/header.html","headers":{}},"duration":0.000058078,"status":500,"err_id":"zfkvw2ui7","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7690308,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"55720","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/manifest.json","headers":{}},"duration":0.000059702,"status":500,"err_id":"5fxn23pi5","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7691407,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"55512","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/manifest.json","headers":{}},"duration":0.000214481,"status":500,"err_id":"nwamf4bvy","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7693002,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"55310","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/analytics.js","headers":{}},"duration":0.000303848,"status":500,"err_id":"vdajwtauf","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.769388,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"55560","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/components.css","headers":{}},"duration":0.000093074,"status":500,"err_id":"prn8mjn20","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7693126,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"56026","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/thumb2.webp","headers":{}},"duration":0.000084989,"status":500,"err_id":"zzam86kfj","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7695267,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"55326","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/thumb1.webp","headers":{}},"duration":0.000105267,"status":500,"err_id":"dhyx1uzyt","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7690225,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"55922","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/bold.woff2","headers":{}},"duration":0.000084207,"status":500,"err_id":"ghhdq9vap","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7698755,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"56196","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/layout.css","headers":{}},"duration":0.000095599,"status":500,"err_id":"ckftj4qsw","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7699366,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"55454","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/icon-sprite.svg","headers":{}},"duration":0.00008551,"status":500,"err_id":"5p0ndavky","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7699554,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"56514","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/router.js","headers":{}},"duration":0.000087284,"status":500,"err_id":"b54758qf7","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7700024,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"56220","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/components.css","headers":{}},"duration":0.000057658,"status":500,"err_id":"tzmuxc2tw","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7700422,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"56594","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/icon-sprite.svg","headers":{}},"duration":0.0002509,"status":500,"err_id":"qh5j6g8u7","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7700047,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"56398","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/logo.svg","headers":{}},"duration":0.000111369,"status":500,"err_id":"euup8662m","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7700818,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"56144","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/reset.css","headers":{}},"duration":0.000054902,"status":500,"err_id":"j2g2mphg5","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7701156,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"56868","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/helpers.js","headers":{}},"duration":0.000071043,"status":500,"err_id":"j543c6i58","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.770328,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"56474","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/bold.woff2","headers":{}},"duration":0.000554728,"status":500,"err_id":"zfxn64ynv","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7703276,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"56462","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/vendor.js","headers":{}},"duration":0.000558135,"status":500,"err_id":"0xqehwypt","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.770342,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"56622","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/hero.webp","headers":{}},"duration":0.00005885,"status":500,"err_id":"ehuzn0smt","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7703292,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"57080","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/app.js","headers":{}},"duration":0.000066825,"status":500,"err_id":"b18gxsq1j","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7703884,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"57102","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/app.js","headers":{}},"duration":0.00014415,"status":500,"err_id":"fhagru67e","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7704155,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"56354","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/manifest.json","headers":{}},"duration":0.000681405,"status":500,"err_id":"24f3z36jw","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7704234,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"56262","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/bold.woff2","headers":{}},"duration":0.000075351,"status":500,"err_id":"g6psjsmgu","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7703972,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"56378","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/manifest.json","headers":{}},"duration":0.000068558,"status":500,"err_id":"gnbciu68r","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.770377,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"56998","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/layout.css","headers":{}},"duration":0.000056796,"status":500,"err_id":"wc40fuvi8","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.77054,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"56958","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/bold.woff2","headers":{}},"duration":0.000410619,"status":500,"err_id":"m064r6rrb","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7705672,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"56728","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/header.html","headers":{}},"duration":0.000061566,"status":500,"err_id":"v18zshm32","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7709386,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"57460","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/app.js","headers":{}},"duration":0.000059221,"status":500,"err_id":"dgk52jde0","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7709577,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"57194","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/theme.css","headers":{}},"duration":0.00006429,"status":500,"err_id":"gg5ix8d2i","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7708747,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"56846","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/reset.css","headers":{}},"duration":0.000071444,"status":500,"err_id":"6b0aukckw","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7709863,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"57476","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/layout.css","headers":{}},"duration":0.000067978,"status":500,"err_id":"u0g56z39d","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.771025,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"57216","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/manifest.json","headers":{}},"duration":0.000051457,"status":500,"err_id":"n2t63qkib","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7709758,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"57240","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/header.html","headers":{}},"duration":0.000052187,"status":500,"err_id":"3bbp9myg4","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.771046,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"56150","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/reset.css","headers":{}},"duration":0.000128861,"status":500,"err_id":"va5b6yt06","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7711084,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"57520","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/logo.svg","headers":{}},"duration":0.000081893,"status":500,"err_id":"n2ri6wqmq","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.771228,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"56248","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/thumb2.webp","headers":{}},"duration":0.000183343,"status":500,"err_id":"puay9bh1k","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7714903,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"57586","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/app.js","headers":{}},"duration":0.000097773,"status":500,"err_id":"i4bx2zv9b","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.772923,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"57628","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/thumb2.webp","headers":{}},"duration":0.000033182,"status":500,"err_id":"js64zhdq7","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7729304,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"57590","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/helpers.js","headers":{}},"duration":0.001522579,"status":500,"err_id":"ftx9mn4c3","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.773255,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"57686","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/thumb1.webp","headers":{}},"duration":0.000040696,"status":500,"err_id":"teg7iag4s","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+{"level":"error","ts":1775498832.7735317,"logger":"http.log.error","msg":"context canceled","request":{"remote_ip":"127.0.0.1","remote_port":"57714","client_ip":"127.0.0.1","proto":"HTTP/1.1","method":"GET","host":"localhost:8080","uri":"/static/icon-sprite.svg","headers":{}},"duration":0.000052358,"status":500,"err_id":"2skxivcks","err_trace":"caddy.(*FrankenPHPModule).ServeHTTP (module.go:252)"}
+fatal error: concurrent map iteration and map write
+
+goroutine 1152311 [running]:
+internal/runtime/maps.fatal({0x2352806?, 0x496d0f?})
+	/usr/local/go/src/runtime/panic.go:1181 +0x18
+internal/runtime/maps.(*Iter).Next(0xbe0d25449f0?)
+	/usr/local/go/src/internal/runtime/maps/table.go:819 +0x86
+net/http.Header.Clone(...)
+	/usr/local/go/src/net/http/header.go:101
+net/http.(*response).WriteHeader(0xbe0cf91e000, 0x1f4)
+	/usr/local/go/src/net/http/server.go:1187 +0x6b9
+github.com/caddyserver/caddy/v2/modules/caddyhttp.(*Server).ServeHTTP(0xbe0cbcee388, {0x262cf60, 0xbe0cf91e000}, 0xbe0d2283b80)
+	/root/go/pkg/mod/github.com/caddyserver/caddy/v2@v2.11.2/modules/caddyhttp/server.go:467 +0x110c
+net/http.serverHandler.ServeHTTP({0xbe0cea18100?}, {0x262cf60?, 0xbe0cf91e000?}, 0x1?)
+	/usr/local/go/src/net/http/server.go:3311 +0x8e
+net/http.(*conn).serve(0xbe0d1f3e870, {0x26337e0, 0xbe0cb8d2150})
+	/usr/local/go/src/net/http/server.go:2073 +0x650
+created by net/http.(*Server).Serve in goroutine 123
+	/usr/local/go/src/net/http/server.go:3464 +0x485

@@ -40,6 +40,26 @@
     "status_5xx": 0
   },
   {
+    "framework": "aspnet-minimal-aot",
+    "language": "C#",
+    "rps": 132980,
+    "avg_latency": "4.57ms",
+    "p99_latency": "12.00ms",
+    "cpu": "3417.0%",
+    "memory": "915.7MiB",
+    "connections": 1024,
+    "threads": 64,
+    "duration": "5s",
+    "pipeline": 1,
+    "bandwidth": "1.03GB/s",
+    "input_bw": "",
+    "reconnects": 0,
+    "status_2xx": 1329809,
+    "status_3xx": 0,
+    "status_4xx": 0,
+    "status_5xx": 0
+  },
+  {
     "framework": "aspnet-mvc",
     "language": "C#",
     "rps": 139648,
@@ -360,6 +380,26 @@
     "status_5xx": 0
   },
   {
+    "framework": "frankenphp-trueasync",
+    "language": "PHP",
+    "rps": 4030,
+    "avg_latency": "244.97ms",
+    "p99_latency": "1.36s",
+    "cpu": "190.2%",
+    "memory": "7.9GiB",
+    "connections": 1024,
+    "threads": 64,
+    "duration": "5s",
+    "pipeline": 1,
+    "bandwidth": "6.63MB/s",
+    "input_bw": "",
+    "reconnects": 0,
+    "status_2xx": 40301,
+    "status_3xx": 0,
+    "status_4xx": 0,
+    "status_5xx": 0
+  },
+  {
     "framework": "genhttp",
     "language": "C#",
     "rps": 146974,
@@ -460,27 +500,6 @@
     "status_5xx": 0
   },
   {
-    "framework": "hono",
-    "language": "JS",
-    "rps": 120465,
-    "avg_latency": "6.45ms",
-    "p99_latency": "51.00ms",
-    "cpu": "6278.3%",
-    "memory": "7.3GiB",
-    "connections": 1024,
-    "threads": 64,
-    "duration": "5s",
-    "pipeline": 1,
-    "bandwidth": "947.61MB/s",
-    "input_bw": "",
-    "reconnects": 194,
-    "status_2xx": 1204651,
-    "status_3xx": 0,
-    "status_4xx": 0,
-    "status_5xx": 0,
-    "type": "tuned"
-  },
-  {
     "framework": "hono-bun",
     "language": "TS",
     "rps": 127190,
@@ -498,8 +517,7 @@
     "status_2xx": 1271909,
     "status_3xx": 0,
     "status_4xx": 0,
-    "status_5xx": 0,
-    "type": "production"
+    "status_5xx": 0
   },
   {
     "framework": "humming-bird",
@@ -817,6 +835,26 @@
     "input_bw": "",
     "reconnects": 0,
     "status_2xx": 380,
+    "status_3xx": 0,
+    "status_4xx": 0,
+    "status_5xx": 0
+  },
+  {
+    "framework": "spring-boot",
+    "language": "Java",
+    "rps": 10720,
+    "avg_latency": "87.22ms",
+    "p99_latency": "141.30ms",
+    "cpu": "986.7%",
+    "memory": "2.0GiB",
+    "connections": 1024,
+    "threads": 64,
+    "duration": "5s",
+    "pipeline": 1,
+    "bandwidth": "97.49MB/s",
+    "input_bw": "",
+    "reconnects": 453,
+    "status_2xx": 107204,
     "status_3xx": 0,
     "status_4xx": 0,
     "status_5xx": 0
