@@ -42,6 +42,7 @@ jobs:
   benchmark:
     if: vars.RUNNER_LOCAL != 'true'
     runs-on: self-hosted
+    environment: runner
     steps:
       - uses: actions/checkout@v5
         with:

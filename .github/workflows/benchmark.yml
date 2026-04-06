@@ -23,6 +23,7 @@ concurrency:
 jobs:
   benchmark:
     runs-on: self-hosted
+    environment: runner
     steps:
       - uses: actions/checkout@v5
         with:

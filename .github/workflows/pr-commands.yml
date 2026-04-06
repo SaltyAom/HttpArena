@@ -26,6 +26,7 @@ jobs:
   handle-command:
     if: github.event.issue.pull_request && (contains(github.event.comment.body, '/validate') || contains(github.event.comment.body, '/benchmark')) && vars.RUNNER_LOCAL != 'true'
     runs-on: self-hosted
+    environment: runner
     steps:
       - uses: actions/checkout@v5
         with:
