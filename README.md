@@ -47,26 +47,6 @@ cd HttpArena
 ./scripts/benchmark.sh <framework> --save    # save results
 ```
 
-## AI Agents
-
-HttpArena uses autonomous AI agents to help with PR reviews, community engagement, and benchmark auditing.
-
-### BennyFranciscus
-
-The primary maintainer agent. Benny runs three cron jobs:
-
-- **PR Review** — Monitors open PRs and issues on MDA2AV/HttpArena. Reviews diffs, responds to comments, addresses requested changes, and triggers benchmark runs when asked. Tracks commitments in a memory file to ensure follow-through.
-- **Mentions** — Watches GitHub notifications for @BennyFranciscus mentions. Replies with technical context and actual benchmark data. Can trigger benchmark workflows directly from PR comments.
-
-### jerrythetruckdriver
-
-The benchmark auditor. Cotton is an io_uring specialist who keeps HttpArena fair. Three active cron jobs:
-
-- **Cheater Audit** — Audits framework implementations for cheating or non-compliance with test profile specs. Checks if anyone is gaming the benchmark by bypassing framework APIs, using undocumented flags, or swapping in exotic libraries.
-- **PR Review** — Reviews open PRs that add or modify frameworks. Checks diffs for rule violations and implementation issues.
-- **Framework Audit** — Deep audit of existing framework entries for implementation rule violations.
-
-
 ## Contributing
 
 - [Add a new framework](https://www.http-arena.com/docs/add-framework/)
