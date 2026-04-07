@@ -53,3 +53,11 @@ cd HttpArena
 - Improve an existing implementation — open a PR modifying files under `frameworks/<name>/`
 - [Open an issue](https://github.com/MDA2AV/HttpArena/issues)
 - Comment on any open issue or PR
+
+### Framework Maintainers
+
+Add your GitHub username to the `maintainers` array in your framework's `meta.json` to get notified when someone opens a PR that touches your framework:
+
+```json
+"maintainers": ["your-github-username"]
+```

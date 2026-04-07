@@ -13,7 +13,8 @@ Create a `meta.json` file in your framework directory:
   "description": "Short description of the framework and its key features.",
   "repo": "https://github.com/org/repo",
   "enabled": true,
-  "tests": ["baseline", "pipelined", "limited-conn", "json", "upload", "compression", "noisy", "mixed", "baseline-h2", "static-h2"]
+  "tests": ["baseline", "pipelined", "limited-conn", "json", "upload", "compression", "noisy", "mixed", "baseline-h2", "static-h2"],
+  "maintainers": ["your-github-username"]
 }
 ```
 
@@ -29,6 +30,7 @@ Create a `meta.json` file in your framework directory:
 | `repo` | Link to the framework's source repository |
 | `enabled` | Set to `false` to skip this framework during benchmark runs |
 | `tests` | Array of test profiles this framework participates in |
+| `maintainers` | Array of GitHub usernames to notify when a PR modifies this framework |
 
 ## Available test profiles
 

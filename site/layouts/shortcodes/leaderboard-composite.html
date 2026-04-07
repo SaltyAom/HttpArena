@@ -74,6 +74,12 @@ html.dark #composite-type-note { color: #e2e8f0 !important; background: linear-g
   html.dark .composite-type-filter[data-type="production"].active { color:#4ade80; border-color:#22c55e; background:rgba(34,197,94,0.12); }
   html.dark .composite-type-filter[data-type="tuned"].active { color:#fbbf24; border-color:#eab308; background:rgba(234,179,8,0.12); }
   html.dark .composite-type-filter[data-type="engine"].active { color:#fbbf24; border-color:#f59e0b; background:rgba(245,158,11,0.12); }
+  .composite-badges { display:inline-flex; flex-wrap:wrap; gap:0.15rem; margin-left:0.25rem; vertical-align:middle; }
+  .composite-badge { display:inline-flex; align-items:center; justify-content:center; font-size:1.05rem; line-height:1; cursor:default; }
+  .composite-crown { font-size:1.5rem; }
+  .composite-profile-crown { font-size:1.05rem; opacity:0.8; }
+  .composite-snail { line-height:0; }
+  html.dark .composite-badge { opacity:0.9; }
   </style>
 
   <div class="composite-profiles-wrap" style="margin:0.5rem 0 0 0; padding:0.75rem 1rem; background:rgba(0,0,0,0.04); border-radius:8px; border:1px solid rgba(0,0,0,0.08); display:flex; flex-direction:column; gap:0.5rem;">
@@ -603,6 +609,35 @@ function renderComposite() {
     }
   });
 
+  // Determine #1 framework per profile for badges (always all profiles)
+  var topFwByProfile = {};
+  allProfileIds.forEach(function(pid) {
+    var bestFw = null, bestScore = 0;
+    if (pid === 'api-4' || pid === 'api-16') {
+      // Use weighted throughput scoring (same as composite)
+      Object.keys(avgTplByProfile[pid] || {}).forEach(function(fw) {
+        if (isExcluded(fw)) return;
+        var t = avgTplByProfile[pid][fw];
+        var w = t.baseline * mixedWeights.baseline + t.json * mixedWeights.json + t.db * mixedWeights.db + t.upload * mixedWeights.upload + t.compression * mixedWeights.compression + (t.static || 0) * mixedWeights.static + (t.async_db || 0) * mixedWeights.async_db;
+        if (w > bestScore) { bestScore = w; bestFw = fw; }
+      });
+    } else {
+      Object.keys(avgByProfile[pid] || {}).forEach(function(fw) {
+        if (isExcluded(fw)) return;
+        var rps = avgByProfile[pid][fw] || 0;
+        if (rps > bestScore) { bestScore = rps; bestFw = fw; }
+      });
+    }
+    if (bestFw) topFwByProfile[pid] = bestFw;
+  });
+  var badgesByFw = {};
+  allProfileIds.forEach(function(pid) {
+    var fw = topFwByProfile[pid];
+    if (!fw) return;
+    if (!badgesByFw[fw]) badgesByFw[fw] = [];
+    badgesByFw[fw].push({ pid: pid, label: profileLabels[pid], proto: profileProtos[pid] });
+  });
+
   // Weight config
   var wRps = 1, wCpu = useCpu ? 1 : 0, wMem = useMem ? 0.5 : 0;
   var totalWeight = wRps + wCpu + wMem;
@@ -676,6 +711,76 @@ function renderComposite() {
     }
   }
 
+  // Compute section champions (crown badges) using raw avgByProfile data
+  var sectionGroups = { h1iso: [], h1wk: [], h2: [], h3: [], grpc: [], ws: [] };
+  allProfileIds.forEach(function(pid) {
+    var proto = profileProtos[pid];
+    if (proto === 'h1iso') sectionGroups.h1iso.push(pid);
+    else if (proto === 'h1wk') sectionGroups.h1wk.push(pid);
+    else if (proto === 'h2') sectionGroups.h2.push(pid);
+    else if (proto === 'h3') sectionGroups.h3.push(pid);
+    else if (proto === 'grpc') sectionGroups.grpc.push(pid);
+    else if (proto === 'ws') sectionGroups.ws.push(pid);
+  });
+  // Compute max RPS per profile across all profiles (for normalization)
+  var allMaxRps = {};
+  allProfileIds.forEach(function(pid) {
+    allMaxRps[pid] = 0;
+    Object.keys(avgByProfile[pid] || {}).forEach(function(fw) {
+      if (isExcluded(fw)) return;
+      var rps = avgByProfile[pid][fw] || 0;
+      if (rps > allMaxRps[pid]) allMaxRps[pid] = rps;
+    });
+  });
+  var crownsByFw = {};
+  var sectionLabels = { h1iso: 'H/1.1 Isolated', h1wk: 'H/1.1 Workload', h2: 'H/2', h3: 'H/3', grpc: 'gRPC', ws: 'WebSocket' };
+  var sectionColors = { h1iso: '#3b82f6', h1wk: '#2563eb', h2: '#eab308', h3: '#22c55e', grpc: '#7c3aed', ws: '#0891b2' };
+  // Compute max weighted score for api profiles (for crown normalization)
+  var allMaxWeighted = {};
+  ['api-4', 'api-16'].forEach(function(mpid) {
+    var maxW = 0;
+    Object.keys(avgTplByProfile[mpid] || {}).forEach(function(fw) {
+      if (isExcluded(fw)) return;
+      var t = avgTplByProfile[mpid][fw];
+      var w = t.baseline * mixedWeights.baseline + t.json * mixedWeights.json + t.db * mixedWeights.db + t.upload * mixedWeights.upload + t.compression * mixedWeights.compression + (t.static || 0) * mixedWeights.static + (t.async_db || 0) * mixedWeights.async_db;
+      if (w > maxW) maxW = w;
+    });
+    allMaxWeighted[mpid] = maxW;
+  });
+  Object.keys(sectionGroups).forEach(function(section) {
+    var pids = sectionGroups[section];
+    if (pids.length === 0) return;
+    var bestFw = null, bestAvg = 0;
+    Object.keys(allFw).forEach(function(fw) {
+      if (isExcluded(fw)) return;
+      var sum = 0, count = 0;
+      pids.forEach(function(pid) {
+        if (pid === 'api-4' || pid === 'api-16') {
+          var t = avgTplByProfile[pid] && avgTplByProfile[pid][fw];
+          var maxW = allMaxWeighted[pid] || 0;
+          if (t && maxW > 0) {
+            var w = t.baseline * mixedWeights.baseline + t.json * mixedWeights.json + t.db * mixedWeights.db + t.upload * mixedWeights.upload + t.compression * mixedWeights.compression + (t.static || 0) * mixedWeights.static + (t.async_db || 0) * mixedWeights.async_db;
+            sum += (w / maxW) * 100;
+            count++;
+          }
+        } else {
+          var rps = (avgByProfile[pid] && avgByProfile[pid][fw]) || 0;
+          var maxRps = allMaxRps[pid] || 0;
+          if (rps > 0 && maxRps > 0) {
+            sum += (rps / maxRps) * 100;
+            count++;
+          }
+        }
+      });
+      var avg = count > 0 ? sum / count : 0;
+      if (avg > bestAvg) { bestAvg = avg; bestFw = fw; }
+    });
+    if (bestFw) {
+      if (!crownsByFw[bestFw]) crownsByFw[bestFw] = [];
+      crownsByFw[bestFw].push({ section: section, label: sectionLabels[section], color: sectionColors[section] });
+    }
+  });
+
   // Render
   var table = document.getElementById('composite-table');
   table.innerHTML = '';
@@ -686,7 +791,7 @@ function renderComposite() {
   // Header
   var header = document.createElement('div');
   header.className = 'lb-row lb-header';
-  header.style.gridTemplateColumns = '2rem 9rem 3.5rem 3.5rem repeat(' + activeCount + ', minmax(4.2rem, 5.5rem))';
+  header.style.gridTemplateColumns = '2rem 14rem 3.5rem 3.5rem repeat(' + activeCount + ', minmax(4.2rem, 5.5rem))';
   var headerHtml = '<div title="Rank">#</div>' +
     '<div>Framework</div>' +
     '<div>Lang</div>' +
@@ -735,7 +840,7 @@ function renderComposite() {
     row.dataset.name = r.framework;
     row.dataset.lang = r.language;
     row.dataset.type = ftype;
-    row.style.gridTemplateColumns = '2rem 9rem 3.5rem 3.5rem repeat(' + activeCount + ', minmax(4.2rem, 5.5rem))';
+    row.style.gridTemplateColumns = '2rem 14rem 3.5rem 3.5rem repeat(' + activeCount + ', minmax(4.2rem, 5.5rem))';
     row.style.cursor = 'pointer';
 
     var rank = String(idx + 1);
@@ -773,9 +878,46 @@ function renderComposite() {
       }
     });
 
+    var badgeHtml = '';
+    var fwCrowns = crownsByFw[r.framework];
+    var fwBadges = badgesByFw[r.framework];
+    var hasCrowns = fwCrowns && fwCrowns.length > 0;
+    var hasProfileBadges = fwBadges && fwBadges.length > 0;
+    if (hasCrowns || hasProfileBadges) {
+      var protoColors = { h1iso: '#3b82f6', h1wk: '#2563eb', h2: '#eab308', h3: '#22c55e', grpc: '#7c3aed', ws: '#0891b2' };
+      badgeHtml = '<div class="composite-badges">';
+      if (hasCrowns) {
+        fwCrowns.forEach(function(c) {
+          badgeHtml += '<span class="composite-badge composite-crown" style="color:' + c.color + ';" title="#1 overall in ' + c.label + '">\u265A</span>';
+        });
+      }
+      if (hasProfileBadges) {
+        fwBadges.forEach(function(b) {
+          var color = protoColors[b.proto] || '#3b82f6';
+          var sublabel = profileSublabels[b.pid] || b.proto;
+          badgeHtml += '<span class="composite-badge composite-profile-crown" style="color:' + color + ';" title="#1 in ' + b.label + ' (' + sublabel + ')">\u2655</span>';
+        });
+      }
+      badgeHtml += '</div>';
+    }
+    // Snails for scores below 10
+    var snailCount = 0;
+    r.scores.forEach(function(s, i) {
+      var pid = activeIds[i];
+      if (s > 0 && s < 20 && isScoredForFw(pid, r.framework)) snailCount++;
+    });
+    if (snailCount >= 3) {
+      var snailFilter = snailCount >= 7 ? 'brightness(0) saturate(100%) invert(73%) sepia(60%) saturate(500%) hue-rotate(10deg)' : snailCount >= 5 ? 'brightness(0) saturate(100%) invert(75%) sepia(5%) saturate(200%) hue-rotate(200deg)' : 'brightness(0) saturate(100%) invert(55%) sepia(40%) saturate(500%) hue-rotate(350deg)';
+      var snailTitle = snailCount + ' test' + (snailCount > 1 ? 's' : '') + ' scored below 20';
+      if (!badgeHtml) badgeHtml = '<div class="composite-badges">';
+      else badgeHtml = badgeHtml.replace('</div>', '');
+      badgeHtml += '<span class="composite-badge composite-snail" style="filter:' + snailFilter + ';" title="' + snailTitle + '">\uD83D\uDC0C</span>';
+      badgeHtml += '</div>';
+    }
+    var totalBadges = (fwCrowns ? fwCrowns.length : 0) + (fwBadges ? fwBadges.length : 0);
     row.innerHTML =
       '<div class="lb-rank">' + rank + '</div>' +
-      '<div class="lb-name" style="font-weight:400; font-size:0.8rem;">' + r.framework + '</div>' +
+      '<div class="lb-name" style="font-weight:400; font-size:0.8rem;">' + r.framework + badgeHtml + '</div>' +
       '<div class="lb-lang">' + r.language + '</div>' +
       '<div class="lb-rps" style="font-weight:400; text-align:left; padding-left:0.5rem; color:' + (pct >= 85 ? '#16a34a' : pct >= 70 ? '#65a30d' : pct >= 50 ? '#ca8a04' : pct >= 30 ? '#ea580c' : '#dc2626') + ';">' + r.composite.toFixed(1) + '</div>' +
       profileCells;
@@ -857,9 +999,9 @@ function updateCompositeNote() {
   var tunedActive = document.querySelector('.composite-type-filter[data-type="tuned"]').classList.contains('active');
   var engineActive = document.querySelector('.composite-type-filter[data-type="engine"]').classList.contains('active');
   var defs = [];
-  if (prodActive) defs.push('<span class="lb-type-badge lb-type-badge-production">$ Production</span> Standard framework configuration. Must follow production-specific implementation rules for each test.');
-  if (tunedActive) defs.push('<span class="lb-type-badge lb-type-badge-tuned"># Tuned</span> May use experimental flags and non-default optimizations. Not bound by production implementation rules.');
-  if (engineActive) defs.push('<span class="lb-type-badge lb-type-badge-engine">* Engine</span> Bare-metal HTTP servers — not frameworks. A different breed entirely.');
+  if (prodActive) defs.push('<span class="lb-type-badge lb-type-badge-production"><span class="lb-type-square" style="background:#22c55e;"></span> Production</span> Standard framework configuration. Must follow production-specific implementation rules for each test.');
+  if (tunedActive) defs.push('<span class="lb-type-badge lb-type-badge-tuned"><span class="lb-type-square" style="background:#eab308;"></span> Tuned</span> May use experimental flags and non-default optimizations. Not bound by production implementation rules.');
+  if (engineActive) defs.push('<span class="lb-type-badge lb-type-badge-engine"><span class="lb-type-square" style="background:#dc2626;"></span> Engine</span> Bare-metal HTTP servers — not frameworks. A different breed entirely.');
   note.innerHTML = defs.join('<br>');
 }
 updateCompositeNote();

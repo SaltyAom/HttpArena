@@ -269,22 +269,14 @@ html.dark .lb-popup-link { color: #60a5fa; }
 }
 html.dark .lb-header-floating { background: #0d1117; box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
 .lb-rank { font-weight: 400; font-size: 0.85rem; color: #000; }
-.lb-name { font-weight: 400; font-size: 0.8rem; color: #000; text-transform: lowercase; }
-.lb-row[data-type="production"] .lb-name,
-.lb-row[data-type="production"] .lb-lang { background: rgba(34, 197, 94, 0.08); border-radius: 3px; padding: 0 0.2rem; margin: 0 -0.2rem; }
-html.dark .lb-row[data-type="production"] .lb-name,
-html.dark .lb-row[data-type="production"] .lb-lang { background: rgba(34, 197, 94, 0.1); }
-.lb-row[data-type="production"] .lb-name::after { content: " $"; }
-.lb-row[data-type="engine"] .lb-name,
-.lb-row[data-type="engine"] .lb-lang { background: rgba(220, 38, 38, 0.08); border-radius: 3px; padding: 0 0.2rem; margin: 0 -0.2rem; }
-html.dark .lb-row[data-type="engine"] .lb-name,
-html.dark .lb-row[data-type="engine"] .lb-lang { background: rgba(248, 113, 113, 0.1); }
-.lb-row[data-type="engine"] .lb-name::after { content: " *"; }
-.lb-row[data-type="tuned"] .lb-name,
-.lb-row[data-type="tuned"] .lb-lang { background: rgba(234, 179, 8, 0.08); border-radius: 3px; padding: 0 0.2rem; margin: 0 -0.2rem; }
-html.dark .lb-row[data-type="tuned"] .lb-name,
-html.dark .lb-row[data-type="tuned"] .lb-lang { background: rgba(234, 179, 8, 0.1); }
-.lb-row[data-type="tuned"] .lb-name::after { content: " #"; }
+.lb-name { font-weight: 400; font-size: 0.8rem; color: #000; text-transform: lowercase; position: relative; padding-left: 0.85rem; }
+.lb-name::before { content: ""; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 0.5rem; height: 0.5rem; border-radius: 2px; }
+.lb-row[data-type="production"] .lb-name::before { background: #22c55e; }
+html.dark .lb-row[data-type="production"] .lb-name::before { background: #4ade80; }
+.lb-row[data-type="engine"] .lb-name::before { background: #dc2626; }
+html.dark .lb-row[data-type="engine"] .lb-name::before { background: #f87171; }
+.lb-row[data-type="tuned"] .lb-name::before { background: #eab308; }
+html.dark .lb-row[data-type="tuned"] .lb-name::before { background: #fbbf24; }
 .lb-lang { font-size: 0.8rem; color: #000; }
 .lb-conns { font-size: 0.8rem; color: #000; text-align: right; font-variant-numeric: tabular-nums; }
 .lb-rps { font-weight: 700; font-size: 0.95rem; text-align: right; font-variant-numeric: tabular-nums; color: #000; }
@@ -449,6 +441,7 @@ html.dark .lb-type-note-h1wk { color: #e2e8f0 !important; background: linear-gra
 html.dark .lb-type-badge-production { background:rgba(34,197,94,0.15); color:#4ade80; border-color:rgba(34,197,94,0.4); }
 html.dark .lb-type-badge-tuned { background:rgba(234,179,8,0.12); color:#fbbf24; border-color:rgba(234,179,8,0.35); }
 html.dark .lb-type-badge-engine { background:rgba(220,38,38,0.12); color:#f87171; border-color:rgba(220,38,38,0.35); }
+.lb-type-square { display:inline-block; width:0.5rem; height:0.5rem; border-radius:2px; vertical-align:middle; }
 </style>
 
 {{ range $i, $p := $profiles }}
@@ -537,15 +530,6 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaa42</pre>
   html.dark details[open] > div pre { background: rgba(255,255,255,0.06) !important; color: #e2e8f0; }
   html.dark details { background: rgba(59,130,246,0.08) !important; border-color: rgba(59,130,246,0.25) !important; }
   html.dark details summary { color: #60a5fa !important; }
-  </style>
-  {{ end }}
-  {{ if eq $p.id "baseline" }}
-  <div class="lb-cpu-warning" style="margin-top:0.5rem; margin-bottom:0.75rem; padding:0.5rem 1rem; border-radius:0.5rem; background:rgba(234,179,8,0.08); border:1px solid rgba(234,179,8,0.3); color:#78350f; font-size:0.85rem;">
-    &#9889; <strong>CPU throttled:</strong> Containers are limited to 64 CPU threads (<code>--cpus=64</code>) for this test.
-  </div>
-  <style>
-  html.dark .lb-cpu-warning { color: #fef3c7 !important; background: rgba(234,179,8,0.12) !important; border-color: rgba(234,179,8,0.4) !important; }
-  html.dark .lb-cpu-warning code { color: #fde68a; }
   </style>
   {{ end }}
 
@@ -755,9 +739,9 @@ function applyH1WkFilters() {
   var typeNote = document.querySelector('.lb-type-note-h1wk');
   if (typeNote) {
     var defs = [];
-    if (showProduction) defs.push('<span class="lb-type-badge lb-type-badge-production">$ Production</span> Standard framework configuration. Must follow production-specific implementation rules for each test.');
-    if (showTuned) defs.push('<span class="lb-type-badge lb-type-badge-tuned"># Tuned</span> May use experimental flags and non-default optimizations. Not bound by production implementation rules.');
-    if (showEngine) defs.push('<span class="lb-type-badge lb-type-badge-engine">* Engine</span> Bare-metal HTTP servers — not frameworks. A different breed entirely.');
+    if (showProduction) defs.push('<span class="lb-type-badge lb-type-badge-production"><span class="lb-type-square" style="background:#22c55e;"></span> Production</span> Standard framework configuration. Must follow production-specific implementation rules for each test.');
+    if (showTuned) defs.push('<span class="lb-type-badge lb-type-badge-tuned"><span class="lb-type-square" style="background:#eab308;"></span> Tuned</span> May use experimental flags and non-default optimizations. Not bound by production implementation rules.');
+    if (showEngine) defs.push('<span class="lb-type-badge lb-type-badge-engine"><span class="lb-type-square" style="background:#dc2626;"></span> Engine</span> Bare-metal HTTP servers — not frameworks. A different breed entirely.');
     typeNote.innerHTML = defs.join('<br>');
   }
 
