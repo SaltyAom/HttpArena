@@ -1,7 +1,7 @@
 ---
 title: Implementation Guidelines
 ---
-{{< type-rules production="Response compression must use the framework's standard middleware. No pre-compressed files on disk. Binary formats (webp, woff2) must not be compressed." tuned="May cache compressed and uncompressed versions in memory. No pre-compressed files on disk. Must serve uncompressed when Accept-Encoding: gzip is absent." engine="No pre-compressed files on disk. Must respect Accept-Encoding header presence/absence." >}}
+{{< type-rules production="Response compression must use the framework's standard middleware. Pre-compressed files on disk are allowed if the framework documents this as the official/recommended approach (e.g., ASP.NET MapStaticAssets, Nginx gzip_static). Binary formats (webp, woff2) should not be compressed." tuned="May cache compressed and uncompressed versions in memory. Pre-compressed files on disk allowed. Must serve uncompressed when Accept-Encoding: gzip is absent." engine="Pre-compressed files on disk allowed. Must respect Accept-Encoding header presence/absence." >}}
 
 The Assets-16 profile is identical to [Assets-4](../../assets-4/implementation) but with the server constrained to **16 CPUs and 32 GB memory** instead of 4 CPUs and 16 GB. This measures how well the framework scales asset serving with more available resources.
 

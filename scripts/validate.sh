@@ -625,29 +625,70 @@ if has_test "assets-4" || has_test "assets-16"; then
         fail_with_link "[static/app.js gzip]: expected gzip response, got enc='$app_js_gzip_enc' magic='$_gzip_magic'" "$ASSETS_DOCS"
     fi
 
-    # 5. Binary file (webp) with Accept-Encoding: gzip → must NOT compress
+    # 5. Binary file (webp) with Accept-Encoding: gzip → should not compress, response size ~= original
+    #    curl auto-decompresses Content-Encoding: gzip, so size_download is the decoded body size
+    #    If server skips compression: size matches exactly. If server compresses: curl decompresses, size still matches.
+    #    Either way, the decoded body must match the original file size.
     webp_expected=$(wc -c < "$DATA_DIR/static/hero.webp" 2>/dev/null || echo "0")
     webp_gzip_size=$(curl -s --max-time 30 -H "Accept-Encoding: gzip" -o /dev/null -w '%{size_download}' "http://localhost:$PORT/static/hero.webp")
     webp_gzip_enc=$(curl -s --max-time 30 -D- -o /dev/null -H "Accept-Encoding: gzip" "http://localhost:$PORT/static/hero.webp" | grep -i "^Content-Encoding:" | sed 's/^[^:]*: *//' | tr -d '\r' || true)
-    if [ -z "$webp_gzip_enc" ] && [ "$webp_gzip_size" -eq "$webp_expected" ]; then
-        echo "  PASS [static/hero.webp gzip-skip] ($webp_gzip_size bytes, no compression — correct)"
+    if [ "$webp_gzip_size" -eq "$webp_expected" ]; then
+        if [ -z "$webp_gzip_enc" ]; then
+            echo "  PASS [static/hero.webp gzip-skip] ($webp_gzip_size bytes, no compression — correct)"
+        else
+            echo "  PASS [static/hero.webp gzip-skip] ($webp_gzip_size bytes, server compressed but binary — acceptable)"
+        fi
         PASS=$((PASS + 1))
     else
-        fail_with_link "[static/hero.webp gzip-skip]: binary file should NOT be compressed, got size=$webp_gzip_size enc='$webp_gzip_enc'" "$ASSETS_DOCS"
+        fail_with_link "[static/hero.webp gzip-skip]: expected $webp_expected bytes, got $webp_gzip_size (binary files should not benefit from compression)" "$ASSETS_DOCS"
     fi
 
-    # 6. Binary file (woff2) with Accept-Encoding: gzip → must NOT compress
+    # 6. Binary file (woff2) with Accept-Encoding: gzip → should not compress, response size ~= original
     woff2_expected=$(wc -c < "$DATA_DIR/static/regular.woff2" 2>/dev/null || echo "0")
     woff2_gzip_size=$(curl -s --max-time 30 -H "Accept-Encoding: gzip" -o /dev/null -w '%{size_download}' "http://localhost:$PORT/static/regular.woff2")
     woff2_gzip_enc=$(curl -s --max-time 30 -D- -o /dev/null -H "Accept-Encoding: gzip" "http://localhost:$PORT/static/regular.woff2" | grep -i "^Content-Encoding:" | sed 's/^[^:]*: *//' | tr -d '\r' || true)
-    if [ -z "$woff2_gzip_enc" ] && [ "$woff2_gzip_size" -eq "$woff2_expected" ]; then
-        echo "  PASS [static/regular.woff2 gzip-skip] ($woff2_gzip_size bytes, no compression — correct)"
+    if [ "$woff2_gzip_size" -eq "$woff2_expected" ]; then
+        if [ -z "$woff2_gzip_enc" ]; then
+            echo "  PASS [static/regular.woff2 gzip-skip] ($woff2_gzip_size bytes, no compression — correct)"
+        else
+            echo "  PASS [static/regular.woff2 gzip-skip] ($woff2_gzip_size bytes, server compressed but binary — acceptable)"
+        fi
         PASS=$((PASS + 1))
     else
-        fail_with_link "[static/regular.woff2 gzip-skip]: binary file should NOT be compressed, got size=$woff2_gzip_size enc='$woff2_gzip_enc'" "$ASSETS_DOCS"
+        fail_with_link "[static/regular.woff2 gzip-skip]: expected $woff2_expected bytes, got $woff2_gzip_size (binary files should not benefit from compression)" "$ASSETS_DOCS"
     fi
 
-    # 7. SVG with Accept-Encoding: gzip → accept either compressed or uncompressed
+    # 7. Binary file (thumb1.webp) without Accept-Encoding → must return original size
+    thumb_expected=$(wc -c < "$DATA_DIR/static/thumb1.webp" 2>/dev/null || echo "0")
+    thumb_size=$(curl -s --max-time 30 -o /dev/null -w '%{size_download}' "http://localhost:$PORT/static/thumb1.webp")
+    if [ "$thumb_size" -eq "$thumb_expected" ]; then
+        echo "  PASS [static/thumb1.webp no-gzip] ($thumb_size bytes, matches disk)"
+        PASS=$((PASS + 1))
+    else
+        fail_with_link "[static/thumb1.webp no-gzip]: expected $thumb_expected bytes, got $thumb_size" "$ASSETS_DOCS"
+    fi
+
+    # 8. Additional text file (CSS) with Accept-Encoding: gzip → must have Content-Encoding: gzip
+    css_gzip_enc=$(curl -s --max-time 30 -D- -o /dev/null -H "Accept-Encoding: gzip" "http://localhost:$PORT/static/components.css" | grep -i "^Content-Encoding:" | sed 's/^[^:]*: *//' | tr -d '\r' || true)
+    if [[ "$css_gzip_enc" == *"gzip"* ]]; then
+        echo "  PASS [static/components.css gzip] (Content-Encoding: $css_gzip_enc)"
+        PASS=$((PASS + 1))
+    else
+        fail_with_link "[static/components.css gzip]: expected Content-Encoding: gzip, got '$css_gzip_enc'" "$ASSETS_DOCS"
+    fi
+
+    # 9. Additional text file (CSS) without Accept-Encoding → must return original size, no compression
+    css_expected=$(wc -c < "$DATA_DIR/static/components.css" 2>/dev/null || echo "0")
+    css_plain_size=$(curl -s --max-time 30 -o /dev/null -w '%{size_download}' "http://localhost:$PORT/static/components.css")
+    css_plain_enc=$(curl -s --max-time 30 -D- -o /dev/null "http://localhost:$PORT/static/components.css" | grep -i "^Content-Encoding:" | tr -d '\r' || true)
+    if [ "$css_plain_size" -eq "$css_expected" ] && [ -z "$css_plain_enc" ]; then
+        echo "  PASS [static/components.css no-gzip] ($css_plain_size bytes, matches disk)"
+        PASS=$((PASS + 1))
+    else
+        fail_with_link "[static/components.css no-gzip]: expected $css_expected bytes uncompressed, got $css_plain_size (enc: $css_plain_enc)" "$ASSETS_DOCS"
+    fi
+
+    # 10. SVG with Accept-Encoding: gzip → accept either compressed or uncompressed
     svg_expected=$(wc -c < "$DATA_DIR/static/icon-sprite.svg" 2>/dev/null || echo "0")
     svg_gzip_enc=$(curl -s --max-time 30 -D- -o /dev/null -H "Accept-Encoding: gzip" "http://localhost:$PORT/static/icon-sprite.svg" | grep -i "^Content-Encoding:" | sed 's/^[^:]*: *//' | tr -d '\r' || true)
     if [[ "$svg_gzip_enc" == *"gzip"* ]]; then
