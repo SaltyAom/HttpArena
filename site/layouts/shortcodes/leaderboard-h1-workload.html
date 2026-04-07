@@ -363,6 +363,8 @@ html.dark .lb-card-title { color: #ffffff; }
 {{ $profiles := slice
   (dict "id" "api-4"         "label" "API-4"                  "conns" (slice 256) "desc" "Lighter workload (baseline, JSON, async-db) with the server constrained to 4 CPU threads (cores 0-3). 4 threads, 256 connections. Measures framework efficiency under limited resources — closer to a typical production deployment. <a href='/docs/test-profiles/h1/workload/api-4/' class='lb-desc-link'>Learn more &rarr;</a>")
   (dict "id" "api-16"        "label" "API-16"                 "conns" (slice 1024) "desc" "Same API workload (baseline, JSON, async-db) with the server constrained to 16 CPU threads (cores 0-7, 64-71) and 32 GB memory. 64 threads, 256 connections. Tests performance scaling with more resources. <a href='/docs/test-profiles/h1/workload/api-16/' class='lb-desc-link'>Learn more &rarr;</a>")
+  (dict "id" "assets-4"      "label" "Assets-4"               "conns" (slice 256) "desc" "Static files and JSON with conditional gzip compression, constrained to 4 CPUs and 16 GB memory. Mix of compressed and uncompressed requests — tests how efficiently a framework handles asset serving with on-the-fly compression under limited resources. <a href='/docs/test-profiles/h1/workload/assets-4/' class='lb-desc-link'>Learn more &rarr;</a>")
+  (dict "id" "assets-16"     "label" "Assets-16"              "conns" (slice 1024) "desc" "Same asset workload (static files, JSON, conditional gzip) with the server constrained to 16 CPU threads (cores 0-7, 64-71) and 32 GB memory. Tests asset serving performance scaling with more resources. <a href='/docs/test-profiles/h1/workload/assets-16/' class='lb-desc-link'>Learn more &rarr;</a>")
 }}
 
 {{/* Build JSON data blob for round switching */}}

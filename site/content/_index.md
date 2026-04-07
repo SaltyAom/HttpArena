@@ -68,7 +68,7 @@ html.dark .test-card-endpoint { color: #64748b; }
 </style>
 
 <div class="tests-section">
-<h2>20 Test Profiles Across H/1.1, H/2, H/3, gRPC and WebSocket</h2>
+<h2>23 Test Profiles Across H/1.1, H/2, H/3, gRPC and WebSocket</h2>
 <p class="tests-sub">Every framework is tested under diverse, realistic workloads — from raw throughput to compression, gRPC unary calls, and WebSocket echo.</p>
 
 <div class="tests-proto">
@@ -124,6 +124,11 @@ html.dark .test-card-endpoint { color: #64748b; }
     <div class="test-card-desc">16 requests sent back-to-back per connection. Tests pipeline batching.</div>
     <div class="test-card-endpoint">GET /pipeline</div>
   </a>
+  <a class="test-card" href="docs/test-profiles/h1/isolated/database">
+    <div class="test-card-title">Sync Database (SQLite)</div>
+    <div class="test-card-desc">SQLite range query over 100K rows with result parsing and JSON serialization.</div>
+    <div class="test-card-endpoint">GET /db</div>
+  </a>
 </div>
 </div>
 
@@ -144,6 +149,16 @@ html.dark .test-card-endpoint { color: #64748b; }
     <div class="test-card-title">API-16</div>
     <div class="test-card-desc">Same API workload (baseline, JSON, async-db) with 16 CPUs and 32 GB memory — tests performance scaling.</div>
     <div class="test-card-endpoint">GET/POST API endpoints (16 CPU, 32 GB)</div>
+  </a>
+  <a class="test-card" href="docs/test-profiles/h1/workload/assets-4">
+    <div class="test-card-title">Assets-4</div>
+    <div class="test-card-desc">Static files and JSON with conditional gzip compression, constrained to 4 CPUs — tests asset serving with on-the-fly compression.</div>
+    <div class="test-card-endpoint">GET /static/* + /json (gzip, 4 CPU)</div>
+  </a>
+  <a class="test-card" href="docs/test-profiles/h1/workload/assets-16">
+    <div class="test-card-title">Assets-16</div>
+    <div class="test-card-desc">Same asset workload with 16 CPUs and 32 GB memory — tests asset serving scaling.</div>
+    <div class="test-card-endpoint">GET /static/* + /json (gzip, 16 CPU)</div>
   </a>
 </div>
 </div>

@@ -1,6 +1,8 @@
 {{ $profiles := slice
   (dict "id" "api-4" "label" "API-4" "sublabel" "H/1.1 Workload" "proto" "h1wk" "conns" (slice 256) "scored" true "engineScored" true)
   (dict "id" "api-16" "label" "API-16" "sublabel" "H/1.1 Workload" "proto" "h1wk" "conns" (slice 1024) "scored" true "engineScored" false)
+  (dict "id" "assets-4" "label" "Assets-4" "sublabel" "H/1.1 Workload" "proto" "h1wk" "conns" (slice 256) "scored" true "engineScored" true)
+  (dict "id" "assets-16" "label" "Assets-16" "sublabel" "H/1.1 Workload" "proto" "h1wk" "conns" (slice 1024) "scored" true "engineScored" false)
   (dict "id" "baseline" "label" "Baseline" "sublabel" "H/1.1 Isolated" "proto" "h1iso" "conns" (slice 512 4096) "scored" true "engineScored" true)
   (dict "id" "pipelined" "label" "Pipelined" "sublabel" "H/1.1 Isolated" "proto" "h1iso" "conns" (slice 512 4096) "scored" true "engineScored" true)
   (dict "id" "limited-conn" "label" "Short-lived" "sublabel" "H/1.1 Isolated" "proto" "h1iso" "conns" (slice 512 4096) "scored" true "engineScored" true)
