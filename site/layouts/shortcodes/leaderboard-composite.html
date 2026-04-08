@@ -76,10 +76,11 @@ html.dark #composite-type-note { color: #e2e8f0 !important; background: linear-g
   html.dark .composite-type-filter[data-type="production"].active { color:#4ade80; border-color:#22c55e; background:rgba(34,197,94,0.12); }
   html.dark .composite-type-filter[data-type="tuned"].active { color:#fbbf24; border-color:#eab308; background:rgba(234,179,8,0.12); }
   html.dark .composite-type-filter[data-type="engine"].active { color:#fbbf24; border-color:#f59e0b; background:rgba(245,158,11,0.12); }
-  .composite-badges { display:inline-flex; flex-wrap:wrap; gap:0.15rem; margin-left:0.25rem; vertical-align:middle; }
-  .composite-badge { display:inline-flex; align-items:center; justify-content:center; font-size:1.05rem; line-height:1; cursor:default; }
-  .composite-crown { font-size:1.5rem; }
-  .composite-profile-crown { font-size:1.05rem; opacity:0.8; }
+  .composite-badges { display:inline-flex; flex-wrap:wrap; gap:0; margin-left:0.15rem; vertical-align:middle; }
+  .composite-badge { display:inline-flex; align-items:center; justify-content:center; font-size:1.05rem; line-height:1; cursor:default; margin-left:-0.15rem; }
+  .composite-trophy svg, .composite-medal svg { display:block; }
+  .composite-trophy svg { width:1.18rem; height:1.18rem; }
+  .composite-medal svg { width:0.95rem; height:0.95rem; }
   .composite-snail { line-height:0; }
   html.dark .composite-badge { opacity:0.9; }
   </style>
@@ -492,6 +493,13 @@ function getActiveTypes() {
   return types.length > 0 ? types : ['production'];
 }
 
+var svgTrophyGold = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 3h10l-1 7a4 4 0 0 1-8 0L7 3z" fill="#FBBF24" stroke="#92400E" stroke-width="0.8"/><path d="M7 5c-2 0-4 1.5-4 3.5S5 12 7 12" stroke="#92400E" stroke-width="1.3" stroke-linecap="round" fill="none"/><path d="M17 5c2 0 4 1.5 4 3.5S19 12 17 12" stroke="#92400E" stroke-width="1.3" stroke-linecap="round" fill="none"/><rect x="10" y="14" width="4" height="3" rx="0.5" fill="#F59E0B" stroke="#92400E" stroke-width="0.6"/><rect x="7" y="17" width="10" height="3" rx="1.2" fill="#F59E0B" stroke="#92400E" stroke-width="0.6"/></svg>';
+var svgTrophySilver = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 3h10l-1 7a4 4 0 0 1-8 0L7 3z" fill="#D1D5DB" stroke="#4B5563" stroke-width="0.8"/><path d="M7 5c-2 0-4 1.5-4 3.5S5 12 7 12" stroke="#4B5563" stroke-width="1.3" stroke-linecap="round" fill="none"/><path d="M17 5c2 0 4 1.5 4 3.5S19 12 17 12" stroke="#4B5563" stroke-width="1.3" stroke-linecap="round" fill="none"/><rect x="10" y="14" width="4" height="3" rx="0.5" fill="#9CA3AF" stroke="#4B5563" stroke-width="0.6"/><rect x="7" y="17" width="10" height="3" rx="1.2" fill="#9CA3AF" stroke="#4B5563" stroke-width="0.6"/></svg>';
+var svgTrophyBronze = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 3h10l-1 7a4 4 0 0 1-8 0L7 3z" fill="#D97706" stroke="#78350F" stroke-width="0.8"/><path d="M7 5c-2 0-4 1.5-4 3.5S5 12 7 12" stroke="#78350F" stroke-width="1.3" stroke-linecap="round" fill="none"/><path d="M17 5c2 0 4 1.5 4 3.5S19 12 17 12" stroke="#78350F" stroke-width="1.3" stroke-linecap="round" fill="none"/><rect x="10" y="14" width="4" height="3" rx="0.5" fill="#B45309" stroke="#78350F" stroke-width="0.6"/><rect x="7" y="17" width="10" height="3" rx="1.2" fill="#B45309" stroke="#78350F" stroke-width="0.6"/></svg>';
+var svgMedalGold = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 1l2 5 2-5" stroke="#DC2626" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="14.5" r="8" fill="#FBBF24" stroke="#B45309" stroke-width="0.7"/><circle cx="12" cy="14.5" r="6" fill="none" stroke="#F59E0B" stroke-width="0.5"/><path d="M12 10l1 3h3.1l-2.5 1.8 1 3-2.6-2-2.6 2 1-3L8.9 13H12z" fill="#F59E0B"/></svg>';
+var svgMedalSilver = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 1l2 5 2-5" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="14.5" r="8" fill="#D1D5DB" stroke="#4B5563" stroke-width="0.7"/><circle cx="12" cy="14.5" r="6" fill="none" stroke="#9CA3AF" stroke-width="0.5"/><path d="M12 10l1 3h3.1l-2.5 1.8 1 3-2.6-2-2.6 2 1-3L8.9 13H12z" fill="#9CA3AF"/></svg>';
+var svgMedalBronze = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 1l2 5 2-5" stroke="#92400E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="14.5" r="8" fill="#D97706" stroke="#78350F" stroke-width="0.7"/><circle cx="12" cy="14.5" r="6" fill="none" stroke="#B45309" stroke-width="0.5"/><path d="M12 10l1 3h3.1l-2.5 1.8 1 3-2.6-2-2.6 2 1-3L8.9 13H12z" fill="#B45309"/></svg>';
+
 function renderComposite() {
   var activeIds = getActiveProfiles();
   var activeCount = activeIds.length;
@@ -611,33 +619,55 @@ function renderComposite() {
     }
   });
 
-  // Determine #1 framework per profile for badges (always all profiles)
-  var topFwByProfile = {};
+  // Determine top-3 frameworks per profile for badges (always all profiles)
+  var topFwByProfile = {}, secondFwByProfile = {}, thirdFwByProfile = {};
   allProfileIds.forEach(function(pid) {
-    var bestFw = null, bestScore = 0;
+    var bestFw = null, bestScore = 0, secondFw = null, secondScore = 0, thirdFw = null, thirdScore = 0;
     if (pid === 'api-4' || pid === 'api-16') {
-      // Use weighted throughput scoring (same as composite)
       Object.keys(avgTplByProfile[pid] || {}).forEach(function(fw) {
         if (isExcluded(fw)) return;
         var t = avgTplByProfile[pid][fw];
         var w = t.baseline * mixedWeights.baseline + t.json * mixedWeights.json + t.db * mixedWeights.db + t.upload * mixedWeights.upload + t.compression * mixedWeights.compression + (t.static || 0) * mixedWeights.static + (t.async_db || 0) * mixedWeights.async_db;
-        if (w > bestScore) { bestScore = w; bestFw = fw; }
+        if (w > bestScore) { thirdScore = secondScore; thirdFw = secondFw; secondScore = bestScore; secondFw = bestFw; bestScore = w; bestFw = fw; }
+        else if (w > secondScore) { thirdScore = secondScore; thirdFw = secondFw; secondScore = w; secondFw = fw; }
+        else if (w > thirdScore) { thirdScore = w; thirdFw = fw; }
       });
     } else {
+      var useAdjusted = pid === 'compression' && minBwPerReq[pid];
       Object.keys(avgByProfile[pid] || {}).forEach(function(fw) {
         if (isExcluded(fw)) return;
         var rps = avgByProfile[pid][fw] || 0;
-        if (rps > bestScore) { bestScore = rps; bestFw = fw; }
+        var score = rps;
+        if (useAdjusted && rps > 0) {
+          var bw = (avgBwByProfile[pid] && avgBwByProfile[pid][fw]) || 0;
+          if (bw > 0) score = rps * (minBwPerReq[pid] / (bw / rps));
+        }
+        if (score > bestScore) { thirdScore = secondScore; thirdFw = secondFw; secondScore = bestScore; secondFw = bestFw; bestScore = score; bestFw = fw; }
+        else if (score > secondScore) { thirdScore = secondScore; thirdFw = secondFw; secondScore = score; secondFw = fw; }
+        else if (score > thirdScore) { thirdScore = score; thirdFw = fw; }
       });
     }
     if (bestFw) topFwByProfile[pid] = bestFw;
+    if (secondFw) secondFwByProfile[pid] = secondFw;
+    if (thirdFw) thirdFwByProfile[pid] = thirdFw;
   });
   var badgesByFw = {};
   allProfileIds.forEach(function(pid) {
     var fw = topFwByProfile[pid];
-    if (!fw) return;
-    if (!badgesByFw[fw]) badgesByFw[fw] = [];
-    badgesByFw[fw].push({ pid: pid, label: profileLabels[pid], proto: profileProtos[pid] });
+    if (fw) {
+      if (!badgesByFw[fw]) badgesByFw[fw] = [];
+      badgesByFw[fw].push({ pid: pid, label: profileLabels[pid], proto: profileProtos[pid], place: 1 });
+    }
+    var fw2 = secondFwByProfile[pid];
+    if (fw2) {
+      if (!badgesByFw[fw2]) badgesByFw[fw2] = [];
+      badgesByFw[fw2].push({ pid: pid, label: profileLabels[pid], proto: profileProtos[pid], place: 2 });
+    }
+    var fw3 = thirdFwByProfile[pid];
+    if (fw3) {
+      if (!badgesByFw[fw3]) badgesByFw[fw3] = [];
+      badgesByFw[fw3].push({ pid: pid, label: profileLabels[pid], proto: profileProtos[pid], place: 3 });
+    }
   });
 
   // Weight config
@@ -713,7 +743,7 @@ function renderComposite() {
     }
   }
 
-  // Compute section champions (crown badges) using raw avgByProfile data
+  // Compute section champions (trophy/medal badges) using raw avgByProfile data
   var sectionGroups = { h1iso: [], h1wk: [], h2: [], h3: [], grpc: [], ws: [] };
   allProfileIds.forEach(function(pid) {
     var proto = profileProtos[pid];
@@ -752,7 +782,7 @@ function renderComposite() {
   Object.keys(sectionGroups).forEach(function(section) {
     var pids = sectionGroups[section];
     if (pids.length === 0) return;
-    var bestFw = null, bestAvg = 0;
+    var bestFw = null, bestAvg = 0, secondFw = null, secondAvg = 0, thirdFw = null, thirdAvg = 0;
     var totalPids = pids.length;
     Object.keys(allFw).forEach(function(fw) {
       if (isExcluded(fw)) return;
@@ -774,11 +804,21 @@ function renderComposite() {
         }
       });
       var avg = totalPids > 0 ? sum / totalPids : 0;
-      if (avg > bestAvg) { bestAvg = avg; bestFw = fw; }
+      if (avg > bestAvg) { thirdAvg = secondAvg; thirdFw = secondFw; secondAvg = bestAvg; secondFw = bestFw; bestAvg = avg; bestFw = fw; }
+      else if (avg > secondAvg) { thirdAvg = secondAvg; thirdFw = secondFw; secondAvg = avg; secondFw = fw; }
+      else if (avg > thirdAvg) { thirdAvg = avg; thirdFw = fw; }
     });
     if (bestFw) {
       if (!crownsByFw[bestFw]) crownsByFw[bestFw] = [];
-      crownsByFw[bestFw].push({ section: section, label: sectionLabels[section], color: sectionColors[section] });
+      crownsByFw[bestFw].push({ section: section, label: sectionLabels[section], color: sectionColors[section], place: 1 });
+    }
+    if (secondFw) {
+      if (!crownsByFw[secondFw]) crownsByFw[secondFw] = [];
+      crownsByFw[secondFw].push({ section: section, label: sectionLabels[section], color: sectionColors[section], place: 2 });
+    }
+    if (thirdFw) {
+      if (!crownsByFw[thirdFw]) crownsByFw[thirdFw] = [];
+      crownsByFw[thirdFw].push({ section: section, label: sectionLabels[section], color: sectionColors[section], place: 3 });
     }
   });
 
@@ -792,7 +832,7 @@ function renderComposite() {
   // Header
   var header = document.createElement('div');
   header.className = 'lb-row lb-header';
-  header.style.gridTemplateColumns = '2rem 14rem 3.5rem 3.5rem repeat(' + activeCount + ', minmax(4.2rem, 5.5rem))';
+  header.style.gridTemplateColumns = '2rem 16.8rem 3.5rem 3.5rem repeat(' + activeCount + ', minmax(4.2rem, 5.5rem))';
   var headerHtml = '<div title="Rank">#</div>' +
     '<div>Framework</div>' +
     '<div>Lang</div>' +
@@ -841,7 +881,7 @@ function renderComposite() {
     row.dataset.name = r.framework;
     row.dataset.lang = r.language;
     row.dataset.type = ftype;
-    row.style.gridTemplateColumns = '2rem 14rem 3.5rem 3.5rem repeat(' + activeCount + ', minmax(4.2rem, 5.5rem))';
+    row.style.gridTemplateColumns = '2rem 16.8rem 3.5rem 3.5rem repeat(' + activeCount + ', minmax(4.2rem, 5.5rem))';
     row.style.cursor = 'pointer';
 
     var rank = String(idx + 1);
@@ -889,14 +929,18 @@ function renderComposite() {
       badgeHtml = '<div class="composite-badges">';
       if (hasCrowns) {
         fwCrowns.forEach(function(c) {
-          badgeHtml += '<span class="composite-badge composite-crown" style="color:' + c.color + ';" title="#1 overall in ' + c.label + '">\u265A</span>';
+          var svg = c.place === 1 ? svgTrophyGold : c.place === 2 ? svgTrophySilver : svgTrophyBronze;
+          var placeLabel = c.place === 1 ? '#1' : c.place === 2 ? '#2' : '#3';
+          badgeHtml += '<span class="composite-badge composite-trophy" title="' + placeLabel + ' overall in ' + c.label + '">' + svg + '</span>';
         });
       }
       if (hasProfileBadges) {
         fwBadges.forEach(function(b) {
           var color = protoColors[b.proto] || '#3b82f6';
           var sublabel = profileSublabels[b.pid] || b.proto;
-          badgeHtml += '<span class="composite-badge composite-profile-crown" style="color:' + color + ';" title="#1 in ' + b.label + ' (' + sublabel + ')">\u2655</span>';
+          var svg = b.place === 1 ? svgMedalGold : b.place === 2 ? svgMedalSilver : svgMedalBronze;
+          var placeLabel = b.place === 1 ? '#1' : b.place === 2 ? '#2' : '#3';
+          badgeHtml += '<span class="composite-badge composite-medal" title="' + placeLabel + ' in ' + b.label + ' (' + sublabel + ')">' + svg + '</span>';
         });
       }
       badgeHtml += '</div>';
@@ -952,18 +996,22 @@ function renderComposite() {
       var popupSnails = snailCount;
       var protoColorsPopup = { h1iso: '#3b82f6', h1wk: '#2563eb', h2: '#eab308', h3: '#22c55e', grpc: '#7c3aed', ws: '#0891b2' };
       if (popupCrowns && popupCrowns.length > 0) {
-        popupBadges += '<div style="margin-bottom:0.4rem;"><span style="font-weight:600; font-size:0.8rem; color:#64748b;">\u265A Section Champion</span><div style="margin-top:0.2rem;">';
+        popupBadges += '<div style="margin-bottom:0.4rem;"><span style="font-weight:600; font-size:0.8rem; color:#64748b;display:inline-flex;align-items:center;gap:0.3rem;"><span style="width:0.9rem;height:0.9rem;display:inline-flex;">' + svgTrophyGold + '</span> Section Podium</span><div style="margin-top:0.2rem;">';
         popupCrowns.forEach(function(c) {
-          popupBadges += '<span style="display:inline-block; margin:0.15rem 0.3rem 0.15rem 0; padding:0.2rem 0.5rem; border-radius:4px; font-size:0.78rem; font-weight:600; color:' + c.color + '; background:rgba(0,0,0,0.04); border:1px solid ' + c.color + ';">\u265A #1 in ' + c.label + '</span>';
+          var svg = c.place === 1 ? svgTrophyGold : c.place === 2 ? svgTrophySilver : svgTrophyBronze;
+          var placeLabel = c.place === 1 ? '#1' : c.place === 2 ? '#2' : '#3';
+          popupBadges += '<span style="display:inline-flex; align-items:center; gap:0.3rem; margin:0.15rem 0.3rem 0.15rem 0; padding:0.2rem 0.5rem; border-radius:4px; font-size:0.78rem; font-weight:600; color:' + c.color + '; background:rgba(0,0,0,0.04); border:1px solid ' + c.color + ';"><span style="width:0.85rem;height:0.85rem;display:inline-flex;">' + svg + '</span> ' + placeLabel + ' in ' + c.label + '</span>';
         });
         popupBadges += '</div></div>';
       }
       if (popupProfileBadges && popupProfileBadges.length > 0) {
-        popupBadges += '<div style="margin-bottom:0.4rem;"><span style="font-weight:600; font-size:0.8rem; color:#64748b;">\u2655 Test Leader</span><div style="margin-top:0.2rem;">';
+        popupBadges += '<div style="margin-bottom:0.4rem;"><span style="font-weight:600; font-size:0.8rem; color:#64748b;display:inline-flex;align-items:center;gap:0.3rem;"><span style="width:0.9rem;height:0.9rem;display:inline-flex;">' + svgMedalGold + '</span> Test Podium</span><div style="margin-top:0.2rem;">';
         popupProfileBadges.forEach(function(b) {
           var color = protoColorsPopup[b.proto] || '#3b82f6';
           var sublabel = profileSublabels[b.pid] || b.proto;
-          popupBadges += '<span style="display:inline-block; margin:0.15rem 0.3rem 0.15rem 0; padding:0.2rem 0.5rem; border-radius:4px; font-size:0.78rem; font-weight:500; color:' + color + '; background:rgba(0,0,0,0.04); border:1px solid ' + color + ';">#1 ' + b.label + ' (' + sublabel + ')</span>';
+          var svg = b.place === 1 ? svgMedalGold : b.place === 2 ? svgMedalSilver : svgMedalBronze;
+          var placeLabel = b.place === 1 ? '#1' : b.place === 2 ? '#2' : '#3';
+          popupBadges += '<span style="display:inline-flex; align-items:center; gap:0.3rem; margin:0.15rem 0.3rem 0.15rem 0; padding:0.2rem 0.5rem; border-radius:4px; font-size:0.78rem; font-weight:500; color:' + color + '; background:rgba(0,0,0,0.04); border:1px solid ' + color + ';"><span style="width:0.85rem;height:0.85rem;display:inline-flex;">' + svg + '</span> ' + placeLabel + ' ' + b.label + ' (' + sublabel + ')</span>';
         });
         popupBadges += '</div></div>';
       }
