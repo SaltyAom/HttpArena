@@ -48,24 +48,6 @@ let pgPool: any = null;
 
 const STATIC_DIR = "/data/static";
 
-function sumQuery(url: string): number {
-  const q = url.indexOf("?");
-  if (q === -1) return 0;
-  let sum = 0;
-  const qs = url.slice(q + 1);
-  let i = 0;
-  while (i < qs.length) {
-    const eq = qs.indexOf("=", i);
-    if (eq === -1) break;
-    let amp = qs.indexOf("&", eq);
-    if (amp === -1) amp = qs.length;
-    const n = parseInt(qs.slice(eq + 1, amp), 10);
-    if (!isNaN(n)) sum += n;
-    i = amp + 1;
-  }
-  return sum;
-}
-
 const app = new Hono();
 
 // --- /pipeline ---
@@ -77,14 +59,20 @@ app.get("/pipeline", (c) => {
 
 // --- /baseline11 GET & POST ---
 app.get("/baseline11", (c) => {
-  const s = sumQuery(c.req.raw.url);
-  return new Response(String(s), {
+  const query = c.req.query();
+  let sum = 0;
+  for (const v of Object.values(query))
+    sum += parseInt(v, 10) || 0;
+  return new Response(String(sum), {
     headers: { "content-type": "text/plain", server: SERVER_NAME },
   });
 });
 
 app.post("/baseline11", async (c) => {
-  const querySum = sumQuery(c.req.raw.url);
+  const query = c.req.query();
+  let querySum = 0;
+  for (const v of Object.values(query))
+    querySum += parseInt(v, 10) || 0;
   const body = await c.req.text();
   let total = querySum;
   const n = parseInt(body.trim(), 10);
@@ -96,8 +84,11 @@ app.post("/baseline11", async (c) => {
 
 // --- /baseline2 ---
 app.get("/baseline2", (c) => {
-  const s = sumQuery(c.req.raw.url);
-  return new Response(String(s), {
+  const query = c.req.query();
+  let sum = 0;
+  for (const v of Object.values(query))
+    sum += parseInt(v, 10) || 0;
+  return new Response(String(sum), {
     headers: { "content-type": "text/plain", server: SERVER_NAME },
   });
 });
@@ -150,19 +141,8 @@ app.get("/db", (c) => {
       headers: { "content-type": "application/json", server: SERVER_NAME },
     });
   }
-  let min = 10, max = 50;
-  const url = c.req.raw.url;
-  const qIdx = url.indexOf("?");
-  if (qIdx !== -1) {
-    const qs = url.slice(qIdx + 1);
-    for (const pair of qs.split("&")) {
-      const eq = pair.indexOf("=");
-      if (eq === -1) continue;
-      const k = pair.slice(0, eq), v = pair.slice(eq + 1);
-      if (k === "min") min = parseFloat(v) || 10;
-      else if (k === "max") max = parseFloat(v) || 50;
-    }
-  }
+  const min = parseFloat(c.req.query('min') || '') || 10;
+  const max = parseFloat(c.req.query('max') || '') || 50;
   const rows = dbStmt.all(min, max) as any[];
   const items = rows.map((r: any) => ({
     id: r.id, name: r.name, category: r.category,
@@ -187,19 +167,8 @@ app.get("/async-db", async (c) => {
       headers: { "content-type": "application/json", server: SERVER_NAME },
     });
   }
-  let min = 10, max = 50;
-  const url = c.req.raw.url;
-  const qIdx = url.indexOf("?");
-  if (qIdx !== -1) {
-    const qs = url.slice(qIdx + 1);
-    for (const pair of qs.split("&")) {
-      const eq = pair.indexOf("=");
-      if (eq === -1) continue;
-      const k = pair.slice(0, eq), v = pair.slice(eq + 1);
-      if (k === "min") min = parseFloat(v) || 10;
-      else if (k === "max") max = parseFloat(v) || 50;
-    }
-  }
+  const min = parseFloat(c.req.query('min') || '') || 10;
+  const max = parseFloat(c.req.query('max') || '') || 50;
   try {
     const result = await pgPool.query(
       "SELECT id, name, category, price, quantity, active, tags, rating_score, rating_count FROM items WHERE price BETWEEN $1 AND $2 LIMIT 50",

@@ -46,31 +46,15 @@ let pgPool: any = null;
 
 const STATIC_DIR = "/data/static";
 
-function sumQuery(url: string): number {
-  const q = url.indexOf("?");
-  if (q === -1) return 0;
-  let sum = 0;
-  const qs = url.slice(q + 1);
-  let i = 0;
-  while (i < qs.length) {
-    const eq = qs.indexOf("=", i);
-    if (eq === -1) break;
-    let amp = qs.indexOf("&", eq);
-    if (amp === -1) amp = qs.length;
-    const n = parseInt(qs.slice(eq + 1, amp), 10);
-    if (!isNaN(n)) sum += n;
-    i = amp + 1;
-  }
-  return sum;
-}
-
 // Build route handlers as a reusable plugin
 function addRoutes(app: Elysia) {
   return app
     .get("/pipeline", () => new Response("ok", { headers: { "content-type": "text/plain" } }))
 
-    .all("/baseline11", async ({ request }) => {
-      const querySum = sumQuery(request.url);
+    .all("/baseline11", async ({ query, request }) => {
+      let querySum = 0;
+      for (const v of Object.values(query))
+        querySum += parseInt(v as string, 10) || 0;
       if (request.method === "POST") {
         const body = await request.text();
         let total = querySum;
@@ -114,22 +98,11 @@ function addRoutes(app: Elysia) {
       });
     })
 
-    .get("/db", ({ request }) => {
+    .get("/db", ({ query }) => {
       if (!dbStmt) return new Response("DB not available", { status: 500 });
       try {
-        let min = 10, max = 50;
-        const url = request.url;
-        const qIdx = url.indexOf("?");
-        if (qIdx !== -1) {
-          const qs = url.slice(qIdx + 1);
-          for (const pair of qs.split("&")) {
-            const eq = pair.indexOf("=");
-            if (eq === -1) continue;
-            const k = pair.slice(0, eq), v = pair.slice(eq + 1);
-            if (k === "min") min = parseFloat(v) || 10;
-            else if (k === "max") max = parseFloat(v) || 50;
-          }
-        }
+        const min = parseFloat(query.min as string) || 10;
+        const max = parseFloat(query.max as string) || 50;
         const rows = dbStmt.all(min, max) as any[];
         const items = rows.map((r: any) => ({
           id: r.id, name: r.name, category: r.category,
@@ -146,25 +119,14 @@ function addRoutes(app: Elysia) {
       }
     })
 
-    .get("/async-db", async ({ request }) => {
+    .get("/async-db", async ({ query }) => {
       if (!pgPool) {
         return new Response('{"items":[],"count":0}', {
           headers: { "content-type": "application/json" },
         });
       }
-      let min = 10, max = 50;
-      const url = request.url;
-      const qIdx = url.indexOf("?");
-      if (qIdx !== -1) {
-        const qs = url.slice(qIdx + 1);
-        for (const pair of qs.split("&")) {
-          const eq = pair.indexOf("=");
-          if (eq === -1) continue;
-          const k = pair.slice(0, eq), v = pair.slice(eq + 1);
-          if (k === "min") min = parseFloat(v) || 10;
-          else if (k === "max") max = parseFloat(v) || 50;
-        }
-      }
+      const min = parseFloat(query.min as string) || 10;
+      const max = parseFloat(query.max as string) || 50;
       try {
         const result = await pgPool.query(
           "SELECT id, name, category, price, quantity, active, tags, rating_score, rating_count FROM items WHERE price BETWEEN $1 AND $2 LIMIT 50",

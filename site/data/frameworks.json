@@ -13,7 +13,7 @@
   "caddy": {"dir": "caddy", "description": "Caddy web server with a custom handler module for benchmark endpoints, native HTTP/2 support.", "repo": "https://github.com/caddyserver/caddy", "type": "engine", "engine": "caddy"},
   "carno": {"dir": "carno", "description": "Ultra-fast, performance-first framework for Bun with JIT-compiled routes, decorator-based API, and built-in DI.", "repo": "https://github.com/carnojs/carno.js", "type": "production", "engine": "bun"},
   "chi": {"dir": "chi", "description": "Chi is a lightweight, idiomatic and composable router for building Go HTTP services, built on top of net/http.", "repo": "https://github.com/go-chi/chi", "type": "tuned", "engine": "chi"},
-  "deno": {"dir": "deno", "description": "Deno HTTP server using deno serve --parallel with zero-dependency native fetch handler.", "repo": "https://github.com/denoland/deno", "type": "production", "engine": "v8"},
+  "deno": {"dir": "deno", "description": "Deno HTTP server using deno serve --parallel with zero-dependency native fetch handler.", "repo": "https://github.com/denoland/deno", "type": "engine", "engine": "v8"},
   "deno-websocket": {"dir": "deno-websocket", "description": "Deno WebSocket echo server", "repo": "https://github.com/denoland/deno", "type": "tuned", "engine": "deno"},
   "django": {"dir": "django", "description": "Django web framework on Gunicorn with sync workers, one worker per CPU core.", "repo": "https://github.com/django/django", "type": "tuned", "engine": "gunicorn"},
   "drogon": {"dir": "drogon", "description": "Drogon C++ framework using HttpController with async callbacks, mimalloc allocator, and -flto optimization.", "repo": "https://github.com/drogonframework/drogon", "type": "tuned", "engine": "drogon"},
