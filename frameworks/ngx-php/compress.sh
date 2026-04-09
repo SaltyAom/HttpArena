@@ -12,3 +12,5 @@ for FILE in $(find $DIR -type f -iname '*.css' -o -iname '*.js' -o -iname '*.svg
     echo "done."
 done
 IFS=$OLDIFS-1
+
+

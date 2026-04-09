@@ -31,7 +31,7 @@ RUN wget -q http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz && \
 
 RUN echo "opcache.jit=tracing" >> /etc/php/8.4/embed/conf.d/90-override.ini
 
-COPY --link . .
+COPY . .
 
 RUN chmod +x /compress.sh
 RUN /compress.sh
