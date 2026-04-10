@@ -7,6 +7,7 @@ class Db
     public static function init()
     {
         $db = new Sqlite3('/data/benchmark.db', SQLITE3_OPEN_READONLY);
+        $db->exec('PRAGMA mmap_size=268435456;');
 
         self::$prepared = $db->prepare('SELECT id, name, category, price, quantity, active, tags, rating_score, rating_count
                             FROM items
