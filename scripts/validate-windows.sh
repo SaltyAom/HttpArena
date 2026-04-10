@@ -78,15 +78,6 @@ if has_test "compression" || has_test "assets-4" || has_test "assets-16"; then
     docker_args+=(-v "$DATA_DIR/dataset-large.json:/data/dataset-large.json:ro")
 fi
 
-if has_test "sync-db"; then
-    DB_FILE="$DATA_DIR/benchmark.db"
-    if [ ! -f "$DB_FILE" ]; then
-        echo "[db] benchmark.db not found, generating..."
-        python3 "$SCRIPT_DIR/generate-db.py" "$DATA_DIR/dataset.json" "$DB_FILE"
-    fi
-    docker_args+=(-v "$DB_FILE:/data/benchmark.db:ro")
-fi
-
 if has_test "static" || has_test "static-h2" || has_test "static-h3" || has_test "assets-4" || has_test "assets-16"; then
     docker_args+=(-v "$DATA_DIR/static:/data/static:ro")
 fi
@@ -350,18 +341,18 @@ if has_test "compression" || has_test "assets-4" || has_test "assets-16"; then
     COMP_DOCS="$DOCS_BASE/h1/isolated/compression/validation"
     echo "[test] compression endpoint"
 
-    # Must return Content-Encoding: gzip when Accept-Encoding: gzip is sent
-    comp_headers=$(curl -s --max-time 30 -D- -o /dev/null -H "Accept-Encoding: gzip" "http://localhost:$PORT/compression")
+    # Must return Content-Encoding: gzip or br when Accept-Encoding: gzip, br is sent
+    comp_headers=$(curl -s --max-time 30 -D- -o /dev/null -H "Accept-Encoding: gzip, br" "http://localhost:$PORT/compression")
     comp_encoding=$(echo "$comp_headers" | grep -i "^content-encoding:" | sed 's/^[^:]*: *//' | tr -d '\r' | awk '{print tolower($1)}' || true)
-    if [ "$comp_encoding" = "gzip" ]; then
-        echo "  PASS [compression Content-Encoding: gzip]"
+    if [ "$comp_encoding" = "gzip" ] || [ "$comp_encoding" = "br" ]; then
+        echo "  PASS [compression Content-Encoding: $comp_encoding]"
         PASS=$((PASS + 1))
     else
-        fail_with_link "[compression]: expected Content-Encoding gzip, got '$comp_encoding'" "$COMP_DOCS"
+        fail_with_link "[compression]: expected Content-Encoding gzip or br, got '$comp_encoding'" "$COMP_DOCS"
     fi
 
     # Verify compressed response is valid JSON with items and totals
-    comp_response=$(curl -s --max-time 30 --compressed -H "Accept-Encoding: gzip" "http://localhost:$PORT/compression")
+    comp_response=$(curl -s --max-time 30 --compressed -H "Accept-Encoding: gzip, br" "http://localhost:$PORT/compression")
     comp_result=$(echo "$comp_response" | python3 -c "
 import sys, json
 d = json.load(sys.stdin)
@@ -381,7 +372,7 @@ print(f'{count} {has_total}')
     fi
 
     # Verify compressed size is reasonable (should be well under 1MB uncompressed ~1MB)
-    comp_size=$(curl -s --max-time 30 -o /dev/null -w '%{size_download}' -H "Accept-Encoding: gzip" "http://localhost:$PORT/compression")
+    comp_size=$(curl -s --max-time 30 -o /dev/null -w '%{size_download}' -H "Accept-Encoding: gzip, br" "http://localhost:$PORT/compression")
     if [ "$comp_size" -lt 500000 ]; then
         echo "  PASS [compression size] ($comp_size bytes < 500KB)"
         PASS=$((PASS + 1))
@@ -390,7 +381,7 @@ print(f'{count} {has_total}')
     fi
 
     # Verify compression happens per-request (not pre-compressed cache)
-    # Request without Accept-Encoding: gzip must NOT return Content-Encoding: gzip
+    # Request without Accept-Encoding must NOT return Content-Encoding
     no_enc_headers=$(curl -s --max-time 30 -D- -o /dev/null "http://localhost:$PORT/compression")
     no_enc_encoding=$(echo "$no_enc_headers" | grep -i "^content-encoding:" | sed 's/^[^:]*: *//' | tr -d '\r' | awk '{print tolower($1)}' || true)
     if [ -z "$no_enc_encoding" ]; then
@@ -429,90 +420,6 @@ if has_test "noisy"; then
     B4=$((RANDOM % 900 + 100))
     check "GET /baseline11?a=$A4&b=$B4 (post-noise)" "$((A4 + B4))" "$NOISY_DOCS" \
         "http://localhost:$PORT/baseline11?a=$A4&b=$B4"
-fi
-
-# ───── DB (GET /db — SQLite) ─────
-
-if has_test "sync-db"; then
-    DB_DOCS="$DOCS_BASE/h1/isolated/database/validation"
-    echo "[test] db endpoint"
-    response=$(curl -s --max-time 30 "http://localhost:$PORT/db?min=10&max=50")
-    db_result=$(echo "$response" | python3 -c "
-import sys, json
-d = json.load(sys.stdin)
-count = d.get('count', 0)
-items = d.get('items', [])
-has_rating = all('rating' in item and 'score' in item['rating'] for item in items) if items else False
-has_tags = all(isinstance(item.get('tags'), list) for item in items) if items else False
-has_active_bool = all(isinstance(item.get('active'), bool) for item in items) if items else False
-print(f'{count} {has_rating} {has_tags} {has_active_bool}')
-" 2>/dev/null || echo "0 False False False")
-    db_count=$(echo "$db_result" | cut -d' ' -f1)
-    db_rating=$(echo "$db_result" | cut -d' ' -f2)
-    db_tags=$(echo "$db_result" | cut -d' ' -f3)
-    db_active=$(echo "$db_result" | cut -d' ' -f4)
-
-    if [ "$db_count" -gt 0 ] && [ "$db_count" -le 50 ] && [ "$db_rating" = "True" ] && [ "$db_tags" = "True" ] && [ "$db_active" = "True" ]; then
-        echo "  PASS [GET /db?min=10&max=50] ($db_count items, correct structure)"
-        PASS=$((PASS + 1))
-    else
-        fail_with_link "[GET /db?min=10&max=50]: count=$db_count, rating=$db_rating, tags=$db_tags, active=$db_active" "$DB_DOCS"
-    fi
-
-    check_header "GET /db Content-Type" "Content-Type" "application/json" "$DB_DOCS" \
-        "http://localhost:$PORT/db?min=10&max=50"
-
-    # Anti-cheat: empty range should return 0 items
-    response_empty=$(curl -s --max-time 30 "http://localhost:$PORT/db?min=9999&max=9999")
-    db_empty=$(echo "$response_empty" | python3 -c "import sys,json; print(json.load(sys.stdin).get('count','-1'))" 2>/dev/null || echo "-1")
-    if [ "$db_empty" = "0" ]; then
-        echo "  PASS [GET /db empty range] (count=0)"
-        PASS=$((PASS + 1))
-    else
-        fail_with_link "[GET /db empty range]: expected count=0, got $db_empty" "$DB_DOCS"
-    fi
-fi
-
-# ───── Sync DB (GET /db — SQLite) ─────
-
-if has_test "sync-db"; then
-    DB_DOCS="$DOCS_BASE/h1/isolated/database/validation"
-    echo "[test] sync-db endpoint"
-    response=$(curl -s --max-time 30 "http://localhost:$PORT/db?min=10&max=50")
-    db_result=$(echo "$response" | python3 -c "
-import sys, json
-d = json.load(sys.stdin)
-count = d.get('count', 0)
-items = d.get('items', [])
-has_rating = all('rating' in item and 'score' in item['rating'] for item in items) if items else False
-has_tags = all(isinstance(item.get('tags'), list) for item in items) if items else False
-has_active_bool = all(isinstance(item.get('active'), bool) for item in items) if items else False
-print(f'{count} {has_rating} {has_tags} {has_active_bool}')
-" 2>/dev/null || echo "0 False False False")
-    db_count=$(echo "$db_result" | cut -d' ' -f1)
-    db_rating=$(echo "$db_result" | cut -d' ' -f2)
-    db_tags=$(echo "$db_result" | cut -d' ' -f3)
-    db_active=$(echo "$db_result" | cut -d' ' -f4)
-
-    if [ "$db_count" -gt 0 ] && [ "$db_count" -le 50 ] && [ "$db_rating" = "True" ] && [ "$db_tags" = "True" ] && [ "$db_active" = "True" ]; then
-        echo "  PASS [GET /db?min=10&max=50] ($db_count items, correct structure)"
-        PASS=$((PASS + 1))
-    else
-        fail_with_link "[GET /db?min=10&max=50]: count=$db_count, rating=$db_rating, tags=$db_tags, active=$db_active" "$DB_DOCS"
-    fi
-
-    check_header "GET /db Content-Type" "Content-Type" "application/json" "$DB_DOCS" \
-        "http://localhost:$PORT/db?min=10&max=50"
-
-    # Anti-cheat: empty range should return 0 items
-    response_empty=$(curl -s --max-time 30 "http://localhost:$PORT/db?min=9999&max=9999")
-    db_empty=$(echo "$response_empty" | python3 -c "import sys,json; print(json.load(sys.stdin).get('count','-1'))" 2>/dev/null || echo "-1")
-    if [ "$db_empty" = "0" ]; then
-        echo "  PASS [GET /db empty range] (count=0)"
-        PASS=$((PASS + 1))
-    else
-        fail_with_link "[GET /db empty range]: expected count=0, got $db_empty" "$DB_DOCS"
-    fi
 fi
 
 # ───── Baseline H2 (GET /baseline2 over HTTP/2 + TLS) ─────

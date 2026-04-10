@@ -18,11 +18,12 @@
     "api-16",
     "db",
     "async-db",
-    "sync-db",
     "static",
     "tcp-frag",
     "baseline-h2",
     "static-h2"
   ],
-  "maintainers": ["joanhey"]
+  "maintainers": [
+    "joanhey"
+  ]
 }

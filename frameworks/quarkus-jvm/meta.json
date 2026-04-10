@@ -20,8 +20,7 @@
     "tcp-frag",
     "baseline-h2",
     "static-h2",
-    "async-db",
-    "sync-db"
+    "async-db"
   ],
   "maintainers": []
 }

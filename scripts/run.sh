@@ -66,13 +66,6 @@ if [ -d "$CERTS_DIR" ]; then
     docker_args+=( -v "$CERTS_DIR:/certs:ro")
 fi
 
-DB_FILE="$DATA_DIR/benchmark.db"
-if [ ! -f "$DB_FILE" ]; then
-    echo "[db] benchmark.db not found, generating..."
-    python3 "$SCRIPT_DIR/generate-db.py" "$DATA_DIR/dataset.json" "$DB_FILE"
-fi
-docker_args+=(-v "$DB_FILE:/data/benchmark.db:ro")
-
 # Start Postgres sidecar
 PG_CONTAINER="httparena-pg"
 

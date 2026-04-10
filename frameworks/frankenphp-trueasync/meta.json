@@ -14,7 +14,6 @@
     "upload",
     "noisy",
     "static",
-    "sync-db",
     "async-db",
     "api-4",
     "api-16",

@@ -1,7 +1,0 @@
-{
-  "name": "httparena-uwebsockets",
-  "private": true,
-  "dependencies": {
-    "uWebSockets.js": "github:uNetworking/uWebSockets.js#v20.61.0"
-  }
-}

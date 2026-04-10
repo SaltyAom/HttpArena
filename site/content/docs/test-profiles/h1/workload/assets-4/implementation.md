@@ -1,18 +1,18 @@
 ---
 title: Implementation Guidelines
 ---
-{{< type-rules production="Response compression must use the framework's standard middleware. Pre-compressed files on disk are allowed if the framework documents this as the official/recommended approach (e.g., ASP.NET MapStaticAssets, Nginx gzip_static). Binary formats (webp, woff2) should not be compressed." tuned="May cache compressed and uncompressed versions in memory. Pre-compressed files on disk allowed. Must serve uncompressed when Accept-Encoding: gzip is absent." engine="Pre-compressed files on disk allowed. Must respect Accept-Encoding header presence/absence. JSON endpoint must serialize and compress on every request — no pre-compressed JSON." >}}
+{{< type-rules production="Static file compression must use the framework's standard middleware or built-in static file handler — no handmade compression code. Pre-compressed files on disk are allowed if the framework documents this as the official/recommended approach (e.g., ASP.NET MapStaticAssets, Nginx gzip_static). Binary formats (webp, woff2) should not be compressed." tuned="May cache compressed and uncompressed versions in memory. Pre-compressed files on disk allowed. Free to use any compression approach." engine="Pre-compressed files on disk allowed. Must respect Accept-Encoding header presence/absence." >}}
 
-The Assets-4 profile serves a mix of static files and JSON responses, where some requests include `Accept-Encoding: gzip` and others do not. The server must compress text-based responses on-the-fly when the header is present, skip compression for binary formats, and serve uncompressed responses when the header is absent. The server container is constrained to **4 CPUs and 16 GB memory**.
+The Assets-4 profile serves a mix of static files and JSON responses. All static file requests include `Accept-Encoding: br;q=1, gzip;q=0.8`. JSON requests (`/json`) do **not** include a compression header — this endpoint tests pure serialization performance. The server container is constrained to **4 CPUs and 16 GB memory**.
 
 ## Compression rules
 
-1. **Text-based files** (CSS, JS, HTML, JSON): must be gzip-compressed when `Accept-Encoding: gzip` is present in the request
-2. **Binary files** (webp, woff2): must NOT be compressed even when `Accept-Encoding: gzip` is present — these formats are already compressed
-3. **SVG files**: server may choose to compress or not (both are accepted)
-4. **No compression header**: when `Accept-Encoding: gzip` is absent, responses must always be uncompressed regardless of content type
-5. **JSON endpoint (`/json`)**: the response must be serialized and compressed on every request. Pre-compressed or cached JSON responses are not allowed — this endpoint tests live serialization + compression performance.
-6. **Pre-compressed files on disk**: allowed for **production** frameworks if the framework documents this as the official/recommended approach (e.g., ASP.NET `MapStaticAssets`, Nginx `gzip_static`). Always allowed for **tuned** and **engine** types.
+1. **Static files**: all static file requests include `Accept-Encoding: br;q=1, gzip;q=0.8`. Compression is **optional but recommended** for text-based files — frameworks that compress will benefit from reduced I/O
+2. **Binary files** (webp, woff2): already compressed formats — servers should skip compression for these
+3. **JSON endpoint (`/json`)**: no compression header is sent. The response must be serialized on every request — this tests pure JSON processing throughput
+4. **Pre-compressed files on disk** (`.gz`, `.br`): available for all static files. Frameworks that support serving pre-compressed files can use them for zero CPU overhead compression
+5. **Production rule**: compression must use the framework's standard middleware or built-in static file handler. No handmade compression code
+6. **Tuned rule**: free to use any compression approach
 
 ## Caching rules
 
@@ -21,17 +21,13 @@ The Assets-4 profile serves a mix of static files and JSON responses, where some
 
 ## Request mix (20 templates)
 
-| Category | Templates | Accept-Encoding: gzip |
-|----------|-----------|-----------------------|
-| Text files (JS, CSS, HTML) | 5 | Yes |
-| JSON (`/json`) | 1 | Yes |
-| Text files (JS, CSS, HTML) | 5 | No |
-| JSON (`/json`) | 1 | No |
-| Binary (webp, woff2) | 2 | Yes (server must skip) |
-| Binary (webp, woff2) | 2 | No |
-| SVG | 1 | Yes (either accepted) |
-| SVG | 1 | No |
-| Manifest JSON + CSS | 2 | No |
+| Category | Templates | Accept-Encoding |
+|----------|-----------|-----------------|
+| Static text (JS, CSS, HTML) | 10 | `br;q=1, gzip;q=0.8` |
+| Static binary (webp, woff2) | 4 | `br;q=1, gzip;q=0.8` (server should skip) |
+| Static SVG + logo | 2 | `br;q=1, gzip;q=0.8` |
+| Static manifest + CSS | 2 | `br;q=1, gzip;q=0.8` |
+| JSON (`/json`) | 2 | None |
 
 ## Docker constraints
 

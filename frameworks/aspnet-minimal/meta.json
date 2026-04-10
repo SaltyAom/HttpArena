@@ -21,7 +21,6 @@
     "static",
     "tcp-frag",
     "async-db",
-    "sync-db",
     "baseline-h2",
     "static-h2"
   ],

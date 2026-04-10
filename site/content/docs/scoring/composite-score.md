@@ -43,9 +43,8 @@ Not all profiles count toward the composite score. Profiles marked as **scored**
 | Short-lived | Yes | Connections closed after 10 requests |
 | JSON | Yes | Dataset processing and serialization |
 | Upload | Yes | 20 MB body ingestion, return byte count |
-| Compression | Yes | ~1 MB gzip-compressed JSON response |
+| Compression | Yes | ~1 MB compressed JSON response (gzip or brotli) |
 | Static | Yes | 20 static files served over HTTP/1.1 |
-| Sync DB | Yes | SQLite range query with JSON serialization |
 | Async DB | Yes | Async Postgres query with connection pooling |
 | TCP Frag | No (*) | Baseline with MTU 69 — TCP fragmentation stress |
 | Noisy | No (*) | Valid requests interleaved with malformed noise |
@@ -143,7 +142,7 @@ Framework A still leads because its raw throughput advantage outweighs B's CPU e
 Engines and frameworks are scored **separately** — each type has its own composite ranking and normalization pool. The scored profiles differ by type:
 
 - **Frameworks** are scored on all scored profiles across H/1.1, H/2, H/3, gRPC, and WebSocket.
-- **Engines** are scored on a reduced set: Baseline, Pipelined, Short-lived, API-4, H/2 (both), H/3 (both), gRPC (both), and WebSocket, since most engines don't implement the heavier endpoints (JSON, DB, upload, compression).
+- **Engines** are scored on a reduced set: Baseline, Pipelined, Short-lived, API-4, H/2 (both), H/3 (both), gRPC (both), and WebSocket, since most engines don't implement the heavier endpoints (JSON, upload, compression).
 
 The Type filter on the composite leaderboard switches between the two rankings.
 

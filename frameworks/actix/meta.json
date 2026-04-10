@@ -18,7 +18,6 @@
     "api-16",
     "static",
     "async-db",
-    "sync-db",
     "baseline-h2",
     "static-h2",
     "tcp-frag"

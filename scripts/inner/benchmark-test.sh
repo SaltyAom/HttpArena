@@ -20,7 +20,7 @@ if [ "$TEST" = "test" ]; then
     echo ""
     echo "Available profiles:"
     echo "  baseline pipelined limited-conn json upload compression"
-    echo "  noisy api-4 api-16 assets-4 assets-16 static sync-db async-db"
+    echo "  noisy api-4 api-16 assets-4 assets-16 static async-db"
     echo "  baseline-h2 static-h2 baseline-h3 static-h3"
     echo "  unary-grpc unary-grpc-tls echo-ws"
     exit 1

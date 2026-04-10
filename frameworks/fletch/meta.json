@@ -17,8 +17,7 @@
     "api-4",
     "api-16",
     "static",
-    "async-db",
-    "sync-db"
+    "async-db"
   ],
   "maintainers": []
 }

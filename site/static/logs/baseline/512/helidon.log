@@ -1,9 +1,0 @@
-[0.013s][warning][os] NUMA support disabled: Failed to initialize libnuma
-Apr 06, 2026 4:39:06 AM io.helidon.common.features.HelidonFeatures features
-INFO: Helidon SE 4.4.0 features: [Config, Encoding, Media, Registry, WebServer]
-Apr 06, 2026 4:39:06 AM io.helidon.webserver.ServerListener startIt
-INFO: [0x3365c4ad] http://0.0.0.0:8080 bound for socket '@default'
-There is no Helidon logging implementation on classpath, skipping log configuration.
-Apr 06, 2026 4:39:06 AM io.helidon.webserver.LoomServer startIt
-INFO: Started all channels in 18 milliseconds. 1583 milliseconds since JVM startup. Java 25.0.2+10-LTS
-Helidon HttpArena server started on port 8080

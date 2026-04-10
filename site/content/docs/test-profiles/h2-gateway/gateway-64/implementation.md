@@ -430,11 +430,11 @@ The stack must serve four endpoint types. Whether the proxy or server handles ea
 
 ### `/static/*` — Static files
 
-Serves static files from the dataset (CSS, JS, HTML, fonts, images, JSON). The files are available at `/data/static/` inside any container that mounts `${DATA_DIR}/static`.
+Serves static files from the dataset (CSS, JS, HTML, fonts, images, JSON). The files are available at `/data/static/` inside any container that mounts `${DATA_DIR}/static`. Pre-compressed versions (`.gz`, `.br`) are also available on disk.
 
-**Who serves this?** The proxy can serve these directly from disk (e.g., Nginx `location /static/ { alias /data/static/; }`), or the proxy can forward to the server. Serving from the proxy is typically faster since it avoids the proxy-to-server hop for static content.
+All requests include `Accept-Encoding: br;q=1, gzip;q=0.8`. Compression is optional but recommended for text-based files — frameworks that compress will benefit from reduced I/O. See the [Static Files compression rules](/docs/test-profiles/h1/isolated/static/implementation/#compression) for details.
 
-Refer to the [Static Files implementation](/docs/test-profiles/h1/isolated/static/implementation) for file details and content types.
+**Who serves this?** The proxy can serve these directly from disk (e.g., Nginx `location /static/ { alias /data/static/; }` with `gzip_static on; brotli_static on;`), or the proxy can forward to the server. Serving from the proxy is typically faster since it avoids the proxy-to-server hop for static content.
 
 ### `/json` — JSON processing
 

@@ -1,8 +1,0 @@
-{
-  "name": "httparena-elysia",
-  "private": true,
-  "dependencies": {
-    "elysia": "^1.4.0",
-    "pg": "^8.13.0"
-  }
-}

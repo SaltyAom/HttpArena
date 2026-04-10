@@ -2,7 +2,7 @@
 title: Compression
 ---
 
-Measures the throughput cost of real-time gzip compression on a ~1 MB JSON response.
+Measures the throughput cost of real-time compression (gzip or brotli) on a ~1 MB JSON response.
 
 {{< cards >}}
   {{< card link="implementation" title="Implementation Guidelines" subtitle="Endpoint specification, expected request/response format, and type-specific rules." icon="code" >}}

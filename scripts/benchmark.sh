@@ -49,10 +49,9 @@ declare -A PROFILES=(
     [unary-grpc-tls]="1|0|0-31,64-95|256,1024|grpc-tls"
     [gateway-64]="1|0|0-31,64-95|256,1024|gateway-64"
     [echo-ws]="1|0|0-31,64-95|512,4096,16384|ws-echo"
-    [sync-db]="1|0|0-31,64-95|1024|sync-db"
     [async-db]="1|0|0-31,64-95|1024|async-db"
 )
-PROFILE_ORDER=(baseline pipelined limited-conn json upload compression noisy api-4 api-16 assets-4 assets-16 static sync-db async-db baseline-h2 static-h2 gateway-64 unary-grpc unary-grpc-tls echo-ws)
+PROFILE_ORDER=(baseline pipelined limited-conn json upload compression noisy api-4 api-16 assets-4 assets-16 static async-db baseline-h2 static-h2 gateway-64 unary-grpc unary-grpc-tls echo-ws)
 
 # Parse flags
 SAVE_RESULTS=false
@@ -475,7 +474,6 @@ for profile in "${profiles_to_run[@]}"; do
             --ulimit nofile="$HARD_NOFILE:$HARD_NOFILE"
             -v "$ROOT_DIR/data/dataset.json:/data/dataset.json:ro"
             -v "$ROOT_DIR/data/dataset-large.json:/data/dataset-large.json:ro"
-            -v "$ROOT_DIR/data/benchmark.db:/data/benchmark.db:ro"
             -v "$ROOT_DIR/data/static:/data/static:ro"
             -v "$CERTS_DIR:/certs:ro")
         if [ "$endpoint" = "async-db" ] || [ "$endpoint" = "api-4" ] || [ "$endpoint" = "api-16" ]; then
@@ -593,6 +591,7 @@ for profile in "${profiles_to_run[@]}"; do
             "$REQUESTS_DIR/static-h2-uris.txt"
             --urls-from-file
             --http-version 3 --insecure
+            -H "Accept-Encoding: br;q=1, gzip;q=0.8"
             -o "$oha_out" --output-format json
             -c "$CONNS" -p "$pipeline" -z "$DURATION")
     elif [ "$endpoint" = "h3" ]; then
@@ -607,11 +606,13 @@ for profile in "${profiles_to_run[@]}"; do
         USE_H2LOAD=true
         gc_args=("$H2LOAD"
             -i "$REQUESTS_DIR/gateway-64-uris.txt"
+            -H "Accept-Encoding: br;q=1, gzip;q=0.8"
             -c "$CONNS" -m 100 -t "$H2THREADS" -D "$DURATION")
     elif [ "$endpoint" = "static-h2" ]; then
         USE_H2LOAD=true
         gc_args=("$H2LOAD"
             -i "$REQUESTS_DIR/static-h2-uris.txt"
+            -H "Accept-Encoding: br;q=1, gzip;q=0.8"
             -c "$CONNS" -m 100 -t "$H2THREADS" -D "$DURATION")
     elif [ "$endpoint" = "h2" ]; then
         USE_H2LOAD=true
@@ -634,13 +635,10 @@ for profile in "${profiles_to_run[@]}"; do
             --raw "$REQUESTS_DIR/get.raw,$REQUESTS_DIR/get.raw,$REQUESTS_DIR/get.raw,$REQUESTS_DIR/json-get.raw,$REQUESTS_DIR/json-get.raw,$REQUESTS_DIR/json-get.raw,$REQUESTS_DIR/async-db-get.raw,$REQUESTS_DIR/async-db-get.raw"
             -c "$CONNS" -t 64 -d 15s -p "$pipeline")
     elif [ "$endpoint" = "assets-4" ] || [ "$endpoint" = "assets-16" ]; then
-        # 20 templates: text+gzip(6), text-plain(6), binary+gzip(2), binary-plain(2), svg+gzip(1), svg-plain(1), json+gzip(1), json-plain(1)
+        # 20 templates: all static files send Accept-Encoding: br, gzip; json requests do NOT send compression header
         gc_args=("http://localhost:$PORT"
-            --raw "$REQUESTS_DIR/static-app.js-gzip.raw,$REQUESTS_DIR/static-vendor.js-gzip.raw,$REQUESTS_DIR/static-components.css-gzip.raw,$REQUESTS_DIR/static-utilities.css-gzip.raw,$REQUESTS_DIR/static-header.html-gzip.raw,$REQUESTS_DIR/json-get-gzip.raw,$REQUESTS_DIR/static-router.js.raw,$REQUESTS_DIR/static-helpers.js.raw,$REQUESTS_DIR/static-layout.css.raw,$REQUESTS_DIR/static-theme.css.raw,$REQUESTS_DIR/static-footer.html.raw,$REQUESTS_DIR/json-get.raw,$REQUESTS_DIR/static-hero.webp-gzip.raw,$REQUESTS_DIR/static-regular.woff2-gzip.raw,$REQUESTS_DIR/static-thumb1.webp.raw,$REQUESTS_DIR/static-bold.woff2.raw,$REQUESTS_DIR/static-icon-sprite.svg-gzip.raw,$REQUESTS_DIR/static-logo.svg.raw,$REQUESTS_DIR/static-manifest.json.raw,$REQUESTS_DIR/static-reset.css.raw"
+            --raw "$REQUESTS_DIR/static-app.js.raw,$REQUESTS_DIR/static-vendor.js.raw,$REQUESTS_DIR/static-components.css.raw,$REQUESTS_DIR/static-utilities.css.raw,$REQUESTS_DIR/static-header.html.raw,$REQUESTS_DIR/json-get.raw,$REQUESTS_DIR/static-router.js.raw,$REQUESTS_DIR/static-helpers.js.raw,$REQUESTS_DIR/static-layout.css.raw,$REQUESTS_DIR/static-theme.css.raw,$REQUESTS_DIR/static-footer.html.raw,$REQUESTS_DIR/json-get.raw,$REQUESTS_DIR/static-hero.webp.raw,$REQUESTS_DIR/static-regular.woff2.raw,$REQUESTS_DIR/static-thumb1.webp.raw,$REQUESTS_DIR/static-bold.woff2.raw,$REQUESTS_DIR/static-icon-sprite.svg.raw,$REQUESTS_DIR/static-logo.svg.raw,$REQUESTS_DIR/static-manifest.json.raw,$REQUESTS_DIR/static-reset.css.raw"
             -c "$CONNS" -t 64 -d 15s -p "$pipeline")
-    elif [ "$endpoint" = "sync-db" ]; then
-        gc_args=("http://localhost:$PORT/db?min=10&max=50"
-            -c "$CONNS" -t "$THREADS" -d 10s -p "$pipeline")
     elif [ "$endpoint" = "async-db" ]; then
         gc_args=("http://localhost:$PORT/async-db?min=10&max=50"
             -c "$CONNS" -t "$THREADS" -d 10s -p "$pipeline")

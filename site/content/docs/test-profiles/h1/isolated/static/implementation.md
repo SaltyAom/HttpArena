@@ -1,7 +1,7 @@
 ---
 title: Implementation Guidelines
 ---
-{{< type-rules production="Must load files from disk on every request. No in-memory caching, no memory-mapped files, no pre-loaded file buffers." tuned="May cache files in memory at startup, use memory-mapped files, pre-rendered response headers, or any caching strategy." engine="No specific rules." >}}
+{{< type-rules production="Must load files from disk on every request. No in-memory caching, no memory-mapped files, no pre-loaded file buffers. Compression must use the framework's standard middleware or built-in static file handler — no handmade compression code." tuned="May cache files in memory at startup, use memory-mapped files, pre-rendered response headers, or any caching strategy. May serve pre-compressed files (.gz, .br) from disk. Free to use any compression approach." engine="No specific rules." >}}
 
 
 Serves 20 static files of various types and sizes over HTTP/1.1, simulating a realistic page load with diverse file types and sizes.
@@ -10,17 +10,33 @@ Serves 20 static files of various types and sizes over HTTP/1.1, simulating a re
 
 ## Workload
 
-The load generator ([gcannon](https://github.com/MDA2AV/gcannon)) requests 20 static files in a round-robin pattern using raw HTTP/1.1 request templates:
+The load generator ([gcannon](https://github.com/MDA2AV/gcannon)) requests 20 static files in a round-robin pattern using raw HTTP/1.1 request templates. All requests include `Accept-Encoding: br;q=1, gzip;q=0.8`.
 
-- **CSS** (5 files, 1.2-12 KB): `reset.css`, `layout.css`, `theme.css`, `components.css`, `utilities.css`
-- **JavaScript** (5 files, 3.2-35 KB): `analytics.js`, `helpers.js`, `app.js`, `vendor.js`, `router.js`
-- **HTML** (2 files, 1.1-1.5 KB): `header.html`, `footer.html`
-- **Fonts** (2 files, 32-38 KB): `regular.woff2`, `bold.woff2`
-- **SVG** (2 files, 4.5-8 KB): `logo.svg`, `icon-sprite.svg`
-- **Images** (3 files, 18-85 KB): `hero.webp`, `thumb1.webp`, `thumb2.webp`
-- **JSON** (1 file, 0.9 KB): `manifest.json`
+- **CSS** (5 files, 8–55 KB): `reset.css`, `layout.css`, `theme.css`, `components.css`, `utilities.css`
+- **JavaScript** (5 files, 15–400 KB): `analytics.js`, `helpers.js`, `app.js`, `vendor.js`, `router.js`
+- **HTML** (2 files, 5–8 KB): `header.html`, `footer.html`
+- **Fonts** (2 files, 20–25 KB): `regular.woff2`, `bold.woff2`
+- **SVG** (2 files, 12–55 KB): `logo.svg`, `icon-sprite.svg`
+- **Images** (3 files, 15–120 KB): `hero.webp`, `thumb1.webp`, `thumb2.webp`
+- **JSON** (1 file, 3 KB): `manifest.json`
 
-Total payload: ~325 KB across 20 files.
+Total payload: ~1.16 MB across 20 files (~966 KB compressible text + ~200 KB binary).
+
+Pre-compressed versions of all text files (`.gz` at level 9, `.br` at level 11) are available in the `data/static/` directory alongside the originals.
+
+## Compression
+
+All requests include `Accept-Encoding: br;q=1, gzip;q=0.8`, indicating the client prefers Brotli but accepts gzip.
+
+**Compression is optional.** Frameworks that don't compress will serve files uncompressed — there is no penalty or validation failure. However, frameworks that do compress will benefit from reduced I/O, which naturally improves throughput.
+
+- **Text files** (CSS, JS, HTML, SVG, JSON): good candidates for compression (60-90% size reduction)
+- **Binary files** (woff2, webp): already compressed formats — servers should skip compression for these
+- **Pre-compressed files**: `.gz` and `.br` versions are available on disk. Frameworks that support serving pre-compressed files (e.g., Nginx `gzip_static`/`brotli_static`) can serve these directly with zero CPU overhead
+
+**Production rule:** compression must use the framework's standard middleware or built-in static file handler (e.g., Nginx `gzip on`, ASP.NET response compression middleware). No handmade compression code.
+
+**Tuned rule:** free to use any approach — custom compression, pre-compressed file serving, etc.
 
 ## What it measures
 
@@ -28,29 +44,29 @@ Total payload: ~325 KB across 20 files.
 - Content-Type handling for different file types
 - File serving strategy efficiency (disk I/O vs caching, depending on type)
 - Response efficiency with varied payload sizes
+- Compression efficiency (optional — reduces I/O at the cost of CPU)
 
 ## Expected request/response
 
 ```
 GET /static/reset.css HTTP/1.1
 Host: localhost:8080
+Accept-Encoding: br;q=1, gzip;q=0.8
 ```
 
 ```
 HTTP/1.1 200 OK
 Content-Type: text/css
+Content-Encoding: br
 
-(file contents)
+(compressed file contents)
 ```
 
-```
-GET /static/app.js HTTP/1.1
-Host: localhost:8080
-```
+Or without compression:
 
 ```
 HTTP/1.1 200 OK
-Content-Type: application/javascript
+Content-Type: text/css
 
 (file contents)
 ```

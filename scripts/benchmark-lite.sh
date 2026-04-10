@@ -44,10 +44,9 @@ declare -A PROFILES=(
     [unary-grpc]="1|0||512|grpc"
     [unary-grpc-tls]="1|0||512|grpc-tls"
     [echo-ws]="1|0||512|ws-echo"
-    [sync-db]="1|0||512|sync-db"
     [async-db]="1|0||512|async-db"
 )
-PROFILE_ORDER=(baseline pipelined limited-conn json upload compression noisy static sync-db async-db baseline-h2 static-h2 unary-grpc unary-grpc-tls echo-ws)
+PROFILE_ORDER=(baseline pipelined limited-conn json upload compression noisy static async-db baseline-h2 static-h2 unary-grpc unary-grpc-tls echo-ws)
 
 # Parse flags
 SAVE_RESULTS=false
@@ -441,7 +440,6 @@ for profile in "${profiles_to_run[@]}"; do
         --ulimit nofile="$HARD_NOFILE:$HARD_NOFILE"
         -v "$ROOT_DIR/data/dataset.json:/data/dataset.json:ro"
         -v "$ROOT_DIR/data/dataset-large.json:/data/dataset-large.json:ro"
-        -v "$ROOT_DIR/data/benchmark.db:/data/benchmark.db:ro"
         -v "$ROOT_DIR/data/static:/data/static:ro"
         -v "$CERTS_DIR:/certs:ro")
     if [ "$endpoint" = "async-db" ] || [ "$endpoint" = "api-4" ] || [ "$endpoint" = "api-16" ]; then
@@ -598,9 +596,6 @@ for profile in "${profiles_to_run[@]}"; do
         gc_args=("http://localhost:$PORT"
             --raw "$REQUESTS_DIR/get.raw,$REQUESTS_DIR/get.raw,$REQUESTS_DIR/get.raw,$REQUESTS_DIR/json-get.raw,$REQUESTS_DIR/json-get.raw,$REQUESTS_DIR/json-get.raw,$REQUESTS_DIR/async-db-get.raw,$REQUESTS_DIR/async-db-get.raw"
             -c "$CONNS" -t 64 -d 15s -p "$pipeline")
-    elif [ "$endpoint" = "sync-db" ]; then
-        gc_args=("http://localhost:$PORT/db?min=10&max=50"
-            -c "$CONNS" -t "$THREADS" -d 10s -p "$pipeline")
     elif [ "$endpoint" = "async-db" ]; then
         gc_args=("http://localhost:$PORT/async-db?min=10&max=50"
             -c "$CONNS" -t "$THREADS" -d 10s -p "$pipeline")

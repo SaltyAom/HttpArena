@@ -15,6 +15,7 @@ Tuned entries have more freedom. They can use non-default configurations, experi
 - Custom thread pools and worker configurations
 - Non-default GC settings without documentation requirement
 - Framework-specific performance flags not recommended for production
+- Any compression approach for static files — custom compression, pre-compressed file serving, alternative compression libraries
 
 ## What is still required
 

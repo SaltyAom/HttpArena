@@ -16,7 +16,6 @@
     "api-4",
     "api-16",
     "async-db",
-    "sync-db",
     "static",
     "tcp-frag"
   ],

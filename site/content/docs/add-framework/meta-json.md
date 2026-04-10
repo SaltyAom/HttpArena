@@ -45,7 +45,6 @@ Create a `meta.json` file in your framework directory:
 | `noisy` | HTTP/1.1 | `/baseline11` |
 | `static` | HTTP/1.1 | `/static/*` (port 8080) |
 | `tcp-frag` | HTTP/1.1 | `/baseline11` (loopback MTU 69) |
-| `sync-db` | HTTP/1.1 | `/db` (requires `/data/benchmark.db` mount) |
 | `async-db` | HTTP/1.1 | `/async-db` (requires `DATABASE_URL` env var) |
 | `api-4` | HTTP/1.1 | `/baseline11`, `/json`, `/async-db` (4 CPU, 16 GB) |
 | `api-16` | HTTP/1.1 | `/baseline11`, `/json`, `/async-db` (16 CPU, 32 GB) |
