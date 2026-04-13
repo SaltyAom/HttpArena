@@ -9,6 +9,7 @@ GCANNON="${GCANNON:-gcannon}"
 GCANNON_IMAGE="${GCANNON_IMAGE:-gcannon:latest}"
 GCANNON_MODE=docker
 H2LOAD_IMAGE="${H2LOAD_IMAGE:-h2load:latest}"
+H2LOAD_H3_IMAGE="${H2LOAD_H3_IMAGE:-h2load-h3:local}"
 OHA="${OHA:-$HOME/.cargo/bin/oha}"
 GHZ="${GHZ:-ghz}"
 HARD_NOFILE=$(ulimit -Hn 2>/dev/null || echo 65536)
@@ -17,6 +18,7 @@ DOCKER_NETWORK="httparena-bench-net"
 AVAILABLE_CORES=$(nproc 2>/dev/null || echo 4)
 THREADS="${THREADS:-$(( AVAILABLE_CORES / 2 > 0 ? AVAILABLE_CORES / 2 : 1 ))}"
 H2THREADS="${H2THREADS:-$THREADS}"
+H3THREADS="${H3THREADS:-64}"
 DURATION=5s
 RUNS=3
 PORT=8080
@@ -27,7 +29,7 @@ CERTS_DIR="$ROOT_DIR/certs"
 
 # Profile definitions: pipeline|req_per_conn|cpu_limit|connections|endpoint
 # endpoint: empty = /baseline11 (raw), "json" = /json (GET), "pipeline" = /pipeline, "upload" = POST /upload (raw),
-#           "h2" = /baseline2 (h2load), "static-h2" = multi-URI h2load, "h3" = /baseline2 (oha HTTP/3), "static-h3" = multi-URI oha,
+#           "h2" = /baseline2 (h2load), "static-h2" = multi-URI h2load, "h3" = /baseline2 (h2load-h3), "static-h3" = multi-URI h2load-h3,
 #           "grpc" = gRPC unary (h2load h2c), "grpc-tls" = gRPC unary (h2load TLS),
 #           "static" = multi-URI static files (gcannon --raw), "ws-echo" = WebSocket echo (gcannon --ws)
 # Lite profiles: no CPU pinning, fixed 512 connections (upload: 128)
@@ -41,12 +43,14 @@ declare -A PROFILES=(
     [static]="1|10||256,512|static"
     [baseline-h2]="1|0||512|h2"
     [static-h2]="1|0||512|static-h2"
+    [baseline-h3]="1|0||64|h3"
+    [static-h3]="1|0||64|static-h3"
     [unary-grpc]="1|0||512|grpc"
     [unary-grpc-tls]="1|0||512|grpc-tls"
     [echo-ws]="1|0||512|ws-echo"
     [async-db]="1|0||512|async-db"
 )
-PROFILE_ORDER=(baseline pipelined limited-conn json json-comp upload static async-db baseline-h2 static-h2 unary-grpc unary-grpc-tls echo-ws)
+PROFILE_ORDER=(baseline pipelined limited-conn json json-comp upload static async-db baseline-h2 static-h2 baseline-h3 static-h3 unary-grpc unary-grpc-tls echo-ws)
 
 # Parse flags
 SAVE_RESULTS=false
@@ -67,6 +71,7 @@ PROFILE_FILTER="${POSITIONAL[1]:-}"
 if [ -n "$LOAD_THREADS" ]; then
     THREADS="$LOAD_THREADS"
     H2THREADS="$LOAD_THREADS"
+    H3THREADS="$LOAD_THREADS"
 fi
 
 rebuild_site_data() {
@@ -371,6 +376,10 @@ if ! docker image inspect "$H2LOAD_IMAGE" >/dev/null 2>&1; then
     echo "[build] Building h2load Docker image..."
     docker build -t "$H2LOAD_IMAGE" -f "$ROOT_DIR/docker/h2load.Dockerfile" "$ROOT_DIR/docker"
 fi
+if ! docker image inspect "$H2LOAD_H3_IMAGE" >/dev/null 2>&1; then
+    echo "[build] Building h2load-h3 Docker image (first time takes ~7 min)..."
+    docker build -t "$H2LOAD_H3_IMAGE" -f "$ROOT_DIR/docker/h2load-h3.Dockerfile" "$ROOT_DIR/docker"
+fi
 
 # Build once
 echo "=== Building: $FRAMEWORK ==="
@@ -561,22 +570,18 @@ for profile in "${profiles_to_run[@]}"; do
             -H 'te: trailers'
             -c "$CONNS" -m 100 -t "$H2THREADS" -D "$DURATION")
     elif [ "$endpoint" = "static-h3" ]; then
-        USE_OHA=true
-        oha_out=$(mktemp)
-        gc_args=("$OHA"
-            "$REQUESTS_DIR/static-h2-uris.txt"
-            --urls-from-file
-            --http-version 3 --insecure
-            -o "$oha_out" --output-format json
-            -c "$CONNS" -p "$pipeline" -z "$DURATION")
+        USE_H2LOAD=true
+        gc_args=(docker run --rm --network "$DOCKER_NETWORK"
+            -v "$REQUESTS_DIR:$REQUESTS_DIR:ro"
+            "$H2LOAD_H3_IMAGE" --alpn-list=h3
+            -i "$REQUESTS_DIR/static-h2-uris.txt"
+            -c "$CONNS" -m 64 -t "$H3THREADS" -D "$DURATION")
     elif [ "$endpoint" = "h3" ]; then
-        USE_OHA=true
-        oha_out=$(mktemp)
-        gc_args=("$OHA"
+        USE_H2LOAD=true
+        gc_args=(docker run --rm --network "$DOCKER_NETWORK"
+            "$H2LOAD_H3_IMAGE" --alpn-list=h3
             "https://$CONTAINER_NAME:8443/baseline2?a=1&b=1"
-            --http-version 3 --insecure
-            -o "$oha_out" --output-format json
-            -c "$CONNS" -p "$pipeline" -z "$DURATION")
+            -c "$CONNS" -m 64 -t "$H3THREADS" -D "$DURATION")
     elif [ "$endpoint" = "static-h2" ]; then
         USE_H2LOAD=true
         gc_args=(docker run --rm --network "$DOCKER_NETWORK"
@@ -668,7 +673,7 @@ for profile in "${profiles_to_run[@]}"; do
         peak_mem=$(awk '{split($2,a,"/"); gsub(/[^0-9.]/,"",a[1]); unit=$2; gsub(/[0-9.]/,"",unit); if(a[1]+0>max){max=a[1]+0; u=unit}} END{if(max>0) printf "%.1f%s", max, u; else print "0MiB"}' "$stats_log")
         rm -f "$stats_log"
 
-        echo "$output"
+        echo "$output" | grep -Ev '^(Warm-up (started|phase)|Main benchmark duration (is started|is over)|Stopped all clients|progress: [0-9]+% of clients started)' || true
         echo "  CPU: $avg_cpu | Mem: $peak_mem"
 
         if [ "$USE_OHA" = "true" ]; then
@@ -713,9 +718,14 @@ for profile in "${profiles_to_run[@]}"; do
         reconnects="0"
         bandwidth=$(echo "$best_output" | python3 -c "import sys,json; d=json.load(sys.stdin); v=d['summary']['sizePerSec']; print(f'{v/1024/1024:.2f}MB/s' if v>0 else '0')" 2>/dev/null || echo "0")
     elif [ "$USE_H2LOAD" = "true" ]; then
-        # h2load: "time for request:  min  max  mean  sd  +/-sd" all on one line
-        avg_lat=$(echo "$best_output" | awk '/time for request:/{print $6}')
-        p99_lat="$avg_lat"  # h2load doesn't report p99; use mean as placeholder
+        # h2 "time for request:" → mean at $6; h3 "request :" table → mean at $8, p99 at $7
+        if echo "$best_output" | grep -q '^[[:space:]]*request[[:space:]]*:'; then
+            avg_lat=$(echo "$best_output" | awk '/^[[:space:]]*request[[:space:]]*:/{print $8; exit}')
+            p99_lat=$(echo "$best_output" | awk '/^[[:space:]]*request[[:space:]]*:/{print $7; exit}')
+        else
+            avg_lat=$(echo "$best_output" | awk '/time for request:/{print $6}')
+            p99_lat="$avg_lat"
+        fi
         reconnects="0"
         bandwidth=$(echo "$best_output" | grep -oP 'finished in [\d.]+s, [\d.]+ req/s, \K[\d.]+[KMGT]?B/s' || echo "0")
     else

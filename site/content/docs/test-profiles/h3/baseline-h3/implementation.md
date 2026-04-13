@@ -6,12 +6,12 @@ title: Implementation Guidelines
 
 The HTTP/3 Baseline profile tests raw throughput over QUIC, the UDP-based transport protocol that powers HTTP/3.
 
-**Connections:** 64, 512
+**Connections:** 64
 
 ## How it works
 
-1. The load generator ([oha](/docs/load-generators)) connects to the server over HTTP/3 (QUIC) on port 8443
-2. Sends `GET /baseline2?a=1&b=1` requests with 128 parallel requests per connection
+1. The load generator ([h2load-h3](/docs/load-generators/h3/h2load-h3/)) connects to the server over HTTP/3 (QUIC) on port 8443
+2. Sends `GET /baseline2?a=1&b=1` over 64 connections, each multiplexing 64 streams, across 64 worker threads
 3. The server parses query parameters and returns the sum
 
 ## What it measures
@@ -39,15 +39,15 @@ Content-Type: text/plain
 | Parameter | Value |
 |-----------|-------|
 | Endpoint | `GET /baseline2?a=1&b=1` |
-| Connections | 64, 512 |
-| Parallelism | 128 per connection |
+| Connections | 64 |
+| Streams per connection | 64 (`-m 64`) |
+| Threads | 64 (`H3THREADS`) |
 | Duration | 5s |
 | Runs | 3 (best taken) |
-| Load generator | oha |
+| Load generator | h2load-h3 (`--alpn-list=h3`) |
 | Port | 8443 (TLS + QUIC) |
 
 ## Notes
 
-- HTTP/3 support is not universal - only frameworks with native QUIC support participate
-- Results may show higher variance than HTTP/1.1 and HTTP/2 due to oha limitations
-- See the [oha load generator docs](/docs/load-generators) for known issues
+- HTTP/3 support is not universal — only frameworks with native QUIC support participate
+- HTTP/3 throughput is typically 4–6× lower than HTTP/2 on the same framework. This reflects the inherent CPU cost of QUIC (per-packet AEAD, no kernel TLS offload, userspace packet processing) — see the [h2load-h3 load generator docs](/docs/load-generators/h3/h2load-h3/) for details

@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   runner-busy:
-    if: github.event.issue.pull_request && (contains(github.event.comment.body, '/validate') || contains(github.event.comment.body, '/benchmark')) && vars.RUNNER_LOCAL == 'true'
+    if: github.event.issue.pull_request && contains(github.event.comment.body, '/benchmark') && vars.RUNNER_LOCAL == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Post runner-busy notice
@@ -20,63 +20,6 @@ jobs:
           gh pr comment "${{ github.event.issue.number }}" \
             --repo "${{ github.repository }}" \
             --body "⏸️ Runner is currently performing local benchmark runs and is disabled for GitHub Actions, please try later or check our Discord announcements on runner state for more info."
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  # ── /validate — runs directly, no approval needed ──
-
-  handle-validate:
-    if: github.event.issue.pull_request && contains(github.event.comment.body, '/validate') && !contains(github.event.comment.body, '/benchmark') && vars.RUNNER_LOCAL != 'true'
-    runs-on: self-hosted
-    # environment: runner  # uncomment to require approval for validation runs
-    steps:
-      - uses: actions/checkout@v5
-        with:
-          ref: refs/pull/${{ github.event.issue.number }}/head
-          fetch-depth: 0
-
-      - name: Parse command
-        id: parse
-        run: |
-          PR="$PR_NUMBER"
-          echo "pr=$PR" >> "$GITHUB_OUTPUT"
-          AUTO_FRAMEWORK=$(gh api "/repos/$REPO/pulls/$PR/files" --paginate --jq '.[].filename' | grep '^frameworks/' | cut -d'/' -f2 | sort -u | head -1)
-          EXPLICIT_FW=$(echo "$COMMENT_BODY" | grep -oP '/validate\s+.*-f\s+\K\S+' || echo "")
-          FRAMEWORK="${EXPLICIT_FW:-$AUTO_FRAMEWORK}"
-          echo "framework=$FRAMEWORK" >> "$GITHUB_OUTPUT"
-          echo "Detected framework: $FRAMEWORK"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          COMMENT_BODY: ${{ github.event.comment.body }}
-          PR_NUMBER: ${{ github.event.issue.number }}
-          REPO: ${{ github.repository }}
-
-      - name: React to comment
-        run: |
-          gh api "/repos/${{ github.repository }}/issues/comments/${{ github.event.comment.id }}/reactions" -f content="rocket"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Run validate
-        if: steps.parse.outputs.framework != ''
-        run: |
-          FRAMEWORK="${{ steps.parse.outputs.framework }}"
-          echo "Validating $FRAMEWORK..."
-          if ./scripts/validate.sh "$FRAMEWORK" 2>&1 | tee /tmp/validate.log; then
-            STATUS="✅ Validation **passed** for \`$FRAMEWORK\`"
-          else
-            STATUS="❌ Validation **failed** for \`$FRAMEWORK\`"
-          fi
-
-          BODY="$STATUS"$'\n\n'"<details><summary>Full log</summary>"$'\n\n```\n'"$(tail -100 /tmp/validate.log)"$'\n```\n</details>'
-          gh pr comment "${{ steps.parse.outputs.pr }}" --body "$BODY"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: No framework detected
-        if: steps.parse.outputs.framework == ''
-        run: |
-          gh pr comment "${{ steps.parse.outputs.pr }}" --body "⚠️ Couldn't detect which framework to validate. Either modify files under \`frameworks/<name>/\` or specify explicitly: \`/validate -f <framework>\`"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

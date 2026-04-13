@@ -1,7 +1,7 @@
 ---
 title: Implementation Guidelines
 ---
-{{< type-rules production="Must load files from disk on every request. No in-memory caching, no memory-mapped files, no pre-loaded file buffers. Compression must use the framework's standard middleware or built-in static file handler — no handmade compression code." tuned="May cache files in memory at startup, use memory-mapped files, pre-rendered response headers, or any caching strategy. May serve pre-compressed files (.gz, .br) from disk. Free to use any compression approach." engine="No specific rules." >}}
+{{< type-rules production="Must load files from disk on every request. No in-memory caching, no memory-mapped files, no pre-loaded file buffers. Compression must use the framework's standard middleware or built-in static file handler — no handmade compression code. Serving pre-compressed `.br`/`.gz` variants from disk **is allowed**, but only through a documented framework API (e.g. ASP.NET `MapStaticAssets`, nginx `gzip_static` / `brotli_static`, Caddy `precompressed`). No custom file-suffix lookup logic." tuned="May cache files in memory at startup, use memory-mapped files, pre-rendered response headers, or any caching strategy. May serve pre-compressed files (.gz, .br) from disk via any mechanism. Free to use any compression approach." engine="No specific rules." >}}
 
 
 Serves 20 static files of various types and sizes over HTTP/1.1, simulating a realistic page load with diverse file types and sizes.
@@ -32,11 +32,11 @@ All requests include `Accept-Encoding: br;q=1, gzip;q=0.8`, indicating the clien
 
 - **Text files** (CSS, JS, HTML, SVG, JSON): good candidates for compression (68–94% size reduction with brotli)
 - **Binary files** (woff2, webp): already compressed formats — servers should skip compression for these
-- **Pre-compressed files**: `.gz` and `.br` versions are available on disk. Frameworks that support serving pre-compressed files (e.g., Nginx `gzip_static`/`brotli_static`) can serve these directly with zero CPU overhead
+- **Pre-compressed files**: `.gz` and `.br` versions are available on disk. Frameworks that support serving pre-compressed files via a documented API (e.g. Nginx `gzip_static`/`brotli_static`, Caddy `precompressed`, ASP.NET `MapStaticAssets`) can serve these directly with zero CPU overhead — this is allowed for both **production** and **tuned** entries.
 
-**Production rule:** compression must use the framework's standard middleware or built-in static file handler (e.g., Nginx `gzip on`, ASP.NET response compression middleware). No handmade compression code.
+**Production rule:** compression must come from the framework's standard middleware, built-in static file handler, or its documented pre-compressed-file API. No handmade compression code, no custom suffix-lookup logic.
 
-**Tuned rule:** free to use any approach — custom compression, pre-compressed file serving, etc.
+**Tuned rule:** free to use any approach — custom compression, manual `.br`/`.gz` lookup, etc.
 
 ## What it measures
 

@@ -60,6 +60,26 @@
     "status_5xx": 0
   },
   {
+    "framework": "aspnet-minimal-iouring",
+    "language": "C#",
+    "rps": 606181,
+    "avg_latency": "1.72ms",
+    "p99_latency": "1.72ms",
+    "cpu": "5649.1%",
+    "memory": "216.9MiB",
+    "connections": 1024,
+    "threads": 64,
+    "duration": "5s",
+    "pipeline": 1,
+    "bandwidth": "9.27GB",
+    "input_bw": "",
+    "reconnects": 0,
+    "status_2xx": 3091231,
+    "status_3xx": 0,
+    "status_4xx": 0,
+    "status_5xx": 0
+  },
+  {
     "framework": "aspnet-mvc",
     "language": "C#",
     "rps": 113940,
